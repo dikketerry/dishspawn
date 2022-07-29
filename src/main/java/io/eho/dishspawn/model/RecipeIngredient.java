@@ -41,9 +41,11 @@ public class RecipeIngredient {
     @Column(name="RECIPE_INGREDIENT_COLOR")
     private String color;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="RECIPE_INGREDIENT_FORM")
     private IngredientForm form;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "RECIPE_INGREDIENT_PREPTYPE")
     private IngredientPrepType prepType;
 
