@@ -4,8 +4,10 @@ import io.eho.dishspawn.util.IngredientForm;
 import io.eho.dishspawn.util.IngredientPrepType;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 // temp solution, in-between class Ingredient - Recipe - need to look into
 // MultiMap or Map<K, List<V>> and avoid in-between class, as it will result
@@ -18,12 +20,17 @@ import javax.persistence.*;
 public class RecipeIngredient {
 
     // TODO: generate ID based on combination of ingredient id & recipe id
+
+    @CreationTimestamp
+    @Column(name="timestamp_created")
+    private Timestamp timestampCreated;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="RECIPE_INGREDIENT_ID")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="INGREDIENT_ID")
     private Ingredient ingredient;
 

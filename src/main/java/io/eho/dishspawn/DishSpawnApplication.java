@@ -3,6 +3,7 @@ package io.eho.dishspawn;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.repository.IngredientRepository;
+import io.eho.dishspawn.repository.RecipeIngredientRepository;
 import io.eho.dishspawn.repository.RecipeRepository;
 import io.eho.dishspawn.util.IngredientCategory;
 import io.eho.dishspawn.util.IngredientForm;
@@ -22,6 +23,12 @@ public class DishSpawnApplication implements CommandLineRunner {
 	@Autowired
 	private RecipeRepository recipeRepository;
 
+	@Autowired
+	private IngredientRepository ingredientRepository;
+
+	@Autowired
+	private RecipeIngredientRepository recipeIngredientRepository;
+
 	@Override
 	public void run(String... args) throws Exception {
 		Ingredient egg = new Ingredient("egg", IngredientCategory.DAIRY);
@@ -31,6 +38,13 @@ public class DishSpawnApplication implements CommandLineRunner {
 		Ingredient curry = new Ingredient("curry", IngredientCategory.HERB);
 		Ingredient mustard = new Ingredient("mustard", IngredientCategory.ADDITIVE);
 		Ingredient persil = new Ingredient("persil", IngredientCategory.HERB);
+
+		ingredientRepository.save(egg);
+		ingredientRepository.save(mayonaise);
+		ingredientRepository.save(chives);
+		ingredientRepository.save(curry);
+		ingredientRepository.save(mustard);
+		ingredientRepository.save(persil);
 
 		Recipe eggSalad = new Recipe("Egg salad", "Boil the eggs, mash them " +
 				"in " +

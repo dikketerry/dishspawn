@@ -4,8 +4,10 @@ package io.eho.dishspawn.model;
 import io.eho.dishspawn.util.IngredientForm;
 import io.eho.dishspawn.util.IngredientPrepType;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +17,12 @@ import java.util.Set;
 @Table(name = "recipe")
 public class Recipe {
 
+    @CreationTimestamp
+    @Column(name="timestamp_created")
+    private Timestamp timestampCreated;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "RECIPE_ID")
     private long id;
 
