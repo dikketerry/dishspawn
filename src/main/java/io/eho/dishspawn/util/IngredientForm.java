@@ -15,5 +15,7 @@ public enum IngredientForm {
     MELTED,
     STRING,
     GRAIN,
-    EXOTIC
+    EXOTIC,
+    LIQUID,
+    HARDBOILED
 }

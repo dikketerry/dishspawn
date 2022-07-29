@@ -14,6 +14,7 @@ public enum IngredientPrepType {
     SIMMER,
     BROIL,
     BAKE,
+    GRILL,
     SPRINKLE,
     COOL,
     PREHEAT,

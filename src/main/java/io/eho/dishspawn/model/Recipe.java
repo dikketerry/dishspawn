@@ -26,7 +26,7 @@ public class Recipe {
     @Column(name = "RECIPE_INSTRUCTIONS")
     private String instructions;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     // constructor
