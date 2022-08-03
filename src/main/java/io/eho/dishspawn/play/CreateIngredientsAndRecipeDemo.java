@@ -18,9 +18,9 @@ public class CreateIngredientsAndRecipeDemo {
         Ingredient coffeeInstant = new Ingredient("instant coffee",
                                                   IngredientCategory.CONDIMENT);
 
-        Ingredient milk = new Ingredient("milk", IngredientCategory.BEVERAGE);
+        Ingredient milk = new Ingredient("milk", IngredientCategory.DAIRY_MILKS);
 
-        Ingredient water = new Ingredient("water", IngredientCategory.BEVERAGE);
+        Ingredient water = new Ingredient("water", IngredientCategory.LIQUIDS_WATER);
 
         // create recipe
         Recipe instantCoffee = new Recipe("Instant coffee", "Boil the water " +
@@ -30,9 +30,9 @@ public class CreateIngredientsAndRecipeDemo {
         instantCoffee.addRecipeIngredient(coffeeInstant,
                                           IngredientForm.POWDER,
                                           IngredientPrepType.STIR, "#000000");
-        instantCoffee.addRecipeIngredient(milk, IngredientForm.EXOTIC,
+        instantCoffee.addRecipeIngredient(milk, IngredientForm.FLUID,
                                           IngredientPrepType.STIR, "#EEEEEE");
-        instantCoffee.addRecipeIngredient(water, IngredientForm.EXOTIC,
+        instantCoffee.addRecipeIngredient(water, IngredientForm.FLUID,
                                           IngredientPrepType.BOIL, "A1A1A1");
 
         // diagnostic println

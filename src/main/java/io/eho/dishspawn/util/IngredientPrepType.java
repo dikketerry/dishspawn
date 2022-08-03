@@ -1,24 +1,28 @@
 package io.eho.dishspawn.util;
 
 public enum IngredientPrepType {
-    ADD,
-    HEAT,
-    COOK,
-    STIR,
-    PLACE,
-    MIX,
-    COVER,
-    REMOVE,
-    SERVE,
-    BOIL,
-    SIMMER,
-    BROIL,
-    BAKE,
-    GRILL,
-    SPRINKLE,
-    COOL,
-    PREHEAT,
-    CUT,
-    COMBINE,
-    DRAIN
+    ADD("Add"),
+    BAKE("Bake"),
+    BOIL("Boil"),
+    BROIL("Broil"),
+    BRAISE("Braise"),
+    GARNISH("Garnish"),
+    GRILL("Grill"),
+    MELT("Melt"),
+    MIX("Mix"),
+    POACH("Poach"),
+    ROAST("Roast"),
+    SAUTE("Saute"),
+    SIMMER("Simmer"),
+    SPRINKLE("Sprinkle"),
+    STEAM("Steam"),
+    STEW("Stew"),
+    STIR("Stir");
+
+    private final String label;
+
+    IngredientPrepType(String label) {
+        this.label = label;
+    }
+
 }

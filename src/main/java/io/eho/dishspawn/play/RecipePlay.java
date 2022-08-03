@@ -22,11 +22,11 @@ public class RecipePlay {
 
         Ingredient milk = new Ingredient();
         milk.setName("milk");
-        milk.setCategory(IngredientCategory.BEVERAGE);
+        milk.setCategory(IngredientCategory.DAIRY_MILKS);
 
         Ingredient water = new Ingredient();
         water.setName("water");
-        water.setCategory(IngredientCategory.BEVERAGE);
+        water.setCategory(IngredientCategory.LIQUIDS_WATER);
 
         Recipe instantCoffee = new Recipe();
 
@@ -40,14 +40,14 @@ public class RecipePlay {
         // ingredient 2 for recipe
         RecipeIngredient i2 = new RecipeIngredient();
         i2.setIngredient(milk);
-        i2.setForm(IngredientForm.EXOTIC); // TODO: need to add LIQUID
+        i2.setForm(IngredientForm.FLUID); // TODO: need to add LIQUID
         i2.setPrepType(IngredientPrepType.STIR);
         i2.setColor("#EEEEEE");
 
         // ingredient 3 for recipe
         RecipeIngredient i3 = new RecipeIngredient();
         i3.setIngredient(water);
-        i3.setForm(IngredientForm.EXOTIC);
+        i3.setForm(IngredientForm.FLUID);
         i3.setPrepType(IngredientPrepType.BOIL);
         // no color
 

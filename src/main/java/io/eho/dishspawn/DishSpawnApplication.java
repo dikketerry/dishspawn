@@ -31,13 +31,13 @@ public class DishSpawnApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Ingredient egg = new Ingredient("egg", IngredientCategory.DAIRY);
+		Ingredient egg = new Ingredient("egg", IngredientCategory.EGGS);
 		Ingredient mayonaise = new Ingredient("mayonaise",
-											  IngredientCategory.MAIZE);
-		Ingredient chives = new Ingredient("chives", IngredientCategory.HERB);
-		Ingredient curry = new Ingredient("curry", IngredientCategory.HERB);
+											  IngredientCategory.CONDIMENT);
+		Ingredient chives = new Ingredient("chives", IngredientCategory.HERBS);
+		Ingredient curry = new Ingredient("curry", IngredientCategory.SPICES);
 		Ingredient mustard = new Ingredient("mustard", IngredientCategory.ADDITIVE);
-		Ingredient persil = new Ingredient("persil", IngredientCategory.HERB);
+		Ingredient persil = new Ingredient("persil", IngredientCategory.HERBS);
 
 		ingredientRepository.save(egg);
 		ingredientRepository.save(mayonaise);
@@ -51,19 +51,19 @@ public class DishSpawnApplication implements CommandLineRunner {
 				"a bowl, add mustard, mayonaise, chives and curry, season to " +
 				"taste, garnish with persil, eat");
 
-		eggSalad.addRecipeIngredient(egg, IngredientForm.HARDBOILED,
+		eggSalad.addRecipeIngredient(egg, IngredientForm.EGG_LIKE,
 									 IngredientPrepType.BOIL, "#FFEFAE");
-		eggSalad.addRecipeIngredient(mayonaise, IngredientForm.MELTED,
+		eggSalad.addRecipeIngredient(mayonaise, IngredientForm.BLOBS,
 									 IngredientPrepType.MIX, "#EEE15F");
 		eggSalad.addRecipeIngredient(chives, IngredientForm.CONFETTI,
 									 IngredientPrepType.MIX, "#8A915D");
 		eggSalad.addRecipeIngredient(curry, IngredientForm.POWDER,
 									 IngredientPrepType.MIX, "#E17B09");
 
-		eggSalad.addRecipeIngredient(mustard, IngredientForm.MELTED,
+		eggSalad.addRecipeIngredient(mustard, IngredientForm.BLOBS,
 									 IngredientPrepType.MIX, "#928222");
-		eggSalad.addRecipeIngredient(persil, IngredientForm.TWIG,
-									 IngredientPrepType.SIMMER, "#1B6F1B");
+		eggSalad.addRecipeIngredient(persil, IngredientForm.LEAVES,
+									 IngredientPrepType.GARNISH, "#1B6F1B");
 
 		recipeRepository.save(eggSalad);
 	}
