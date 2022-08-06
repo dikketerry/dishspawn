@@ -1,19 +1,51 @@
 package io.eho.dishspawn.play;
 
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
+import io.eho.dishspawn.model.Ingredient;
+import io.eho.dishspawn.model.RecipeIngredient;
+import io.eho.dishspawn.util.IngredientCategory;
+import io.eho.dishspawn.util.IngredientForm;
+import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.MassConverter;
 
 public class PlayWithMass {
 
     public static void main(String[] args) {
 
+        Ingredient penne = new Ingredient("penne",
+                                          IngredientCategory.CEREAL_PASTA_NOODLES);
+
+        RecipeIngredient ri = new RecipeIngredient();
+        ri.setIngredient(penne);
+        ri.setForm(IngredientForm.SPHERES);
+        ri.setColor("#EFC953");
+        ri.setPrepType(IngredientPrepType.BOIL);
+
+        // mass extra stuff
+        // simulate input value user
+        String inputUnit = "OUNCE";
+        // parse enum equivalent user input
+        Unit inputUnitEnum = Unit.valueOf(inputUnit);
+        // set a quantity (user input)
+        double quantity = 1.5;
+
+        // convert userInput to grams
+        MassConverter m = new MassConverter();
+        double massPenne = m.convert(quantity, inputUnitEnum, Unit.GRAM);
+
+        // continue setting the RecipeIngredient
+        ri.setMass(massPenne);
+
+        System.out.println("Recipe Ingredient: " + ri);
+
         MassConverter mass = new MassConverter();
-        System.out.println(mass.convertFrom(1, Unit.OUNCE));
+        System.out.println(mass.convert(1, Unit.OUNCE, Unit.GRAM));
 
     }
 
     interface AbstractUnitConverter<U> {
-        double convertTo(double quantity, U unitFrom);
-        double convertFrom(double quantity, U unitTo);
+        double convert(double quantity, U unitFrom, U unitTo);
+//        double convertFrom(double quantity, U unitTo);
     }
 
     static class MassConverter implements AbstractUnitConverter<Unit> {
@@ -27,7 +59,7 @@ public class PlayWithMass {
         private static final double gramToKilogramFactor = 0.001;
 
         @Override
-        public double convertTo(double quantity, Unit unitFrom) {
+        public double convert(double quantity, Unit unitFrom, Unit unitTo) {
 
             switch (unitFrom) {
                 case GRAM: toGrams = quantity;
@@ -44,20 +76,20 @@ public class PlayWithMass {
             } else return toGrams;
         }
 
-        @Override
-        public double convertFrom(double quantity, Unit unitTo) {
-
-            switch (unitTo) {
-                case GRAM: return quantity;
-                case KILOGRAM: return gramToKilogramFactor * quantity;
-                case OUNCE: return gramToOunceFactor * quantity;
-                case POUND: return gramToPoundFactor * quantity;
-            }
-
-            if (fromGrams == -1) {
-                throw new UnitDoesNotExistException("unknown unit");
-            } else return fromGrams;
-        }
+//        @Override
+//        public double convertFrom(double quantity, Unit unitTo) {
+//
+//            switch (unitTo) {
+//                case GRAM: return quantity;
+//                case KILOGRAM: return gramToKilogramFactor * quantity;
+//                case OUNCE: return gramToOunceFactor * quantity;
+//                case POUND: return gramToPoundFactor * quantity;
+//            }
+//
+//            if (fromGrams == -1) {
+//                throw new UnitDoesNotExistException("unknown unit");
+//            } else return fromGrams;
+//        }
 
     }
 
