@@ -1,4 +1,4 @@
-package io.eho.dishspawn.util;
+package io.eho.dishspawn.util.unitconversion;
 
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
 
@@ -71,6 +71,11 @@ public class VolumeConverter implements AbstractUnitConverter<VolumeConverter.Vo
                 // note this exception assumes a user would be able to input any
                 // kind of unit instead of being limited to a selection
         }
+    }
+
+    @Override
+    public VolumeUnit parseStringToUnit(String input) {
+        return VolumeUnit.valueOf(input);
     }
 
     // enum embedded because it really belongs to this class only

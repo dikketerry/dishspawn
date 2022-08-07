@@ -1,6 +1,6 @@
 package io.eho.dishspawn.util;
 
-public enum IngredientTexture {
+public enum RecipeIngredientTexture {
     BREADY("Bready"),
     CHEWY("Chewy"),
     CREAMY("Creamy"),
@@ -12,7 +12,7 @@ public enum IngredientTexture {
 
     private final String label;
 
-    IngredientTexture(String label) {
+    RecipeIngredientTexture(String label) {
         this.label = label;
     }
 

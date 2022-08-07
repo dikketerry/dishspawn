@@ -1,10 +1,14 @@
 package io.eho.dishspawn.model;
 
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
+import io.eho.dishspawn.util.RecipeIngredientTexture;
+import io.eho.dishspawn.util.unitconversion.MassConverter;
+import io.eho.dishspawn.util.unitconversion.VolumeConverter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -19,7 +23,11 @@ import java.sql.Timestamp;
 @Table(name = "recipe_ingredient")
 public class RecipeIngredient {
 
-    // TODO: generate ID based on combination of ingredient id & recipe id
+//    @Autowired
+//    private MassConverter massConverter;
+//
+//    @Autowired
+//    private VolumeConverter volumeConverter;
 
     @CreationTimestamp
     @Column(name="timestamp_created")
@@ -38,6 +46,9 @@ public class RecipeIngredient {
     @JoinColumn(name="RECIPE_ID")
     private Recipe recipe;
 
+    @Column(name="VISUAL_IMPACT")
+    private boolean visualImpact = true;                        // default value
+
     // additional values join table recipe-ingredient
     @Column(name="RECIPE_INGREDIENT_MASS")
     private double mass;
@@ -50,11 +61,24 @@ public class RecipeIngredient {
 
     @Enumerated(EnumType.STRING)
     @Column(name="RECIPE_INGREDIENT_FORM")
-    private IngredientForm form;
+    private RecipeIngredientForm form;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "RECIPE_INGREDIENT_PREPTYPE")
-    private IngredientPrepType prepType;
+    @Column(name="RECIPE_INGREDIENT_TEXTURE")
+    private RecipeIngredientTexture recipeIngredientTexture;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "RECIPE_INGREDIENT_COOKING_METHOD")
+    private RecipeIngredientCookingMethod prepType;
+
+    // the unit name and quantity the recipe_ingredient are provided with
+    // ( 3 teaspoon, 1.5 tablespoon, etc.) are stored in DB to enable
+    // returning these when giving when a recipe is returned from the DB
+    @Column(name="UNIT_NAME")
+    private String unitName;
+
+    @Column(name="QUANTITY")
+    private double quantity;
 
     public Long getId() {
         return id;
@@ -68,12 +92,31 @@ public class RecipeIngredient {
         this.ingredient = ingredient;
     }
 
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public boolean isVisualImpact() {
+        return visualImpact;
+    }
+
+    public void setVisualImpact(boolean visualImpact) {
+        this.visualImpact = visualImpact;
+    }
+
     public double getMass() {
         return mass;
     }
 
-    public void setMass(double mass) {
-        this.mass = mass;
+    public void setMass() {
+        MassConverter massConverter = new MassConverter();
+        MassConverter.MassUnit massUnit =
+                massConverter.parseStringToUnit(this.unitName);
+        this.mass = massConverter.convert(this.quantity, massUnit, MassConverter.MassUnit.GRAM);
     }
 
     public double getVolume() {
@@ -92,27 +135,43 @@ public class RecipeIngredient {
         this.color = color;
     }
 
-    public IngredientForm getForm() {
+    public RecipeIngredientForm getForm() {
         return form;
     }
 
-    public void setForm(IngredientForm form) {
+    public RecipeIngredientTexture getRecipeIngredientTexture() {
+        return recipeIngredientTexture;
+    }
+
+    public void setRecipeIngredientTexture(RecipeIngredientTexture recipeIngredientTexture) {
+        this.recipeIngredientTexture = recipeIngredientTexture;
+    }
+
+    public void setForm(RecipeIngredientForm form) {
         this.form = form;
     }
 
-    public IngredientPrepType getPrepType() {
+    public RecipeIngredientCookingMethod getPrepType() {
         return prepType;
     }
 
-    public void setPrepType(IngredientPrepType prepType) {
+    public void setPrepType(RecipeIngredientCookingMethod prepType) {
         this.prepType = prepType;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
+    public double getQuantityUnit() {
+        return quantity;
+    }
+
+    public void setQuantityUnit(double quantity) {
+        this.quantity = quantity;
     }
 }

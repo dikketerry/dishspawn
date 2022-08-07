@@ -1,6 +1,6 @@
 package io.eho.dishspawn.util;
 
-public enum IngredientPrepType {
+public enum RecipeIngredientCookingMethod {
     ADD("Add"),
     BAKE("Bake"),
     BOIL("Boil"),
@@ -21,7 +21,7 @@ public enum IngredientPrepType {
 
     private final String label;
 
-    IngredientPrepType(String label) {
+    RecipeIngredientCookingMethod(String label) {
         this.label = label;
     }
 

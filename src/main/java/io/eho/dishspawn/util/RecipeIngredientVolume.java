@@ -10,7 +10,7 @@ import lombok.Setter;
 // TODO: don't think @Getter and @Setter are needed
 @Getter
 @Setter
-public class IngredientVolume {
+public class RecipeIngredientVolume {
     // internal representation
     private double _milliliter;
     // conversion factors
@@ -36,45 +36,45 @@ public class IngredientVolume {
 
     // constructor - can it be private due to creating instance in
     // util-methods? YES (TBC)
-    private IngredientVolume(double milliliters) {
+    private RecipeIngredientVolume(double milliliters) {
         this._milliliter = milliliters;
     }
 
     // utility methods
-    public IngredientVolume fromMilliliter(double milliliters) {
-        return new IngredientVolume(milliliters);
+    public RecipeIngredientVolume fromMilliliter(double milliliters) {
+        return new RecipeIngredientVolume(milliliters);
     }
 
-    public IngredientVolume fromLiter(double liters) {
-        return new IngredientVolume(liters / _milliliterToLtr);
+    public RecipeIngredientVolume fromLiter(double liters) {
+        return new RecipeIngredientVolume(liters / _milliliterToLtr);
     }
 
-    public IngredientVolume fromCup(double cups) {
-        return new IngredientVolume(cups / _milliliterToCup);
+    public RecipeIngredientVolume fromCup(double cups) {
+        return new RecipeIngredientVolume(cups / _milliliterToCup);
     }
 
-    public IngredientVolume fromFluidOunce(double fluidOunces) {
-        return new IngredientVolume(fluidOunces / _milliliterToFluidOunce);
+    public RecipeIngredientVolume fromFluidOunce(double fluidOunces) {
+        return new RecipeIngredientVolume(fluidOunces / _milliliterToFluidOunce);
     }
 
-    public IngredientVolume fromGallon(double gallons) {
-        return new IngredientVolume(gallons / _milliliterToGallon);
+    public RecipeIngredientVolume fromGallon(double gallons) {
+        return new RecipeIngredientVolume(gallons / _milliliterToGallon);
     }
 
-    public IngredientVolume fromPint(double pints) {
-        return new IngredientVolume(pints / _milliliterToPint);
+    public RecipeIngredientVolume fromPint(double pints) {
+        return new RecipeIngredientVolume(pints / _milliliterToPint);
     }
 
-    public IngredientVolume fromQuart(double quarts) {
-        return new IngredientVolume(quarts / _milliliterToQuart);
+    public RecipeIngredientVolume fromQuart(double quarts) {
+        return new RecipeIngredientVolume(quarts / _milliliterToQuart);
     }
 
-    public IngredientVolume fromTablespoon(double tablespoons) {
-        return new IngredientVolume(tablespoons / _milliliterToTablespoon);
+    public RecipeIngredientVolume fromTablespoon(double tablespoons) {
+        return new RecipeIngredientVolume(tablespoons / _milliliterToTablespoon);
     }
 
-    public IngredientVolume fromTeaspoon(double teaspoons) {
-        return new IngredientVolume(teaspoons / _milliliterToTeaspoon);
+    public RecipeIngredientVolume fromTeaspoon(double teaspoons) {
+        return new RecipeIngredientVolume(teaspoons / _milliliterToTeaspoon);
     }
 
 }

@@ -4,9 +4,8 @@ import io.eho.dishspawn.exception.UnitDoesNotExistException;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.util.IngredientCategory;
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
-import io.eho.dishspawn.util.MassConverter;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 
 public class PlayWithMass {
 
@@ -17,9 +16,9 @@ public class PlayWithMass {
 
         RecipeIngredient ri = new RecipeIngredient();
         ri.setIngredient(penne);
-        ri.setForm(IngredientForm.SPHERES);
+        ri.setForm(RecipeIngredientForm.SPHERES);
         ri.setColor("#EFC953");
-        ri.setPrepType(IngredientPrepType.BOIL);
+        ri.setPrepType(RecipeIngredientCookingMethod.BOIL);
 
         // mass extra stuff
         // simulate input value user
@@ -34,7 +33,7 @@ public class PlayWithMass {
         double massPenne = m.convert(quantity, inputUnitEnum, Unit.GRAM);
 
         // continue setting the RecipeIngredient
-        ri.setMass(massPenne);
+        ri.setMass();
 
         System.out.println("Recipe Ingredient: " + ri);
 

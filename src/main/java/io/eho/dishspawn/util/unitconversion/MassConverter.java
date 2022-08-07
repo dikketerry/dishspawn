@@ -1,4 +1,4 @@
-package io.eho.dishspawn.util;
+package io.eho.dishspawn.util.unitconversion;
 
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
 
@@ -9,12 +9,13 @@ public class MassConverter implements AbstractUnitConverter<MassConverter.MassUn
 
     // static? to access the factors without creating a converter? hmmm...
 //    private static final double gram = 1;
-    private static final double gramToOunceFactor = 0.0357142857;
-    private static final double gramToPoundFactor = 0.0022026432;
-    private static final double gramToKilogramFactor = 0.001;
+    private static final double GRAM_TO_OUNCE_FACTOR = 0.0357142857;
+    private static final double GRAM_TO_POUND_FACTOR = 0.0022026432;
+    private static final double GRAM_TO_KILOGRAM_FACTOR = 0.001;
 
     @Override
-    public double convert(double quantity, MassUnit unitFrom, MassUnit unitTo) {
+    public double convert(double quantity, MassUnit unitFrom,
+                           MassUnit unitTo) {
         // note the switch cases below are not an exhaustive list of all possible
         // combinations; only combinations needed to support the
         // application functionality are included:
@@ -26,20 +27,20 @@ public class MassConverter implements AbstractUnitConverter<MassConverter.MassUn
                     case GRAM:
                         return quantity;
                     case OUNCE:
-                        return quantity * gramToOunceFactor;
+                        return quantity * GRAM_TO_OUNCE_FACTOR;
                     case KILOGRAM:
-                        return quantity * gramToKilogramFactor;
+                        return quantity * GRAM_TO_KILOGRAM_FACTOR;
                     case POUND:
-                        return quantity * gramToPoundFactor;
+                        return quantity * GRAM_TO_POUND_FACTOR;
                     default:
                         throw new UnsupportedOperationException();
                 }
             case KILOGRAM:
-                return quantity / gramToKilogramFactor;
+                return quantity / GRAM_TO_KILOGRAM_FACTOR;
             case OUNCE:
-                return quantity / gramToOunceFactor;
+                return quantity / GRAM_TO_OUNCE_FACTOR;
             case POUND:
-                return quantity / gramToPoundFactor;
+                return quantity / GRAM_TO_POUND_FACTOR;
             default:
                 throw new UnitDoesNotExistException("unknown unit");
                 // note this exception assumes a user would be able to input any
@@ -47,8 +48,13 @@ public class MassConverter implements AbstractUnitConverter<MassConverter.MassUn
         }
     }
 
+    @Override
+    public MassUnit parseStringToUnit(String input) {
+        return MassUnit.valueOf(input);
+    }
+
     // enum embedded because it really belongs to this class only
-    enum MassUnit {
+    public enum MassUnit {
         GRAM("Grams"),
         OUNCE("Ounce"),             // 28 grams
         POUND("Pounds"),            // 454 grams

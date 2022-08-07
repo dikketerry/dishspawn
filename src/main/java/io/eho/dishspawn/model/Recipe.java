@@ -1,8 +1,8 @@
 package io.eho.dishspawn.model;
 
 
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -73,14 +73,18 @@ public class Recipe {
 //        this.recipeIngredients.add(recipeIngredient);
 //    }
 
+    public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+        this.recipeIngredients.add(recipeIngredient);
+    }
+
     public void addRecipeIngredient(Ingredient ingredient,
-                                    IngredientForm ingredientForm,
-                                    IngredientPrepType ingredientPrepType,
+                                    RecipeIngredientForm recipeIngredientForm,
+                                    RecipeIngredientCookingMethod recipeIngredientCookingMethod,
                                     String color) {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
-        recipeIngredient.setIngredient(ingredient);
-        recipeIngredient.setForm(ingredientForm);
-        recipeIngredient.setPrepType(ingredientPrepType);
+//        recipeIngredient.setIngredient(ingredient);
+        recipeIngredient.setForm(recipeIngredientForm);
+        recipeIngredient.setPrepType(recipeIngredientCookingMethod);
         recipeIngredient.setColor(color);
         this.recipeIngredients.add(recipeIngredient);
     }
@@ -105,4 +109,5 @@ public class Recipe {
 
         return sb.toString();
     }
+
 }

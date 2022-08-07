@@ -4,8 +4,8 @@ import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.util.IngredientCategory;
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 
 public class CreateIngredientsAndRecipeDemo {
 
@@ -29,12 +29,12 @@ public class CreateIngredientsAndRecipeDemo {
 
         // add recipe ingredients to the recipe
         instantCoffee.addRecipeIngredient(coffeeInstant,
-                                          IngredientForm.POWDER,
-                                          IngredientPrepType.STIR, "#000000");
-        instantCoffee.addRecipeIngredient(milk, IngredientForm.FLUID,
-                                          IngredientPrepType.STIR, "#EEEEEE");
-        instantCoffee.addRecipeIngredient(water, IngredientForm.FLUID,
-                                          IngredientPrepType.BOIL, "A1A1A1");
+                                          RecipeIngredientForm.POWDER,
+                                          RecipeIngredientCookingMethod.STIR, "#000000");
+        instantCoffee.addRecipeIngredient(milk, RecipeIngredientForm.FLUID,
+                                          RecipeIngredientCookingMethod.STIR, "#EEEEEE");
+        instantCoffee.addRecipeIngredient(water, RecipeIngredientForm.FLUID,
+                                          RecipeIngredientCookingMethod.BOIL, "A1A1A1");
 
         // TODO: testing mass / volume
         Ingredient basilicum = new Ingredient("basilicum",

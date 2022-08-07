@@ -2,12 +2,14 @@ package io.eho.dishspawn;
 
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
+import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.repository.IngredientRepository;
 import io.eho.dishspawn.repository.RecipeIngredientRepository;
 import io.eho.dishspawn.repository.RecipeRepository;
 import io.eho.dishspawn.util.IngredientCategory;
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
+import io.eho.dishspawn.util.RecipeIngredientTexture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -51,20 +53,25 @@ public class DishSpawnApplication implements CommandLineRunner {
 				"a bowl, add mustard, mayonaise, chives and curry, season to " +
 				"taste, garnish with persil, eat");
 
-		eggSalad.addRecipeIngredient(egg, IngredientForm.EGG_LIKE,
-									 IngredientPrepType.BOIL, "#FFEFAE");
-		eggSalad.addRecipeIngredient(mayonaise, IngredientForm.BLOBS,
-									 IngredientPrepType.MIX, "#EEE15F");
-		eggSalad.addRecipeIngredient(chives, IngredientForm.CONFETTI,
-									 IngredientPrepType.MIX, "#8A915D");
-		eggSalad.addRecipeIngredient(curry, IngredientForm.POWDER,
-									 IngredientPrepType.MIX, "#E17B09");
+		RecipeIngredient r1 = new RecipeIngredient();
+		r1.setIngredient(egg);
+		r1.setRecipe(eggSalad);
+		r1.setQuantityUnit(1);
+		r1.setUnitName("POUND");
+		r1.setMass();
+		r1.setVisualImpact(true);
 
-		eggSalad.addRecipeIngredient(mustard, IngredientForm.BLOBS,
-									 IngredientPrepType.MIX, "#928222");
-		eggSalad.addRecipeIngredient(persil, IngredientForm.LEAVES,
-									 IngredientPrepType.GARNISH, "#1B6F1B");
+		r1.setForm(RecipeIngredientForm.EGG_LIKE);
+		r1.setRecipeIngredientTexture(RecipeIngredientTexture.CHEWY);
+		r1.setPrepType(RecipeIngredientCookingMethod.BOIL);
+		r1.setPrepType(RecipeIngredientCookingMethod.BOIL);
+		r1.setColor("EF9A35");
 
+		// NO SAVE OF RI INDIVIDUALLY! AS SAVE OF RI IS IMPLIED BY CASCADE IN
+		// RECIPE
+//		recipeIngredientRepository.save(r1);
+
+		eggSalad.addRecipeIngredient(r1);
 		recipeRepository.save(eggSalad);
 	}
 }

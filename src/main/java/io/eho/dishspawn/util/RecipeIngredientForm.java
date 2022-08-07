@@ -1,6 +1,6 @@
 package io.eho.dishspawn.util;
 
-public enum IngredientForm {
+public enum RecipeIngredientForm {
     BEANS("Beans"),
     BLOBS("Blobs"),
     CHOPPED("Chopped"),
@@ -29,7 +29,7 @@ public enum IngredientForm {
 
     public final String label;
 
-    IngredientForm(String label) {
+    RecipeIngredientForm(String label) {
         this.label = label;
     }
 }

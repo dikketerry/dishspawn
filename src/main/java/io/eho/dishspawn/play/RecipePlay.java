@@ -4,8 +4,8 @@ import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.util.IngredientCategory;
-import io.eho.dishspawn.util.IngredientForm;
-import io.eho.dishspawn.util.IngredientPrepType;
+import io.eho.dishspawn.util.RecipeIngredientForm;
+import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,22 +33,22 @@ public class RecipePlay {
         // ingredient 1 for recipe
         RecipeIngredient i1 = new RecipeIngredient();
         i1.setIngredient(coffeeInstant);
-        i1.setForm(IngredientForm.POWDER);
-        i1.setPrepType(IngredientPrepType.STIR);
+        i1.setForm(RecipeIngredientForm.POWDER);
+        i1.setPrepType(RecipeIngredientCookingMethod.STIR);
         i1.setColor("#000000");
 
         // ingredient 2 for recipe
         RecipeIngredient i2 = new RecipeIngredient();
         i2.setIngredient(milk);
-        i2.setForm(IngredientForm.FLUID); // TODO: need to add LIQUID
-        i2.setPrepType(IngredientPrepType.STIR);
+        i2.setForm(RecipeIngredientForm.FLUID); // TODO: need to add LIQUID
+        i2.setPrepType(RecipeIngredientCookingMethod.STIR);
         i2.setColor("#EEEEEE");
 
         // ingredient 3 for recipe
         RecipeIngredient i3 = new RecipeIngredient();
         i3.setIngredient(water);
-        i3.setForm(IngredientForm.FLUID);
-        i3.setPrepType(IngredientPrepType.BOIL);
+        i3.setForm(RecipeIngredientForm.FLUID);
+        i3.setPrepType(RecipeIngredientCookingMethod.BOIL);
         // no color
 
         // construct recipe

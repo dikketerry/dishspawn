@@ -1,0 +1,72 @@
+package io.eho.dishspawn.util;
+
+import io.eho.dishspawn.util.unitconversion.MassConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+
+// non-static util class. when creating a Recipe, each ingredient will either
+// get a Mass or Volume object, which will be attached to the Ingredient and
+// as such attached to the Recipe
+
+// TODO: singleton?
+public class RecipeIngredientMass {
+
+    private MassConverter massConverter;
+    private String unit;
+    private double quantity;
+
+    @Autowired
+    public RecipeIngredientMass(MassConverter massConverter) {
+        this.massConverter = massConverter;
+    }
+
+    // method to calculate given unit and quantity to grams
+    public double toGrams(String unit, double quantity) {
+
+        MassConverter.MassUnit massUnit = massConverter.parseStringToUnit(unit);
+        return massConverter.convert(quantity, massUnit,
+                                     MassConverter.MassUnit.GRAM);
+    }
+
+
+
+
+
+
+
+    //    private double _grams; // internal representation of Mass
+//
+//    // conversion factors
+//    private double _gramsToKgFactor = 0.001;
+//    private double _gramsToPoundsFactor = 0.00220462262;
+//    private double _gramsToOunceFactor = 0.03571428571;
+//    // ... more as needed
+//
+//    // convert to desired unit
+//    private double grams = _grams;
+//    private double kilograms = _grams * _gramsToKgFactor;
+//    private double pounds = _grams * _gramsToPoundsFactor;
+//    private double ounces = _grams * _gramsToOunceFactor;
+//
+//    // constructor - public, it needs to be instantiated per ingredient
+//    private IngredientMass(double grams) {
+//        this._grams = grams;
+//    }
+//
+//    // factory method - create IngredientMass instance with method
+//    public IngredientMass fromGrams(double grams) {
+//        return new IngredientMass(grams);
+//    }
+//
+//    public IngredientMass fromKg(double kg) {
+//        return new IngredientMass(kg / _gramsToKgFactor);
+//    }
+//
+//    public IngredientMass fromPounds(double pounds) {
+//        return new IngredientMass(pounds / _gramsToPoundsFactor);
+//    }
+//
+//    public IngredientMass fromOunces(double ounces) {
+//        return new IngredientMass(ounces / _gramsToOunceFactor);
+//    }
+
+}
