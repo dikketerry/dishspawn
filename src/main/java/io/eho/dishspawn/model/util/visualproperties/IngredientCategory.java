@@ -1,6 +1,4 @@
-package io.eho.dishspawn.util;
-
-import org.aspectj.apache.bcel.classfile.Unknown;
+package io.eho.dishspawn.model.util.visualproperties;
 
 public enum IngredientCategory {
     ADDITIVE("Additive - sugar, salt, sweeteners"),

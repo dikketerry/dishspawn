@@ -1,8 +1,6 @@
 package io.eho.dishspawn.model;
 
 
-import io.eho.dishspawn.util.RecipeIngredientForm;
-import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor @Getter @Setter

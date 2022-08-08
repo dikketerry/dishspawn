@@ -1,4 +1,4 @@
-package io.eho.dishspawn.util;
+package io.eho.dishspawn.model.util.visualproperties;
 
 public enum RecipeIngredientCookingMethod {
     ADD("Add"),

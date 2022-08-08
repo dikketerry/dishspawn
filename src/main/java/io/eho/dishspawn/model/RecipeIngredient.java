@@ -1,11 +1,10 @@
 package io.eho.dishspawn.model;
 
-import io.eho.dishspawn.util.RecipeIngredientForm;
-import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
-import io.eho.dishspawn.util.RecipeIngredientTexture;
-import io.eho.dishspawn.util.unitconversion.AbstractUnitConverter;
-import io.eho.dishspawn.util.unitconversion.MassConverter;
-import io.eho.dishspawn.util.unitconversion.VolumeConverter;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
+import io.eho.dishspawn.model.util.unitconversion.MassConverter;
+import io.eho.dishspawn.model.util.unitconversion.VolumeConverter;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 

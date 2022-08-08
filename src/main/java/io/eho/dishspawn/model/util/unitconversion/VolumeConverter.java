@@ -1,4 +1,4 @@
-package io.eho.dishspawn.util.unitconversion;
+package io.eho.dishspawn.model.util.unitconversion;
 
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
 

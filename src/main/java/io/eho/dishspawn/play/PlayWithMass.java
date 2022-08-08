@@ -3,9 +3,9 @@ package io.eho.dishspawn.play;
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.RecipeIngredient;
-import io.eho.dishspawn.util.IngredientCategory;
-import io.eho.dishspawn.util.RecipeIngredientForm;
-import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
+import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 
 public class PlayWithMass {
 

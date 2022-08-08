@@ -1,7 +1,7 @@
 package io.eho.dishspawn.model;
 
 // project imports
-import io.eho.dishspawn.util.IngredientCategory;
+import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 
 // lombok imports
 import lombok.*;
