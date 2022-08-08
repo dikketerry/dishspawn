@@ -11,7 +11,6 @@ import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,17 +18,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DishSpawnApplication implements CommandLineRunner {
 
+	public DishSpawnApplication() {}
+
 	public static void main(String[] args) {
 		SpringApplication.run(DishSpawnApplication.class, args);
 	}
 
-	@Autowired
 	private RecipeRepository recipeRepository;
 
-	@Autowired
 	private IngredientRepository ingredientRepository;
 
-	@Autowired
 	private RecipeIngredientRepository recipeIngredientRepository;
 
 	@Override
