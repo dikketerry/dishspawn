@@ -34,21 +34,21 @@ public class RecipePlay {
         RecipeIngredient i1 = new RecipeIngredient();
         i1.setIngredient(coffeeInstant);
         i1.setForm(RecipeIngredientForm.POWDER);
-        i1.setPrepType(RecipeIngredientCookingMethod.STIR);
+        i1.setCookingMethod(RecipeIngredientCookingMethod.STIR);
         i1.setColor("#000000");
 
         // ingredient 2 for recipe
         RecipeIngredient i2 = new RecipeIngredient();
         i2.setIngredient(milk);
         i2.setForm(RecipeIngredientForm.FLUID); // TODO: need to add LIQUID
-        i2.setPrepType(RecipeIngredientCookingMethod.STIR);
+        i2.setCookingMethod(RecipeIngredientCookingMethod.STIR);
         i2.setColor("#EEEEEE");
 
         // ingredient 3 for recipe
         RecipeIngredient i3 = new RecipeIngredient();
         i3.setIngredient(water);
         i3.setForm(RecipeIngredientForm.FLUID);
-        i3.setPrepType(RecipeIngredientCookingMethod.BOIL);
+        i3.setCookingMethod(RecipeIngredientCookingMethod.BOIL);
         // no color
 
         // construct recipe

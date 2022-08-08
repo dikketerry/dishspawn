@@ -79,7 +79,7 @@ public class VolumeConverter implements AbstractUnitConverter<VolumeConverter.Vo
     }
 
     // enum embedded because it really belongs to this class only
-    enum VolumeUnit {
+    public enum VolumeUnit {
         LITER("Liter"),             // 1000 milliliter
         FLUID_OUNCE("Fluid ounce"), // 30 milliliter
         GALLON("Gallon"),           // 3800 milliliter

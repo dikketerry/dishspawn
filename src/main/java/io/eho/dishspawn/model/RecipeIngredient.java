@@ -3,31 +3,19 @@ package io.eho.dishspawn.model;
 import io.eho.dishspawn.util.RecipeIngredientForm;
 import io.eho.dishspawn.util.RecipeIngredientCookingMethod;
 import io.eho.dishspawn.util.RecipeIngredientTexture;
+import io.eho.dishspawn.util.unitconversion.AbstractUnitConverter;
 import io.eho.dishspawn.util.unitconversion.MassConverter;
 import io.eho.dishspawn.util.unitconversion.VolumeConverter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-// temp solution, in-between class Ingredient - Recipe - need to look into
-// MultiMap or Map<K, List<V>> and avoid in-between class, as it will result
-// in unnecessary DB entries
-
-@NoArgsConstructor
-@ToString
+@Getter @Setter
 @Entity
 @Table(name = "recipe_ingredient")
 public class RecipeIngredient {
-
-//    @Autowired
-//    private MassConverter massConverter;
-//
-//    @Autowired
-//    private VolumeConverter volumeConverter;
 
     @CreationTimestamp
     @Column(name="timestamp_created")
@@ -35,143 +23,98 @@ public class RecipeIngredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="RECIPE_INGREDIENT_ID")
+    @Setter(AccessLevel.NONE)
+    @Column(name="recipe_ingredient_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="INGREDIENT_ID")
+    @JoinColumn(name="ingredient_id")
     private Ingredient ingredient;
 
     @ManyToOne
-    @JoinColumn(name="RECIPE_ID")
+    @JoinColumn(name="recipe_id")
     private Recipe recipe;
-
-    @Column(name="VISUAL_IMPACT")
-    private boolean visualImpact = true;                        // default value
-
-    // additional values join table recipe-ingredient
-    @Column(name="RECIPE_INGREDIENT_MASS")
-    private double mass;
-
-    @Column(name="RECIPE_INGREDIENT_VOLUME")
-    private double volume;
-
-    @Column(name="RECIPE_INGREDIENT_COLOR")
-    private String color;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="RECIPE_INGREDIENT_FORM")
-    private RecipeIngredientForm form;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="RECIPE_INGREDIENT_TEXTURE")
-    private RecipeIngredientTexture recipeIngredientTexture;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "RECIPE_INGREDIENT_COOKING_METHOD")
-    private RecipeIngredientCookingMethod prepType;
 
     // the unit name and quantity the recipe_ingredient are provided with
     // ( 3 teaspoon, 1.5 tablespoon, etc.) are stored in DB to enable
     // returning these when giving when a recipe is returned from the DB
-    @Column(name="UNIT_NAME")
+    @Column(name="unit_name")
     private String unitName;
 
-    @Column(name="QUANTITY")
+    @Column(name="quantity")
     private double quantity;
 
-    public Long getId() {
-        return id;
+    // additional values join table recipe-ingredient
+    @Column(name="mass")
+    @Setter(AccessLevel.NONE)
+    private double mass;
+
+    @Column(name="volume")
+    @Setter(AccessLevel.NONE)
+    private double volume;
+
+    @Column(name="visual_impact")
+    private boolean visualImpact = true;                        // default value
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="form")
+    private RecipeIngredientForm form;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="texture")
+    private RecipeIngredientTexture texture;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cooking_method")
+    private RecipeIngredientCookingMethod cookingMethod;
+
+    @Column(name="color")
+    private String color;
+
+    // move to service?
+    public void massOrVolumeSetter() {
+
+        switch (this.unitName) {
+            case "MILLILITER":
+            case "CUP":
+            case "DROP":
+            case "FLUID_OUNCE":
+            case "GALLON":
+            case "LITER":
+            case "PINT":
+            case "QUART":
+            case "TABLESPOON":
+            case "TEASPOON":
+                this.volume = calculateVolume();
+                break;
+            case "GRAM":
+            case "OUNCE":
+            case "KILOGRAM":
+            case "POUND":
+                this.mass = calculateMass();
+                break;
+            default: throw new UnsupportedOperationException();
+        }
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public boolean isVisualImpact() {
-        return visualImpact;
-    }
-
-    public void setVisualImpact(boolean visualImpact) {
-        this.visualImpact = visualImpact;
-    }
-
-    public double getMass() {
-        return mass;
-    }
-
-    public void setMass() {
+    private double calculateMass() {
         MassConverter massConverter = new MassConverter();
         MassConverter.MassUnit massUnit =
                 massConverter.parseStringToUnit(this.unitName);
-        this.mass = massConverter.convert(this.quantity, massUnit, MassConverter.MassUnit.GRAM);
+        return massConverter.convert(this.quantity, massUnit,
+                                MassConverter.MassUnit.GRAM);
     }
 
-    public double getVolume() {
-        return volume;
+    private double calculateVolume() {
+        VolumeConverter volumeConverter = new VolumeConverter();
+        VolumeConverter.VolumeUnit volumeUnit =
+                volumeConverter.parseStringToUnit(this.unitName);
+        return volumeConverter.convert(this.quantity, volumeUnit,
+                                  VolumeConverter.VolumeUnit.MILLILITER);
     }
 
-    public void setVolume(double volume) {
-        this.volume = volume;
-    }
+    // toString
 
-    public String getColor() {
-        return color;
-    }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public RecipeIngredientForm getForm() {
-        return form;
-    }
-
-    public RecipeIngredientTexture getRecipeIngredientTexture() {
-        return recipeIngredientTexture;
-    }
-
-    public void setRecipeIngredientTexture(RecipeIngredientTexture recipeIngredientTexture) {
-        this.recipeIngredientTexture = recipeIngredientTexture;
-    }
-
-    public void setForm(RecipeIngredientForm form) {
-        this.form = form;
-    }
-
-    public RecipeIngredientCookingMethod getPrepType() {
-        return prepType;
-    }
-
-    public void setPrepType(RecipeIngredientCookingMethod prepType) {
-        this.prepType = prepType;
-    }
-
-    public String getUnitName() {
-        return unitName;
-    }
-
-    public void setUnitName(String unitName) {
-        this.unitName = unitName;
-    }
-
-    public double getQuantityUnit() {
-        return quantity;
-    }
-
-    public void setQuantityUnit(double quantity) {
-        this.quantity = quantity;
-    }
+    // equals / hash
 }

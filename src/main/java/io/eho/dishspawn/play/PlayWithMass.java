@@ -18,7 +18,7 @@ public class PlayWithMass {
         ri.setIngredient(penne);
         ri.setForm(RecipeIngredientForm.SPHERES);
         ri.setColor("#EFC953");
-        ri.setPrepType(RecipeIngredientCookingMethod.BOIL);
+        ri.setCookingMethod(RecipeIngredientCookingMethod.BOIL);
 
         // mass extra stuff
         // simulate input value user
@@ -33,7 +33,7 @@ public class PlayWithMass {
         double massPenne = m.convert(quantity, inputUnitEnum, Unit.GRAM);
 
         // continue setting the RecipeIngredient
-        ri.setMass();
+        ri.massOrVolumeSetter();
 
         System.out.println("Recipe Ingredient: " + ri);
 

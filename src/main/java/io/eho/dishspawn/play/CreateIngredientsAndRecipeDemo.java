@@ -28,13 +28,13 @@ public class CreateIngredientsAndRecipeDemo {
                 "and stir in the instant coffee and milk.");
 
         // add recipe ingredients to the recipe
-        instantCoffee.addRecipeIngredient(coffeeInstant,
-                                          RecipeIngredientForm.POWDER,
-                                          RecipeIngredientCookingMethod.STIR, "#000000");
-        instantCoffee.addRecipeIngredient(milk, RecipeIngredientForm.FLUID,
-                                          RecipeIngredientCookingMethod.STIR, "#EEEEEE");
-        instantCoffee.addRecipeIngredient(water, RecipeIngredientForm.FLUID,
-                                          RecipeIngredientCookingMethod.BOIL, "A1A1A1");
+//        instantCoffee.addRecipeIngredient(coffeeInstant,
+//                                          RecipeIngredientForm.POWDER,
+//                                          RecipeIngredientCookingMethod.STIR, "#000000");
+//        instantCoffee.addRecipeIngredient(milk, RecipeIngredientForm.FLUID,
+//                                          RecipeIngredientCookingMethod.STIR, "#EEEEEE");
+//        instantCoffee.addRecipeIngredient(water, RecipeIngredientForm.FLUID,
+//                                          RecipeIngredientCookingMethod.BOIL, "A1A1A1");
 
         // TODO: testing mass / volume
         Ingredient basilicum = new Ingredient("basilicum",
