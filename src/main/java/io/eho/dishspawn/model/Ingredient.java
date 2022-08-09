@@ -31,7 +31,7 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     @Column(name="ingredient_id")
-    private long id;
+    private Long id;
 
     @Column(name="ingredient_name", unique = true)
     private String name;

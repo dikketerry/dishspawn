@@ -26,7 +26,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     @Column(name="recipe_id")
-    private long id;
+    private Long id;
 
     @Column(name = "recipe_name")
     private String name;
@@ -34,17 +34,18 @@ public class Recipe {
     @Column(name = "recipe_instructions")
     private String instructions;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<RecipeIngredient> recipeIngredients;
 
-    // user property
-    @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST,
-            CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name="recipe_chef",
-            joinColumns=@JoinColumn(name="recipe_id"),
-            inverseJoinColumns = @JoinColumn(name="chef_id"))
-    private Set<Chef> chefs = new HashSet<>();
+    // user property - should be possible to save on its own
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "chef_id")
+    private Chef chef; // consider better encapsulation (eg. getting it via Id)
+
+    // property for the graphic - to be saved / collected as part of recipe
+    @OneToMany(mappedBy = "recipe", fetch=FetchType.LAZY, cascade =
+            {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private Set<Visual> visuals;
 
     // constructor with args
     public Recipe(String name, String instructions) {
@@ -52,6 +53,7 @@ public class Recipe {
         this.instructions = instructions;
     }
 
+    // convenience method visual
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
         if (recipeIngredients == null) {
             recipeIngredients = new HashSet<>();
@@ -59,11 +61,12 @@ public class Recipe {
         this.recipeIngredients.add(recipeIngredient);
     }
 
-    public void addChef(Chef chef) {
-        if (chefs == null) {
-            chefs = new HashSet<>();
+    // convenience method visual
+    public void addVisual(Visual visual) {
+        if (this.visuals == null) {
+            visuals = new HashSet<>();
         }
-        this.chefs.add(chef);
+        this.visuals.add(visual);
     }
 
     @Override
@@ -73,20 +76,19 @@ public class Recipe {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Recipe name: ");
-        sb.append(name);
+        sb.append(this.name);
         sb.append("\n");
         sb.append("Ingredients needed: ");
         sb.append("\n");
-        for (RecipeIngredient ri : recipeIngredients) {
+        for (RecipeIngredient ri : this.recipeIngredients) {
             sb.append(ri);
             sb.append("\n");
         }
         sb.append("Instructions: ");
-        sb.append(instructions);
-        for (Chef c : chefs) {
-            sb.append(c);
-            sb.append("\n");
-        }
+        sb.append(this.instructions);
+        sb.append("\n");
+        sb.append("Made by: ");
+        sb.append(this.chef.getUserName());
 
         return sb.toString();
     }

@@ -1,16 +1,12 @@
 package io.eho.dishspawn;
 
-import io.eho.dishspawn.model.Chef;
-import io.eho.dishspawn.model.Ingredient;
-import io.eho.dishspawn.model.Recipe;
-import io.eho.dishspawn.model.RecipeIngredient;
-import io.eho.dishspawn.repository.IngredientRepository;
-import io.eho.dishspawn.repository.RecipeIngredientRepository;
-import io.eho.dishspawn.repository.RecipeRepository;
+import io.eho.dishspawn.model.*;
+import io.eho.dishspawn.repository.*;
 import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,22 +20,32 @@ public class DishSpawnApplication implements CommandLineRunner {
 		SpringApplication.run(DishSpawnApplication.class, args);
 	}
 
+	@Autowired
 	private RecipeRepository recipeRepository;
-
+	@Autowired
 	private IngredientRepository ingredientRepository;
-
+	@Autowired
 	private RecipeIngredientRepository recipeIngredientRepository;
+	@Autowired
+	private LikeRepository likeRepository;
+	@Autowired
+	private VisualRepository visualRepository;
+	@Autowired
+	private ChefRepository chefRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
 
-		Chef chef = new Chef();
-		chef.setFirstName("erik");
-		chef.setLastName("hollanders");
-		chef.setUserName("masterchef");
-		chef.setPassword("test123");
-		chef.setEmail("erik.hollanders@gmail.com");
+		// register new chef
+		Chef chefToDB = new Chef();
+		chefToDB.setFirstName("erik");
+		chefToDB.setLastName("hollanders");
+		chefToDB.setUserName("masterchef");
+		chefToDB.setPassword("test123");
+		chefToDB.setEmail("erik.hollanders@gmail.com");
+		chefRepository.save(chefToDB); // id 1
 
+		// add ingredients to DB (should be back-end operation only)
 		Ingredient egg = new Ingredient("egg", IngredientCategory.EGGS);
 		Ingredient mayonaise = new Ingredient("mayonaise",
 											  IngredientCategory.CONDIMENT);
@@ -48,19 +54,24 @@ public class DishSpawnApplication implements CommandLineRunner {
 		Ingredient mustard = new Ingredient("mustard", IngredientCategory.ADDITIVE);
 		Ingredient persil = new Ingredient("persil", IngredientCategory.HERBS);
 
-		ingredientRepository.save(egg);
-		ingredientRepository.save(mayonaise);
-		ingredientRepository.save(chives);
-		ingredientRepository.save(curry);
-		ingredientRepository.save(mustard);
-		ingredientRepository.save(persil);
+		ingredientRepository.save(egg); // id 2
+		ingredientRepository.save(mayonaise); // id 3
+		ingredientRepository.save(chives); // id 4
+		ingredientRepository.save(curry); // id 5
+		ingredientRepository.save(mustard); // id 6
+		ingredientRepository.save(persil); // id 7
 
+		// create new recipe
+		Chef chefFromDB = chefRepository.getReferenceById(1l);
 		Recipe eggSalad = new Recipe("Egg salad", "Boil the eggs, mash them " +
 				"in " +
 				"a bowl, add mustard, mayonaise, chives and curry, season to " +
 				"taste, garnish with persil, eat");
-		eggSalad.addChef(chef);
+		eggSalad.setChef(chefFromDB); // todo as the recipe is created by a
+		// logged-in user, the chef for this new recipe should be
+		// automatically set
 
+		// create recipe ingredients for recipe
 		RecipeIngredient r1 = new RecipeIngredient();
 		r1.setIngredient(egg);
 		r1.setRecipe(eggSalad); // this should also probably not be set by
@@ -140,12 +151,26 @@ public class DishSpawnApplication implements CommandLineRunner {
 		// RECIPE
 //		recipeIngredientRepository.save(r1);
 
-		eggSalad.addRecipeIngredient(r1);
-		eggSalad.addRecipeIngredient(r2);
-		eggSalad.addRecipeIngredient(r3);
-		eggSalad.addRecipeIngredient(r4);
-		eggSalad.addRecipeIngredient(r5);
-		eggSalad.addRecipeIngredient(r6);
-		recipeRepository.save(eggSalad);
+		eggSalad.addRecipeIngredient(r1); // 9
+		eggSalad.addRecipeIngredient(r2); // 10
+		eggSalad.addRecipeIngredient(r3); // 11
+		eggSalad.addRecipeIngredient(r4); // 12
+		eggSalad.addRecipeIngredient(r5); // 13
+		eggSalad.addRecipeIngredient(r6); // 14
+
+		// create visual
+		Visual visual = new Visual();
+		visual.setName("visual1.jpg");
+
+		// attach visual to recipe
+		eggSalad.addVisual(visual); // id 15
+		recipeRepository.save(eggSalad); // id 8 for recipe / then
+		// recipeIngredients 9 to 14 / then visual
+
+		// add a Like to eggSalad
+		Like like = new Like();
+		like.setRecipe(recipeRepository.getReferenceById(8l));
+		likeRepository.save(like); // id 16
+
 	}
 }

@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter @Setter
 @Entity
@@ -40,13 +42,9 @@ public class Chef {
     @Column(name = "avatar_path")
     private String avatarPath;
 
-    @ManyToMany(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST,
-            CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name="recipe_chef",
-            joinColumns=@JoinColumn(name="chef_id"),
-            inverseJoinColumns = @JoinColumn(name="recipe_id"))
-    private List<Recipe> recipes;
+    // todo detail cascade types
+    @OneToMany(mappedBy = "chef", fetch=FetchType.LAZY)
+    private Set<Recipe> recipes = new HashSet<>();
 
     // this boolean needs to ensure a chef can only generate a meal once a
     // day. It needs logic in the service coming from the timestamp for
