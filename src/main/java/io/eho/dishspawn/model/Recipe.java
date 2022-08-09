@@ -53,7 +53,7 @@ public class Recipe {
         this.instructions = instructions;
     }
 
-    // convenience method visual
+    // convenience method recipe ingredient
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
         if (recipeIngredients == null) {
             recipeIngredients = new HashSet<>();

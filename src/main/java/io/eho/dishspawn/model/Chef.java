@@ -3,9 +3,11 @@ package io.eho.dishspawn.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +16,11 @@ import java.util.Set;
 @Entity
 @Table(name = "chef")
 public class Chef {
+
+    @CreationTimestamp
+    @Column(name="timestamp_created")
+    @Setter(AccessLevel.NONE)
+    private Timestamp timestampCreated;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

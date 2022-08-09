@@ -3,14 +3,21 @@ package io.eho.dishspawn.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter @Setter
 @Entity
 @Table(name = "visual")
 
 public class Visual {
+
+    @CreationTimestamp
+    @Column(name="timestamp_created")
+    @Setter(AccessLevel.NONE)
+    private Timestamp timestampCreated;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
