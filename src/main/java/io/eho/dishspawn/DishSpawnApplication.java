@@ -20,6 +20,7 @@ public class DishSpawnApplication implements CommandLineRunner {
 		SpringApplication.run(DishSpawnApplication.class, args);
 	}
 
+	// to test, autowired on the field level for now..
 	@Autowired
 	private RecipeRepository recipeRepository;
 	@Autowired
