@@ -1,6 +1,7 @@
 package io.eho.dishspawn.model;
 
 // project imports
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 
 // lombok imports
@@ -40,6 +41,7 @@ public class Ingredient {
     @Column(name="ingredient_category")
     private IngredientCategory category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "ingredient")
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
@@ -49,7 +51,15 @@ public class Ingredient {
         this.category = Objects.requireNonNull(category);
     }
 
-    // toString
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "timestampCreated=" + timestampCreated +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", category=" + category +
+                '}';
+    }
 
     // equals / hash
 

@@ -1,7 +1,9 @@
 package io.eho.dishspawn.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Getter @Setter
+@NoArgsConstructor @Getter @Setter
 @Entity
 @Table(name = "chef")
 public class Chef {
@@ -50,6 +52,7 @@ public class Chef {
     private String avatarPath;
 
     // todo detail cascade types
+    @JsonIgnore
     @OneToMany(mappedBy = "chef", fetch=FetchType.LAZY)
     private Set<Recipe> recipes = new HashSet<>();
 

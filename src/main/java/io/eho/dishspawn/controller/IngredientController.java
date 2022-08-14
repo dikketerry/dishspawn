@@ -13,7 +13,7 @@ import java.util.List;
 // by annotating with @RestController we'll enable this class to handle Http
 // requests
 @RestController
-@RequestMapping("/api/v1/ingredients")
+@RequestMapping("/api/ingredients")
 public class IngredientController {
 
     @Autowired
