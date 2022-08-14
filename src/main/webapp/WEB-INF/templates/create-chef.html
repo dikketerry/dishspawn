@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+<div class="placeholder" style="height: 100px;">
+    <h2>PLACEHOLDER</h2>
+</div>
+<hr>
+<div class="placeholder" style="height: 200px;">
+    <h2>PLACEHOLDER</h2>
+</div>
+<hr>
+<main>
+
+    <div class="container">
+        <form th:action="@{save}" th:object="${chef}" method="post">
+
+            <h1>Register</h1>
+            <br>
+
+            <div>
+                <label for="userNameField"
+                       style="color: black; font-weight: bold">Username*</label>
+                <div>
+                    <input type="text" th:field="*{userName}" style="border:
+                     1px solid black" name="userName" id="userNameField"
+                           placeholder = "enter username" required>
+                    <!-- TODO: add error handling-->
+                </div>
+            </div>
+
+            <br>
+            <div>
+                <label for="emailField"
+                       style="color: black; font-weight: bold">Email*</label>
+                <div>
+                    <input type="text" th:field="*{email}" style="border:
+                     1px solid black" name="email" id="emailField"
+                           placeholder = "enter email address" required>
+                    <!-- TODO: add error handling-->
+                </div>
+            </div>
+
+            <br>
+            <div>
+                <label for="passwordField"
+                       style="color: black; font-weight: bold">Password*</label>
+                <div>
+                    <input type="text" th:field="*{password}" style="border:
+                     1px solid black" name="password" id="passwordField"
+                           placeholder = "enter password">
+                    <!-- TODO: add error handling-->
+                </div>
+            </div>
+
+<!--            <br>-->
+<!--            <div>-->
+<!--                <label for="retypePasswordField"-->
+<!--                       style="color: black; font-weight: bold">Retype-->
+<!--                    password</label>-->
+<!--                <div>-->
+<!--                    <input type="text" th:field="*{password}" style="border:-->
+<!--                     1px solid black" name="retypePassword"-->
+<!--                           id="retypePasswordField" placeholder =-->
+<!--                                   "retype password">-->
+<!--                    &lt;!&ndash; TODO: add error handling&ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <br>
+            <div>
+                <label for="firstNameField"
+                       style="color: black; font-weight: bold">First name</label>
+                <div>
+                    <input type="text" th:field="*{firstName}" style="border:
+                     1px solid black" name="firstName" id="firstNameField" placeholder = "enter first name">
+                    <!-- TODO: add error handling-->
+                </div>
+            </div>
+
+            <br>
+            <div>
+                <label for="lastNameField"
+                       style="color: black; font-weight: bold">Last name</label>
+                <div>
+                    <input type="text" th:field="*{lastName}" style="border:
+                     1px solid black" name="lastName" id="lastNameField"
+                           placeholder = "enter last name">
+                    <!-- TODO: add error handling-->
+                </div>
+            </div>
+
+            <br>
+
+            <button type="submit" class="buttons">Register me</button>
+
+        </form>
+    </div>
+
+</main>
+
+</body>
+</html>

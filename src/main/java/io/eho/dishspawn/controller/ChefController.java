@@ -2,38 +2,57 @@ package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.service.ChefService;
-import io.eho.dishspawn.service.IngredientService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@Controller
+@RequestMapping("/chef")
 public class ChefController {
 
-    // set ChefService property
+    // property ChefService
     private ChefService chefService;
 
-    // constructors
-    public ChefController() { }
+    public ChefController() {}
 
-    @Autowired // dependency injection via constructor
+    // inject ChefService property via constructor
+    @Autowired
     public ChefController(ChefService chefService) {
         this.chefService = chefService;
     }
 
-    // method for collecting chefs
-    @GetMapping("/api/chefs")
-    public List<Chef> getAllChefs() {
-        return chefService.findAllChefs();
+    // set up mappings (GET, POST, etc.)
+    @GetMapping("/all")
+    public String getAllChefs(Model model) {
+        List<Chef> chefsFromDB = chefService.getAllChefs();
+
+        if (chefsFromDB == null) {
+            model.addAttribute("error", "no chefs found");
+            return "error-page";
+        }
+
+        model.addAttribute("chefs", chefsFromDB);
+        return "all-chefs-test";
     }
 
-    // method for collecting chefs, recipes and ingredients based on search
-    // input
+    @GetMapping("register")
+    public String registerChef(Model model) {
+        model.addAttribute("chef", new Chef());
+        return "create-chef";
+    }
 
+    @PostMapping("save")
+    public String saveChef(@ModelAttribute("chef") Chef chef) {
+//        TODO: error handling + page redirection
 
+        chefService.saveChef(chef);
+        return "redirect:all";
+
+    }
 }

@@ -26,7 +26,7 @@ public class ChefServiceImpl implements ChefService {
     }
 
     @Override
-    public List<Chef> findAllChefs() {
+    public List<Chef> getAllChefs() {
         return chefRepository.findAll();
     }
 

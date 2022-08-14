@@ -11,7 +11,7 @@ public interface ChefService {
     void saveChef(Chef chef);
 
     // read - get all chefs from DB
-    List<Chef> findAllChefs();
+    List<Chef> getAllChefs();
 
     // read - get chef(s) based on string input
     List<Chef> getAllChefsByUserNameContaining(String input);

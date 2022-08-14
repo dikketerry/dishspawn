@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,7 @@ public class Recipe {
     private String name;
 
     @Column(name = "recipe_instructions")
+    @Size(max = 4000)
     private String instructions;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL)

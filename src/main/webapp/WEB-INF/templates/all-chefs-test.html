@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chefs</title>
+</head>
+<body>
+
+    <div th:each="chef:${chefs}">
+        <p style="display: inline-block">First name: </p>
+        <p style="display: inline-block" th:text="${chef.firstName}"></p> <br>
+        <p style="display: inline-block">Username: </p>
+        <p style="display: inline-block" th:text="${chef.userName}"></p> <br>
+        <hr>
+
+    </div>
+
+</body>
+</html>

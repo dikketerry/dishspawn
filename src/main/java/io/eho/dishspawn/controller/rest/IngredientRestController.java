@@ -1,7 +1,6 @@
-package io.eho.dishspawn.controller;
+package io.eho.dishspawn.controller.rest;
 
 import io.eho.dishspawn.model.Ingredient;
-import io.eho.dishspawn.repository.IngredientRepository;
 import io.eho.dishspawn.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +13,12 @@ import java.util.List;
 // requests
 @RestController
 @RequestMapping("/api/ingredients")
-public class IngredientController {
+public class IngredientRestController {
 
     @Autowired
     private IngredientService ingredientService;
 
-    public IngredientController(IngredientService ingredientService) {
+    public IngredientRestController(IngredientService ingredientService) {
         this.ingredientService = ingredientService;
     }
 
