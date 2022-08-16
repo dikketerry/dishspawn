@@ -1,20 +1,93 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- viewport tag for enabling responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Register</title>
+
+    <!-- UIKit css -->
+    <link rel="stylesheet" href="/css/uikit.min.css">
+    <!-- own css -->
+    <link rel="stylesheet" href="/css/master.css">
+
+    <!-- UIKit js -->
+    <script src="/js/uikit.min.js"></script>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+
+<!--    <script src="/js/uikit.icons.min.js"></script>-->
+
 </head>
 <body>
 
-<div class="placeholder" style="height: 100px;">
-    <h2>PLACEHOLDER</h2>
+<!--HEADER-->
+<div class="hdr-wrapper"> <!-- div without width spanning browser width -->
+
+    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+        <!-- now set-up row/column structure -->
+
+        <nav class="uk-navbar">
+<!--            logo part (includes the text (name and tagline)-->
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="/chef/all">
+                    <img class="uk-margin-small-right"
+                         src="/img/logo/icons8-rice-bowl-100.png" width="100"
+                         height="100">
+                    <div class="tagline">
+                        <div class="tagline-cell">
+                            <p id="tagline-main">Dish Spawn</p>
+                            <p id="tagline-sub">Virtual Cook Apprentice</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+<!--            search-->
+            <div class="uk-navbar-center">
+                <div>
+                    <a class="uk-navbar-toggle" uk-search-icon></a>
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
+                        <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
+                            <input id="searchField" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+<!--            chefs / recipes / login / register-->
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                    <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+                    <li><a class="uk-link-text" href="/chef/login">Login</a></li>
+                    <li><a class="uk-link-text" href="/chef/register">Register</a></li>
+                </ul>
+            </div>
+
+        </nav>
+
+    </div>
+
+
 </div>
-<hr>
-<div class="placeholder" style="height: 200px;">
-    <h2>PLACEHOLDER</h2>
-</div>
+
+<!--<hr>-->
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper">
+
+    <div class="uk-container">
+
+
+        <p class="uk-width-1-2 rotate">Make me a chef!</p>
+
+    </div> <!-- container -->
+
+</div> <!-- subhdr-wrapper -->
+
 <hr>
 <main>
 
@@ -24,14 +97,16 @@
             <h1>Register</h1>
             <br>
 
+            <!-- TODO: place all fields and labels in 'form' div - style form
+             div in css -->
+            <!-- TODO: add error handling for field input errors -->
             <div>
                 <label for="userNameField"
                        style="color: black; font-weight: bold">Username*</label>
                 <div>
                     <input type="text" th:field="*{userName}" style="border:
                      1px solid black" name="userName" id="userNameField"
-                           placeholder = "enter username" required>
-                    <!-- TODO: add error handling-->
+                           placeholder="enter username" required autofocus>
                 </div>
             </div>
 
@@ -42,8 +117,7 @@
                 <div>
                     <input type="text" th:field="*{email}" style="border:
                      1px solid black" name="email" id="emailField"
-                           placeholder = "enter email address" required>
-                    <!-- TODO: add error handling-->
+                           placeholder="enter email address" required>
                 </div>
             </div>
 
@@ -54,33 +128,32 @@
                 <div>
                     <input type="text" th:field="*{password}" style="border:
                      1px solid black" name="password" id="passwordField"
-                           placeholder = "enter password">
-                    <!-- TODO: add error handling-->
+                           placeholder="enter password">
                 </div>
             </div>
 
-<!--            <br>-->
-<!--            <div>-->
-<!--                <label for="retypePasswordField"-->
-<!--                       style="color: black; font-weight: bold">Retype-->
-<!--                    password</label>-->
-<!--                <div>-->
-<!--                    <input type="text" th:field="*{password}" style="border:-->
-<!--                     1px solid black" name="retypePassword"-->
-<!--                           id="retypePasswordField" placeholder =-->
-<!--                                   "retype password">-->
-<!--                    &lt;!&ndash; TODO: add error handling&ndash;&gt;-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <br>-->
+            <!--            <div>-->
+            <!--                <label for="retypePasswordField"-->
+            <!--                       style="color: black; font-weight: bold">Retype-->
+            <!--                    password</label>-->
+            <!--                <div>-->
+            <!--                    <input type="text" th:field="*{password}" style="border:-->
+            <!--                     1px solid black" name="retypePassword"-->
+            <!--                           id="retypePasswordField" placeholder =-->
+            <!--                                   "retype password">-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <br>
             <div>
                 <label for="firstNameField"
-                       style="color: black; font-weight: bold">First name</label>
+                       style="color: black; font-weight: bold">First
+                    name</label>
                 <div>
                     <input type="text" th:field="*{firstName}" style="border:
-                     1px solid black" name="firstName" id="firstNameField" placeholder = "enter first name">
-                    <!-- TODO: add error handling-->
+                     1px solid black" name="firstName" id="firstNameField"
+                           placeholder="enter first name">
                 </div>
             </div>
 
@@ -91,8 +164,7 @@
                 <div>
                     <input type="text" th:field="*{lastName}" style="border:
                      1px solid black" name="lastName" id="lastNameField"
-                           placeholder = "enter last name">
-                    <!-- TODO: add error handling-->
+                           placeholder="enter last name">
                 </div>
             </div>
 

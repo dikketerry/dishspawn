@@ -1,0 +1,84 @@
+/* app specific css */
+
+html {
+    font-family: Helvetica, Geneva, sans-serif;
+}
+
+body {
+    /*font-family: Helvetica, Geneva, sans-serif;*/
+    background-color: bisque;
+}
+
+/* HEADER STYLING */
+/* set container to 1270 to get true 1200px content area / 35px margin */
+.uk-container {
+    max-width: 1270px;
+}
+
+.hdr-wrapper {
+    background-color: #222222;
+    min-height: 100px;
+}
+
+/* override of uk-logo font */
+.uk-logo {
+    font-family: Helvetica, Geneva, sans-serif;
+}
+
+/* text styling (part of logo) */
+.tagline {
+    color: #dedede;
+    display: table;
+}
+
+.tagline-cell #tagline-main #tagline-sub {
+    display: table-cell;
+}
+
+#tagline-main {
+    font-size: 30px;
+    line-height: 1.2;
+    margin-bottom: 0px;
+}
+
+#tagline-sub {
+    font-size: 11px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+/* search icon */
+.uk-navbar-toggle {
+    color: #dedede;
+}
+
+/* TODO: search field */
+/*.uk-search-input {*/
+/*    width: 200px;*/
+/*}*/
+
+.uk-navbar-nav li a {
+    color: #dedede;
+}
+
+/* SUB HEADER STYLING */
+.subhdr-wrapper {
+    background-color: #32d296;
+    min-height: 200px;
+}
+
+.rotate {
+    font-family: "Marker Felt", "Comic Sans MS", sans-serif;
+    font-size: 72px;
+    width: 600px;
+    height: 200px;
+    text-align: center;
+    line-height: 200px;
+    transform: rotateZ(-6deg);
+
+}
+
+
+
