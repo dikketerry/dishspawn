@@ -44,7 +44,7 @@ public class RecipeController {
         return "all-recipes";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/add")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new Recipe());
         return "add-recipe";

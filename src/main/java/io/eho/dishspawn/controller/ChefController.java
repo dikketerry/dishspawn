@@ -43,7 +43,7 @@ public class ChefController {
     }
 
     // register a new chef
-    @GetMapping("register")
+    @GetMapping("/add")
     public String registerChef(Model model) {
         model.addAttribute("chef", new Chef());
         return "add-chef";

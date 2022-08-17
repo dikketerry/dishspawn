@@ -25,6 +25,11 @@ body {
     font-family: Helvetica, Geneva, sans-serif;
 }
 
+.food-icon {
+    width: 100px;
+    height: 100px;
+}
+
 /* text styling (part of logo) */
 .tagline {
     color: #dedede;
