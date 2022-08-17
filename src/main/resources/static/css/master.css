@@ -6,7 +6,7 @@ html {
 
 body {
     /*font-family: Helvetica, Geneva, sans-serif;*/
-    background-color: bisque;
+    /*background-color: bisque;*/
 }
 
 /* HEADER STYLING */
@@ -65,19 +65,43 @@ body {
 
 /* SUB HEADER STYLING */
 .subhdr-wrapper {
-    background-color: #32d296;
+    /*background-color: #32d296;*/
     min-height: 200px;
+    text-align: center;
 }
 
 .rotate {
     font-family: "Marker Felt", "Comic Sans MS", sans-serif;
     font-size: 72px;
+    color: #222222;
     width: 600px;
     height: 200px;
-    text-align: center;
     line-height: 200px;
     transform: rotateZ(-6deg);
+}
 
+#swedish-chef {
+    height: auto;
+    width: auto;
+    max-height: 200px;
+    max-width: 266px;
+}
+
+/*MAIN*/
+.content-wrapper {
+    min-height: 300px;
+    text-align: center;
+}
+
+.container-form {
+    margin: 0 auto;
+    width: 600px; /* TODO: need a centered div changing its width dependent on viewport width */
+    height: auto;
+    /*border: solid 1px #222222;*/
+}
+
+.form-label {
+    font-weight: bold;
 }
 
 

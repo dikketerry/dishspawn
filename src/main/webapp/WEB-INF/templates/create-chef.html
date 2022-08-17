@@ -17,9 +17,7 @@
 
     <!-- UIKit js -->
     <script src="/js/uikit.min.js"></script>
-    <script src="/js/jquery-3.6.0.min.js"></script>
-
-<!--    <script src="/js/uikit.icons.min.js"></script>-->
+    <script src="/js/uikit.icons.min.js"></script>
 
 </head>
 <body>
@@ -81,8 +79,12 @@
 
     <div class="uk-container">
 
-
-        <p class="uk-width-1-2 rotate">Make me a chef!</p>
+        <div class="uk-grid">
+            <p class="uk-width-1-2 rotate">Make me a chef!</p>
+            <div class="uk-width-1-2">
+                <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
+            </div>
+        </div>
 
     </div> <!-- container -->
 
@@ -90,90 +92,93 @@
 
 <hr>
 <main>
+    <div class="content-wrapper">
 
-    <div class="container">
-        <form th:action="@{save}" th:object="${chef}" method="post">
+        <div class="uk-container">
 
-            <h1>Register</h1>
-            <br>
+            <div class="container-form">
+                <!--        <form th:action="@{save}" th:object="${chef}" method="post">-->
 
-            <!-- TODO: place all fields and labels in 'form' div - style form
-             div in css -->
-            <!-- TODO: add error handling for field input errors -->
-            <div>
-                <label for="userNameField"
-                       style="color: black; font-weight: bold">Username*</label>
-                <div>
-                    <input type="text" th:field="*{userName}" style="border:
-                     1px solid black" name="userName" id="userNameField"
-                           placeholder="enter username" required autofocus>
-                </div>
+                <form class="uk-form-horizontal uk-margin-small"
+                        th:action="@{save}" th:object="${chef}" method="post">
+
+                    <h1>Register</h1>
+                    <br>
+
+                    <!-- TODO: add error handling for field input errors -->
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="username-field">Username*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="username-field"
+                                   type="text" th:field="*{userName}"
+                                   placeholder="enter username" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="email-field">Email*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="email-field"
+                                   type="text" th:field="*{email}"
+                                   placeholder="enter email" required>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="password-field">Password*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="password-field"
+                                   type="text" th:field="*{password}"
+                                   placeholder="enter password" required>
+                        </div>
+                    </div>
+
+<!--                    TODO: retype password field + validation-->
+<!--                    <div class="uk-margin">-->
+<!--                        <label class="uk-form-label form-label"-->
+<!--                               for="retype-password-field">Password*</label>-->
+<!--                        <div class="uk-form-controls">-->
+<!--                            <input class="uk-input" id="retype-password-field"-->
+<!--                                   type="text" th:field="*{password}"-->
+<!--                                   placeholder="enter password" required>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="first-name-field">First name</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="first-name-field"
+                                   type="text" th:field="*{firstName}"
+                                   placeholder="enter first name" required>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="last-name-field">First name</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="last-name-field"
+                                   type="text" th:field="*{lastName}"
+                                   placeholder="enter last name" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="buttons">Register me</button>
+
+                </form>
+
             </div>
 
-            <br>
-            <div>
-                <label for="emailField"
-                       style="color: black; font-weight: bold">Email*</label>
-                <div>
-                    <input type="text" th:field="*{email}" style="border:
-                     1px solid black" name="email" id="emailField"
-                           placeholder="enter email address" required>
-                </div>
-            </div>
+        </div>
 
-            <br>
-            <div>
-                <label for="passwordField"
-                       style="color: black; font-weight: bold">Password*</label>
-                <div>
-                    <input type="text" th:field="*{password}" style="border:
-                     1px solid black" name="password" id="passwordField"
-                           placeholder="enter password">
-                </div>
-            </div>
-
-            <!--            <br>-->
-            <!--            <div>-->
-            <!--                <label for="retypePasswordField"-->
-            <!--                       style="color: black; font-weight: bold">Retype-->
-            <!--                    password</label>-->
-            <!--                <div>-->
-            <!--                    <input type="text" th:field="*{password}" style="border:-->
-            <!--                     1px solid black" name="retypePassword"-->
-            <!--                           id="retypePasswordField" placeholder =-->
-            <!--                                   "retype password">-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-            <br>
-            <div>
-                <label for="firstNameField"
-                       style="color: black; font-weight: bold">First
-                    name</label>
-                <div>
-                    <input type="text" th:field="*{firstName}" style="border:
-                     1px solid black" name="firstName" id="firstNameField"
-                           placeholder="enter first name">
-                </div>
-            </div>
-
-            <br>
-            <div>
-                <label for="lastNameField"
-                       style="color: black; font-weight: bold">Last name</label>
-                <div>
-                    <input type="text" th:field="*{lastName}" style="border:
-                     1px solid black" name="lastName" id="lastNameField"
-                           placeholder="enter last name">
-                </div>
-            </div>
-
-            <br>
-
-            <button type="submit" class="buttons">Register me</button>
-
-        </form>
     </div>
+
+
 
 </main>
 
