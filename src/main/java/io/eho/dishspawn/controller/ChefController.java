@@ -28,6 +28,7 @@ public class ChefController {
     }
 
     // set up mappings (GET, POST, etc.)
+    // collect all chefs
     @GetMapping("/all")
     public String getAllChefs(Model model) {
         List<Chef> chefsFromDB = chefService.getAllChefs();
@@ -41,12 +42,16 @@ public class ChefController {
         return "all-chefs";
     }
 
+    // register a new chef
     @GetMapping("register")
     public String registerChef(Model model) {
         model.addAttribute("chef", new Chef());
-        return "create-chef";
+        return "add-chef";
     }
 
+    // collect chef(s) username based on string input
+
+    // post - save new chef
     @PostMapping("save")
     public String saveChef(@ModelAttribute("chef") Chef chef) {
 //        TODO: error handling + page redirection

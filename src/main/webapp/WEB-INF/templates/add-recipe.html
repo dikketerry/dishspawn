@@ -8,7 +8,7 @@
     <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Add ingredient</title>
+    <title>New recipe</title>
 
     <!-- UIKit css -->
     <link rel="stylesheet" href="/css/uikit.min.css">
@@ -102,38 +102,52 @@
             sizing and positioning -->
 
                 <form class="uk-form-horizontal uk-margin-small"
-                        th:action="@{save}" th:object="${ingredient}" method="post">
+                        th:action="@{save}" th:object="${recipe}" method="post">
 
-                    <h1>New ingredient</h1>
+                    <h1>New recipe</h1>
                     <br>
 
                     <!-- TODO: add error handling for field input errors -->
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
-                               for="ingredient-name-field">Ingredient name *</label>
+                               for="recipe-name-field">Recipe name *</label>
                         <div class="uk-form-controls">
-                            <input class="uk-input" id="ingredient-name-field"
+                            <input class="uk-input" id="recipe-name-field"
                                    type="text" th:field="*{name}"
-                                   placeholder="enter name of ingredient" required autofocus>
+                                   placeholder="enter name of recipe" required autofocus>
                         </div>
                     </div>
 
-<!--                    below an example of how to have a picklist pre-populated -->
-<!--                    by values from an enum -->
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="ingredient-category-field">Ingredient category *</label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" id="ingredient-category-field"
-                                    th:field="*{category}" placeholder="select ingredient category" required>
-                                <option th:each="category : ${T(io.eho.dishspawn.model.util.visualproperties.IngredientCategory).values()}"
-                                        th:value="${category}"
-                                        th:text="${category.label}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+<!--                    add ingredients to recipe -> recipe ingredients-->
+<!--                    1. find ingredient-->
+<!--                    2. add unit-->
+<!--                    3. add quantity-->
+<!--                    4. set visual impact Y/N-->
+<!--                    5, dependent on 4:-->
+<!--                        1. recipe ingredient save decision tree-->
+<!--                        OR-->
+<!--                        1. provide form-->
+<!--                        2. provide texture-->
+<!--                        3. provide cooking method-->
+<!--                        4. provide color-->
+<!--                        5. recipe ingredient save decision tree-->
+<!--                    6. loop through this for each recipe ingredient-->
+
+
+<!--                    <div class="uk-margin">-->
+<!--                        <label class="uk-form-label form-label"-->
+<!--                               for="ingredient-category-field">Ingredient category *</label>-->
+<!--                        <div class="uk-form-controls">-->
+<!--                            <select class="uk-select" id="ingredient-category-field"-->
+<!--                                    th:field="*{category}" placeholder="select ingredient category" required>-->
+<!--                                <option th:each="category : ${T(io.eho.dishspawn.model.util.visualproperties.IngredientCategory).values()}"-->
+<!--                                        th:value="${category}"-->
+<!--                                        th:text="${category.label}">-->
+<!--                                </option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <button type="submit" class="buttons">Save new ingredient</button>
 

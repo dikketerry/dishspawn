@@ -43,6 +43,7 @@ public class IngredientController {
         return "all-ingredients";
     }
 
+    // add a new ingredient
     @GetMapping("/add")
     public String addIngredient(Model model) {
         model.addAttribute("ingredient", new Ingredient());
@@ -50,6 +51,7 @@ public class IngredientController {
     }
 
     // collect ingredients based on string input
+
 
 
     // post method(s)
