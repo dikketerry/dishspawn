@@ -38,7 +38,7 @@ public class ChefController {
         }
 
         model.addAttribute("chefs", chefsFromDB);
-        return "all-chefs-test";
+        return "all-chefs";
     }
 
     @GetMapping("register")

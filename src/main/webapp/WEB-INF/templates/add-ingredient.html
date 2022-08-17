@@ -8,7 +8,7 @@
     <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Register</title>
+    <title>Add ingredient</title>
 
     <!-- UIKit css -->
     <link rel="stylesheet" href="/css/uikit.min.css">
@@ -81,7 +81,7 @@
 <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
-            <p class="uk-width-1-2 rotate">Make me a chef!</p>
+            <p class="uk-width-1-2 rotate">Add ingredient!</p>
             <div class="uk-width-1-2">
                 <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
             </div>
@@ -102,75 +102,81 @@
             sizing and positioning -->
 
                 <form class="uk-form-horizontal uk-margin-small"
-                        th:action="@{save}" th:object="${chef}" method="post">
+                        th:action="@{save}" th:object="${ingredient}" method="post">
 
-                    <h1>Register</h1>
+                    <h1>New ingredient</h1>
                     <br>
 
                     <!-- TODO: add error handling for field input errors -->
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
-                               for="username-field">Username*</label>
+                               for="ingredient-name-field">Ingredient name *</label>
                         <div class="uk-form-controls">
-                            <input class="uk-input" id="username-field"
-                                   type="text" th:field="*{userName}"
-                                   placeholder="enter username" required autofocus>
+                            <input class="uk-input" id="ingredient-name-field"
+                                   type="text" th:field="*{name}"
+                                   placeholder="enter name of ingredient" required autofocus>
                         </div>
                     </div>
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
-                               for="email-field">Email*</label>
+                               for="ingredient-category-field">Ingredient category *</label>
                         <div class="uk-form-controls">
-                            <input class="uk-input" id="email-field"
-                                   type="text" th:field="*{email}"
-                                   placeholder="enter email" required>
+                            <select class="uk-select" id="ingredient-category-field"
+                                    th:field="*{category}" placeholder="select ingredient category" required>
+                                <option
+                                        th:each="category : ${T(io.eho.dishspawn.model.util.visualproperties.IngredientCategory).values()}"
+                                        th:value="${category}"
+                                        th:text="${category}"></option>
+<!--                                <option>Option 01</option>-->
+<!--                                <option>Option 02</option>-->
+                            </select>
                         </div>
                     </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="password-field">Password*</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="password-field"
-                                   type="text" th:field="*{password}"
-                                   placeholder="enter password" required>
-                        </div>
-                    </div>
-
-<!--                    TODO: retype password field + validation-->
 <!--                    <div class="uk-margin">-->
 <!--                        <label class="uk-form-label form-label"-->
-<!--                               for="retype-password-field">Password*</label>-->
+<!--                               for="password-field">Password*</label>-->
 <!--                        <div class="uk-form-controls">-->
-<!--                            <input class="uk-input" id="retype-password-field"-->
+<!--                            <input class="uk-input" id="password-field"-->
 <!--                                   type="text" th:field="*{password}"-->
 <!--                                   placeholder="enter password" required>-->
 <!--                        </div>-->
 <!--                    </div>-->
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="first-name-field">First name</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="first-name-field"
-                                   type="text" th:field="*{firstName}"
-                                   placeholder="enter first name" required>
-                        </div>
-                    </div>
+<!--&lt;!&ndash;                    TODO: retype password field + validation&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="uk-margin">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <label class="uk-form-label form-label"&ndash;&gt;-->
+<!--&lt;!&ndash;                               for="retype-password-field">Password*</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <div class="uk-form-controls">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <input class="uk-input" id="retype-password-field"&ndash;&gt;-->
+<!--&lt;!&ndash;                                   type="text" th:field="*{password}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                   placeholder="enter password" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
 
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="last-name-field">First name</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="last-name-field"
-                                   type="text" th:field="*{lastName}"
-                                   placeholder="enter last name" required>
-                        </div>
-                    </div>
+<!--                    <div class="uk-margin">-->
+<!--                        <label class="uk-form-label form-label"-->
+<!--                               for="first-name-field">First name</label>-->
+<!--                        <div class="uk-form-controls">-->
+<!--                            <input class="uk-input" id="first-name-field"-->
+<!--                                   type="text" th:field="*{firstName}"-->
+<!--                                   placeholder="enter first name" required>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <button type="submit" class="buttons">Register me</button>
+<!--                    <div class="uk-margin">-->
+<!--                        <label class="uk-form-label form-label"-->
+<!--                               for="last-name-field">First name</label>-->
+<!--                        <div class="uk-form-controls">-->
+<!--                            <input class="uk-input" id="last-name-field"-->
+<!--                                   type="text" th:field="*{lastName}"-->
+<!--                                   placeholder="enter last name" required>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <button type="submit" class="buttons">Save new ingredient</button>
 
                 </form>
 

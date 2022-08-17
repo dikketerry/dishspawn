@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingredients</title>
+</head>
+<body>
+
+    <div th:each="ingredient:${ingredients}">
+        <p style="display: inline-block">Ingredient name: </p>
+        <p style="display: inline-block" th:text="${ingredient.name}"></p>
+        <br>
+        <p style="display: inline-block">Ingredient category: </p>
+        <p style="display: inline-block" th:text="${ingredient.category}"></p>
+        <br>
+        <hr>
+
+    </div>
+
+</body>
+</html>

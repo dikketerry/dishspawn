@@ -22,7 +22,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<Ingredient> findAllIngredients() {
+    public void saveIngredient(Ingredient ingredient) {
+        this.ingredientRepository.save(ingredient);
+    }
+
+    @Override
+    public List<Ingredient> getAllIngredients() {
         return ingredientRepository.findAll();
     }
 }
