@@ -25,14 +25,29 @@ public class Like {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "recipe_id")
+    @JoinColumn(name = "recipe_id") // results in recipe id in like table
     private Recipe recipe;
 
     @ManyToOne
-    @JoinColumn(name = "chef_id")
+    @JoinColumn(name = "chef_id") // results in chef id (who gave the like) in
+    // like table
     private Chef chef;
 
     // toString
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Like id: " + this.id);
+        sb.append(": ");
+        sb.append("by " + this.chef.getUserName() + " ");
+        sb.append("for recipe " + this.recipe.getName());
+
+        return sb.toString();
+
+    }
+
 
     // equals & hash
 

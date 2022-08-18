@@ -28,7 +28,20 @@ public class Visual {
     @Column(name = "visual_name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default, but hey..
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    @Override
+    public String toString() {
+        // name
+        // belongs to
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name of visual file: " + this.name + " ");
+        sb.append("belongs to recipe: " + this.recipe.getName());
+
+        return sb.toString();
+
+    }
 }

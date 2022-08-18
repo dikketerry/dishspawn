@@ -26,11 +26,12 @@ public class RecipeIngredient {
     @Column(name="recipe_ingredient_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default @ManyToOne, but
+    // hey, let's get it explicit to understand what's happening
     @JoinColumn(name="ingredient_id")
     private Ingredient ingredient;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
@@ -113,6 +114,32 @@ public class RecipeIngredient {
     }
 
     // toString
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Ingredient - " + this.ingredient.getName() + " ");
+        sb.append("in recipe - " + this.recipe.getName() + ": ");
+        sb.append("\n");
+        sb.append(this.quantity + " " + this.unitName);
+        sb.append("\n");
+        sb.append("Ingredient has visual impact on recipe? " + this.visualImpact);
+
+        if (this.visualImpact == false) {
+            return sb.toString();
+        }
+
+        sb.append("Form of ingredient: " + this.form);
+        sb.append("\n");
+        sb.append("texture: " + this.texture);
+        sb.append("\n");
+        sb.append("cooking method: " + this.cookingMethod);
+        sb.append("\n");
+        sb.append("color: " + this.color);
+
+        return sb.toString();
+
+    }
 
 
     // equals / hash

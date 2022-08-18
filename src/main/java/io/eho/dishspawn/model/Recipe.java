@@ -36,17 +36,16 @@ public class Recipe {
     @Size(max = 4000)
     private String instructions;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<RecipeIngredient> recipeIngredients;
 
     // user property - should be possible to save on its own
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "chef_id")
-    private Chef chef; // consider better encapsulation (eg. getting it via Id)
+    private Chef chef;
 
     // property for the graphic - to be saved / collected as part of recipe
-    @OneToMany(mappedBy = "recipe", fetch=FetchType.LAZY, cascade =
-            {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "recipe", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Visual> visuals;
 
     // constructor with args

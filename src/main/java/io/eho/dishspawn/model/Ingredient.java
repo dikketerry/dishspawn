@@ -42,7 +42,8 @@ public class Ingredient {
     private IngredientCategory category;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ingredient")
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY) // no cascade
+    // - RecipeIngredients are created with a recipe. not with an Ingredient
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     // constructor with args
@@ -53,12 +54,15 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        return "Ingredient{" +
-                "timestampCreated=" + timestampCreated +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", category=" + category +
-                '}';
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Ingredient's name: " + this.name);
+        sb.append("\n");
+        sb.append("Ingredient's category: " + this.category);
+        sb.append("\n");
+
+        return sb.toString();
     }
 
     // equals / hash

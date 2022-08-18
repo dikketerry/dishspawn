@@ -51,9 +51,9 @@ public class Chef {
     @Column(name = "avatar_path")
     private String avatarPath;
 
-    // todo detail cascade types
     @JsonIgnore
-    @OneToMany(mappedBy = "chef", fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "chef", fetch=FetchType.LAZY) // no cascadetype, as
+    // a chef and a recipe can exist independently.
     private Set<Recipe> recipes = new HashSet<>();
 
     // this boolean needs to ensure a chef can only generate a meal once a
@@ -63,6 +63,24 @@ public class Chef {
     private boolean dailySlot = true;                           // default value
 
     // toString
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Chef's username: " + this.userName);
+        sb.append("\n");
+        for (Recipe recipe : this.recipes) {
+            sb.append(recipe.getName());
+            sb.append("\n");
+        }
+        sb.append("Avatar path: " + this.avatarPath);
+        sb.append("Has used daily slot: " + this.dailySlot);
+
+        return sb.toString();
+
+    }
+
 
     // equals / hash
 
