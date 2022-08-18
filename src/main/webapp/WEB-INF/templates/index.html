@@ -8,7 +8,7 @@
     <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Add ingredient</title>
+    <title>Register</title>
 
     <!-- UIKit css -->
     <link rel="stylesheet" href="/css/uikit.min.css">
@@ -33,7 +33,7 @@
             <div class="uk-navbar-left">
                 <a class="uk-navbar-item uk-logo" href="/chef/all">
                     <img class="uk-margin-small-right food-icon"
-                         src="/img/logo/icons8-food-and-wine-100.png">
+                         src="/img/logo/icons8-rice-bowl-100.png">
                     <div class="tagline">
                         <div class="tagline-cell">
                             <p id="tagline-main">Dish Spawn</p>
@@ -80,9 +80,18 @@
 <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
-            <p class="uk-width-1-2 rotate">Add ingredient!</p>
+            <div class ="uk-width-1-2">
+                <p id="home-subhdr-main">Hi! I'm Dish Spawn.</p>
+                <p id="home-subhdr-sub">Feed me an ingredient or two, and I will
+                    spawn you a nice dish!</p>
+                <p><a class="uk-button uk-button-primary"
+                      th:href="@{/spawn}">Spawn Dish!</a>
+                </p>
+            </div>
+
             <div class="uk-width-1-2">
-                <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
+                <img id="swedish-chef" src="/img/swedish-chef.png"
+                     alt="swedish-chef-image">
             </div>
         </div>
 
@@ -100,43 +109,6 @@
             <div class="container-form"> <!-- div to build the form in for
             sizing and positioning -->
 
-                <form class="uk-form-horizontal uk-margin-small"
-                        th:action="@{save}" th:object="${ingredient}" method="post">
-
-                    <h1>New ingredient</h1>
-                    <br>
-
-                    <!-- TODO: add error handling for field input errors -->
-
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="ingredient-name-field">Ingredient name *</label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="ingredient-name-field"
-                                   type="text" th:field="*{name}"
-                                   placeholder="enter name of ingredient" required autofocus>
-                        </div>
-                    </div>
-
-<!--                    below an example of how to have a picklist pre-populated -->
-<!--                    by values from an enum -->
-                    <div class="uk-margin">
-                        <label class="uk-form-label form-label"
-                               for="ingredient-category-field">Ingredient category *</label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" id="ingredient-category-field"
-                                    th:field="*{category}" placeholder="select ingredient category" required>
-                                <option th:each="category : ${T(io.eho.dishspawn.model.util.visualproperties.IngredientCategory).values()}"
-                                        th:value="${category}"
-                                        th:text="${category.label}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="buttons">Save new ingredient</button>
-
-                </form>
 
             </div>
 

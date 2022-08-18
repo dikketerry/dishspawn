@@ -75,15 +75,19 @@ body {
     text-align: center;
 }
 
-.rotate {
-    font-family: "Marker Felt", "Comic Sans MS", sans-serif;
-    font-size: 72px;
-    color: #222222;
-    width: 600px;
-    height: 200px;
-    line-height: 200px;
-    transform: rotateZ(-6deg);
-}
+    /* for pages only */
+    .
+
+    /* for forms only */
+    .rotate {
+        font-family: "Marker Felt", "Comic Sans MS", sans-serif;
+        font-size: 72px;
+        color: #222222;
+        width: 600px;
+        height: 200px;
+        line-height: 200px;
+        transform: rotateZ(-6deg);
+    }
 
 #swedish-chef {
     height: auto;
