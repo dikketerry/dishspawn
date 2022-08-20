@@ -2,11 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spwan dummy</title>
+    <title>Spawn dummy</title>
 </head>
 <body>
 
 <p>SPAWN DUMMY</p>
+
+<h3>The sets contain:</h3>
+<h4>Search result: </h4>
+<li th:each="ingredient : ${ingredientSearchResult}">
+    <span th:text="${ingredient.name}"></span>
+</li>
+<h4>Spawn Set:</h4>
+<li th:each="ingredient : ${ingredientSpawnSet}">
+    <span th:text="${ingredient.name}"></span>
+</li>
+
+
+<h3>Enter ingredient: </h3>
+
+<form th:action="@{/spawn}" method="post">
+    Ingredient name: <input name="name"/><br/>
+    <input type="submit" value="Search">
+</form>
+
+<br>
+
+<h3>Search result:</h3>
+
+<li th:each="ingredient : ${ingredientSearchResult}">
+    <form th:action="@{/spawn/add-ingredient}" th:object="${ingredient}"
+          method="post">
+        <span th:text="${ingredient.name}"></span>
+        <input type="submit" value="Add to spawn selection">
+    </form>
+</li>
+
+<h3>Selected ingredients:</h3>
+<li th:each="ingredient : ${ingredientSpawnSet}">
+    <span th:text="${ingredient.name}"></span>
+<!--    <input type="submit" value="Add to spawn selection"-->
+<!--           th:action="@{/spawn/add-ingredient}" method="post">-->
+</li>
 
 </body>
 </html>

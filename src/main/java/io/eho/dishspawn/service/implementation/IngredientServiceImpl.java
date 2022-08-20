@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -29,5 +30,10 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public List<Ingredient> getAllIngredients() {
         return ingredientRepository.findAll();
+    }
+
+    @Override
+    public Set<Ingredient> getAllIngredientsByNameContaining(String name) {
+        return ingredientRepository.findAllByNameContaining(name);
     }
 }
