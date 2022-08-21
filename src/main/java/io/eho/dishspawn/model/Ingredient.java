@@ -42,14 +42,22 @@ public class Ingredient {
     private IngredientCategory category;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "ingredient", fetch = FetchType.LAZY) // no cascade
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.EAGER) // no cascade
     // - RecipeIngredients are created with a recipe. not with an Ingredient
-    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+    private Set<RecipeIngredient> recipeIngredients;
 
     // constructor with args
     public Ingredient(String name, IngredientCategory category) {
         this.name = Objects.requireNonNull(name);
         this.category = Objects.requireNonNull(category);
+    }
+
+    // convenience method recipe ingredient
+    public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+        if (recipeIngredients == null) {
+            recipeIngredients = new HashSet<>();
+        }
+        this.recipeIngredients.add(recipeIngredient);
     }
 
     @Override

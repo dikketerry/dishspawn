@@ -8,42 +8,105 @@
 
 <p>SPAWN DUMMY</p>
 
-<h3>The sets contain:</h3>
-<h4>Search result: </h4>
-<li th:each="ingredient : ${ingredientSearchResult}">
-    <span th:text="${ingredient.name}"></span>
-</li>
-<h4>Spawn Set:</h4>
-<li th:each="ingredient : ${ingredientSpawnSet}">
-    <span th:text="${ingredient.name}"></span>
-</li>
+<!--DIAGNOSTICS-->
+<!--<h3>The sets contain:</h3>-->
+<!--<h4>Search result: </h4>-->
+<!--<li th:each="ingredient : ${ingredientSearchResult}">-->
+<!--    <span th:text="${ingredient.name}"></span>-->
+<!--</li>-->
+<!--<h4>Spawn Set:</h4>-->
+<!--<li th:each="ingredient : ${ingredientSpawnSet}">-->
+<!--    <span th:text="${ingredient.name}"></span>-->
+<!--</li>-->
+<!--END DIAGNOSTICS-->
 
-
-<h3>Enter ingredient: </h3>
-
-<form th:action="@{/spawn}" method="post">
-    Ingredient name: <input name="name"/><br/>
+<h3>Search ingredients:</h3>
+<form th:action="@{/spawn/search}" method="get">
+    Ingredient name: <input name="search"/><br/>
     <input type="submit" value="Search">
 </form>
 
-<br>
-
 <h3>Search result:</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Add</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="i : ${ingredientSearchResult}" th:field="${i}">
+<!--        <td th:text="${iStat.index+1}"></td>-->
+        <td th:text="${i.id}"></td>
+        <td th:text="${i.name}"></td>
+        <td th:text="${i.category}"></td>
+        <td>
+            <form th:action="@{/spawn/add/{id}(id=${i.id})}" th:object="${i}"
+                  method="post">
+                <input type="submit" value="add to spawn">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
-<li th:each="ingredient : ${ingredientSearchResult}">
-    <form th:action="@{/spawn/add-ingredient}" th:object="${ingredient}"
-          method="post">
-        <span th:text="${ingredient.name}"></span>
-        <input type="submit" value="Add to spawn selection">
-    </form>
-</li>
+<!--ALTERNATIVE TO ADD INGREDIENT TO SPAWN - NOT WORKING!-->
+<!--<li th:each="i : ${ingredientResult}">-->
+<!--    <form th:action="@{/spawn/add}" th:object="${i}" method="post">-->
+<!--        <span th:text="${i.name}"></span>-->
+<!--        <input type="submit" value="add to spawn">-->
+<!--    </form>-->
+<!--</li>-->
 
-<h3>Selected ingredients:</h3>
+<!--button to reset ingredient search result-->
+<form th:action="@{/spawn/resetingredients}" method="post">
+    <input type="submit" value="reset ingredient search">
+</form>
+
+<hr>
+
+<h3>Ingredients to spawn with:</h3>
 <li th:each="ingredient : ${ingredientSpawnSet}">
     <span th:text="${ingredient.name}"></span>
-<!--    <input type="submit" value="Add to spawn selection"-->
-<!--           th:action="@{/spawn/add-ingredient}" method="post">-->
 </li>
+<br>
+
+<!--button to reset spawn ingredients-->
+<form th:action="@{/spawn/resetspawn}" method="post">
+    <input type="submit" value="reset spawn ingredient">
+</form>
+<br>
+<form th:action="@{/spawn/findrecipes}" method="get">
+    <input type="submit" value="find recipes">
+</form>
+
+<hr>
+
+<h3> Recipe(s) found with spawn ingredient(s):</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${recipeList}" th:field="${r}">
+        <!--        <td th:text="${iStat.index+1}"></td>-->
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.name}"></td>
+        <td>
+            <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}"
+                  method="post">
+                <input type="submit" value="spawn recipe">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

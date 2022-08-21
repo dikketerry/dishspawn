@@ -14,4 +14,5 @@ public interface IngredientService {
 
     Set<Ingredient> getAllIngredientsByNameContaining(String name);
 
+    Ingredient getIngredientById(Long id);
 }

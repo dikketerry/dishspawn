@@ -36,11 +36,18 @@ public class Recipe {
     @Size(max = 4000)
     private String instructions;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipe", cascade = CascadeType.ALL)
+    // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
+    // exception - another solution could be to look into @Transactional
+    // annotation in service methods
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade =
+            CascadeType.ALL)
     private Set<RecipeIngredient> recipeIngredients;
 
     // user property - should be possible to save on its own
-    @ManyToOne(fetch=FetchType.LAZY)
+    // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
+    // exception - another solution could be to look into @Transactional
+    // annotation in service methods
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "chef_id")
     private Chef chef;
 

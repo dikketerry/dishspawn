@@ -7,6 +7,8 @@ import io.eho.dishspawn.repository.RecipeIngredientRepository;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +44,7 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     }
 
     @Override
+//    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public List<Recipe> findAllRecipesByIngredient(Ingredient ingredient) {
         return null;
     }

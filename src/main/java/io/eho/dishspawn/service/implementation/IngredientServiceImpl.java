@@ -36,4 +36,9 @@ public class IngredientServiceImpl implements IngredientService {
     public Set<Ingredient> getAllIngredientsByNameContaining(String name) {
         return ingredientRepository.findAllByNameContaining(name);
     }
+
+    @Override
+    public Ingredient getIngredientById(Long id) {
+        return ingredientRepository.findById(id).get();
+    }
 }
