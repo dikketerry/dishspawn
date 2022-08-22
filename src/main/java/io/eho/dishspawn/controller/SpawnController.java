@@ -110,6 +110,7 @@ public class SpawnController {
     @GetMapping("/resetspawn")
     public String resetSpawnSet() {
         ingredientSpawnSet.clear();
+        resetRecipeList();
         return "redirect:/spawn";
     }
 
@@ -119,33 +120,29 @@ public class SpawnController {
         return "redirect:/spawn";
     }
 
+    private void resetRecipeList() {
+        recipeSpawnList.clear();
+    }
+
     @GetMapping("/findrecipes")
     public String findRecipes(Model model) {
+        // before finding new recipes, first clear the old list
+        resetRecipeList();
 
+        // for each ingredient in selection, create its recipe-ingredients array
         for (Ingredient ingredient : ingredientSpawnSet) {
             RecipeIngredient[] recipeIngredientArr =
                     ingredient.getRecipeIngredients().toArray(
                             new RecipeIngredient[0]);
 
+            // loop through each recipe-ingredient array, get per r-i the
+            // belonging recipe and add to recipe-spawn-list
             for (int i = 0; i < recipeIngredientArr.length; i++) {
                 Recipe recipe = recipeIngredientArr[i].getRecipe();
                 recipeSpawnList.add(recipe);
             }
-//
-//        Long ingredientId = 6l;
-//        Ingredient ingredient = ingredientService.getIngredientById(ingredientId);
-//        Set<RecipeIngredient> recipeIngredients =
-//                ingredient.getRecipeIngredients();
-
-//        System.out.println(ingredient);
-//        System.out.println("*************************");
-//        System.out.println(recipeIngredients);
-//
-//        RecipeIngredient[] recipeIngredientArray =
-//                recipeIngredients.toArray(new RecipeIngredient[recipeIngredients.size()]);
-
         }
-
+        // TODO: only recipes which have ALL ingredients should be shown
         model.addAttribute("recipeList", recipeSpawnList);
 
         return "redirect:/spawn";
@@ -176,51 +173,5 @@ public class SpawnController {
 
         return ingredientDB;
     }
-
-//    @PostMapping("/add")
-//    public String addIngredientToSpawn(@ModelAttribute("ingredient") Ingredient ingredient) {
-//
-//        System.out.println("Ingredient coming in as parameter: " + ingredient);
-//        ingredientSpawnSet.add(ingredient);
-//
-//        // diagnostic prints
-//        for (Ingredient tempIngredient : ingredientSpawnSet) {
-//            System.out.println("Ingredient SpawnSet: " + tempIngredient.getName());
-//        }
-//        return "redirect:/spawn";
-//    }
-
-//    @PostMapping("/spawn")
-//    public String spawnPost(String name) {
-//        Set<Ingredient> ingredientsTemp =
-//                ingredientService.getAllIngredientsByNameContaining(name);
-//
-//        for (Ingredient ingredient : ingredientsTemp) {
-//            ingredientSearchResult.add(ingredient);
-//            System.out.println("found: " + ingredient); // diagnostic print
-//        }
-//        return "redirect:/spawn";
-//    }
-//
-//    @PostMapping("/spawn/add-ingredient")
-//    public String spawnPostAddIngredient(Ingredient ingredient) {
-//        // user confirms adding ingredient x to spawn selection - which is
-//        // the ingredient that comes in as input - means the ingredient object
-//        // needs to be bound to the post action (a button)
-//        System.out.println("Ingredient coming in as parameter: " + ingredient);
-//        ingredientSpawnSet.add(ingredient);
-//        ingredientSearchResult.remove(ingredient);
-//
-//        // diagnostic prints
-//        for (Ingredient tempIngredient : ingredientSpawnSet) {
-//            System.out.println("Ingredient SpawnSet: " + tempIngredient.getName());
-//        }
-//
-//        for (Ingredient tempIngredient : ingredientSearchResult) {
-//            System.out.println("Ingredient Search Result: " + tempIngredient.getName());
-//        }
-//
-//        return "redirect:/spawn";
-//    }
 
 }

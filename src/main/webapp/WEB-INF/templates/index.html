@@ -8,7 +8,7 @@
     <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Register</title>
+    <title>SpawnDish</title>
 
     <!-- UIKit css -->
     <link rel="stylesheet" href="/css/uikit.min.css">
@@ -31,7 +31,7 @@
         <nav class="uk-navbar">
 <!--            logo part (includes the text (name and tagline)-->
             <div class="uk-navbar-left">
-                <a class="uk-navbar-item uk-logo" href="/chef/all">
+                <a class="uk-navbar-item uk-logo" href="/">
                     <img class="uk-margin-small-right food-icon"
                          src="/img/logo/icons8-rice-bowl-100.png">
                     <div class="tagline">
@@ -80,37 +80,70 @@
 <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
-            <div class ="uk-width-1-2">
-                <p id="home-subhdr-main">Hi! I'm Dish Spawn.</p>
-                <p id="home-subhdr-sub">Feed me an ingredient or two, and I will
-                    spawn you a nice dish!</p>
-                <p><a class="uk-button uk-button-primary"
-                      th:href="@{/spawn}">Spawn Dish!</a>
-                </p>
+            <div class ="uk-width-1-2 page-subhdr">
+                <div class="margin50">
+                    <div class="imdishpawn">
+                        <span>Hi! I'm Dish Spawn.</span>
+                    </div>
+                    <div class="feedme">
+                        <p>Feed me an ingredient or two, and I</p>
+                        <p>will spawn you a nice dish!</p>
+                    </div>
+                    <div class="gotospawnbutton">
+                        <a class="uk-button uk-button-primary"
+                              th:href="@{/spawn}">Spawn Dish!</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="uk-width-1-2">
+            <div class="uk-width-expand">
                 <img id="swedish-chef" src="/img/swedish-chef.png"
                      alt="swedish-chef-image">
             </div>
         </div>
 
+        <hr>
+
     </div> <!-- container -->
 
 </div> <!-- subhdr-wrapper -->
 
-<hr>
+
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
 
         <div class="uk-container"> <!-- UIKit class to center + set max width -->
-<!--            now set up the form-->
+<!--            now set up the main content -->
 
-            <div class="container-form"> <!-- div to build the form in for
-            sizing and positioning -->
-
-
+<!--            div title header-->
+            <div class="main-title">
+                <p>latest spawn</p>
             </div>
+<!--                latest spawn-->
+<!--            hr-->
+            <hr>
+<!--            -->
+<!--            div subtitle-->
+<!--                name latest spawn by username chef-->
+<!--                date and time of creation                       #likes-->
+<!--            hr-->
+<!--            -->
+<!--            div img-->
+<!--                IMAGE!-->
+<!--            hr-->
+<!--            -->
+<!--            div 2nd title header-->
+<!--                more spawns-->
+<!--            hr-->
+<!--            -->
+<!--            div-->
+<!--                horizontal row with 3 images:-->
+<!--                    line 1 # of likes top-right per item-->
+<!--                    line 2 images-->
+<!--                    line 3 name recipe image-->
+<!--                    line 4 username chef-->
+<!--                    line 5 date and time of creation-->
+<!--            hr-->
 
         </div>
 

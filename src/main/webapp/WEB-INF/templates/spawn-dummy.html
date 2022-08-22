@@ -78,7 +78,7 @@
 
         <div class="uk-grid">
             <p class="uk-width-1-2 rotate">Spawn me a dish!</p>
-            <div class="uk-width-1-2">
+            <div class="uk-width-expand">
                 <img id="swedish-chef" src="/img/swedish-chef.png"
                      alt="swedish-chef-image">
             </div>
@@ -101,17 +101,31 @@
             <div class="container-form">
 
                 <div class="uk-margin">
-                    <h3>Ingredient selector</h3>
-                    <form class="uk-form-horizontal"
-                          th:action="@{/spawn/search}" method="get">
-                        <input class="uk-input" type="text" name="search"
-                               placeholder="aubergine"/>
-                        <button class="uk-button-small" type="submit"
-                                value="search">search</button>
+                    <h4>Ingredient selector</h4>
+                    <form class="uk-search uk-search-default"
+                          th:action="@{/spawn/search}" method="get"
+                          style="display: inline-flex">
+                                <input
+                                        style="display: inline"
+                                        class="uk-search-input"
+                        type="text"
+                                       name="search" placeholder="aubergine"/>
+                                <button style="display: inline"
+                                        class="uk-button uk-button-small"
+                                        type="submit">
+                                    search</button>
+
                     </form>
 
+<!--                    <form class="uk-search uk-search-default">-->
+<!--                        <a th:href="@{/spawn/search}" class="uk-search-icon-flip"></a>-->
+<!--                        <input class="uk-search-input" type="text" name="search"-->
+<!--                               placeholder="aubergine"/>-->
+<!--                    </form>-->
 
-                    <h3>Search result:</h3>
+
+
+                    <h4>Search result</h4>
 
 
                     <table class="uk-table uk-table-middle uk-table-divider">
@@ -128,17 +142,22 @@
                             <!--<td th:text="${iStat.index+1}"></td>-->
                             <!--<td th:text="${i.id}"></td>-->
                             <td th:text="${i.name}"></td>
-                            <td th:text="${i.category}"></td>
+                            <td th:text="${i.category.label}"></td>
                             <td>
                                 <a class="uk-button uk-button-small"
-                                   th:href="@{/spawn/add/{id}(id=${i.id})}">Add to spawn</a>
+                                   th:href="@{/spawn/add/{id}(id=${i.id})}">Select</a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
-
                 </div>
+
+                <!--button to reset ingredient search result-->
+<!--                <form th:action="@{/spawn/resetingredients}" method="get">-->
+<!--                    <button class="uk-button uk-button-small" type="submit">-->
+<!--                        Clear-->
+<!--                    </button>-->
+<!--                </form>-->
 
                 <!--ALTERNATIVE TO ADD INGREDIENT TO SPAWN - NOT WORKING!-->
                 <!--<li th:each="i : ${ingredientResult}">-->
@@ -148,32 +167,24 @@
                 <!--    </form>-->
                 <!--</li>-->
 
-
-                <!--button to reset ingredient search result-->
-                <form th:action="@{/spawn/resetingredients}" method="get">
-                    <input type="submit" value="reset ingredient search">
-                </form>
-
                 <hr>
 
-                <h3>Ingredients to spawn with:</h3>
+                <h4>Selected ingredients</h4>
                 <li th:each="ingredient : ${ingredientSpawnSet}">
                     <span th:text="${ingredient.name}"></span>
                 </li>
                 <br>
+                <form th:action="@{/spawn/findrecipes}" method="get">
+                    <button class="uk-button uk-button-small" type="submit">
+                        Find recipes
+                    </button>
+                    <!--                    <input type="submit" value="find recipes">-->
+                </form>
 
                 <!--button to reset spawn ingredients-->
-                <form th:action="@{/spawn/resetspawn}" method="get">
-                    <input type="submit" value="reset spawn ingredient">
-                </form>
-                <br>
-                <form th:action="@{/spawn/findrecipes}" method="get">
-                    <input type="submit" value="find recipes">
-                </form>
-
                 <hr>
 
-                <h3> Recipe(s) found with spawn ingredient(s):</h3>
+                <h4> Recipe(s) found with spawn ingredient(s):</h4>
 
                 <table class="uk-table uk-table-middle uk-table-divider">
                     <thead>
@@ -193,12 +204,23 @@
                         <td>
                             <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}"
                                   method="post">
-                                <input type="submit" value="spawn recipe">
+                                <button class="uk-button uk-button-small" type="submit">
+                                    Spawn!
+                                </button>
+<!--                                <input type="submit" value="spawn recipe">-->
                             </form>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+
+<!--                button to reset recipes and selected ingredients-->
+                <form th:action="@{/spawn/resetspawn}" method="get">
+                    <button class="uk-button uk-button-small" type="submit">
+                        Clear
+                    </button>
+                    <!--                    <input type="submit" value="Clear">-->
+                </form>
 
             </div>
 
