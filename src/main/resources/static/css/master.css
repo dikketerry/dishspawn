@@ -106,9 +106,9 @@ body {
 
 .container-form {
     margin: 0 auto;
-    width: 600px; /* TODO: need a centered div changing its width dependent on viewport width */
+    width: 50%; /* TODO: need a centered div changing its width dependent on viewport width */
     height: auto;
-    /*border: solid 1px #222222;*/
+    border: solid 1px #222222;
 }
 
 .form-label {

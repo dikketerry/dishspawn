@@ -1,112 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
+    <!-- viewport tag for enabling responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Spawn dummy</title>
+
+    <!-- UIKit css -->
+    <link rel="stylesheet" href="/css/uikit.min.css">
+    <!-- own css -->
+    <link rel="stylesheet" href="/css/master.css">
+
+    <!-- UIKit js -->
+    <script src="/js/uikit.min.js"></script>
+    <script src="/js/uikit.icons.min.js"></script>
+
 </head>
 <body>
 
-<p>SPAWN DUMMY</p>
+<!--HEADER-->
+<div class="hdr-wrapper"> <!-- div without width spanning browser width -->
 
-<!--DIAGNOSTICS-->
-<!--<h3>The sets contain:</h3>-->
-<!--<h4>Search result: </h4>-->
-<!--<li th:each="ingredient : ${ingredientSearchResult}">-->
-<!--    <span th:text="${ingredient.name}"></span>-->
-<!--</li>-->
-<!--<h4>Spawn Set:</h4>-->
-<!--<li th:each="ingredient : ${ingredientSpawnSet}">-->
-<!--    <span th:text="${ingredient.name}"></span>-->
-<!--</li>-->
-<!--END DIAGNOSTICS-->
+    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+        <!-- now set-up row/column structure -->
 
-<h3>Search ingredients:</h3>
-<form th:action="@{/spawn/search}" method="get">
-    Ingredient name: <input name="search"/><br/>
-    <input type="submit" value="Search">
-</form>
+        <nav class="uk-navbar">
+            <!--            logo part (includes the text (name and tagline)-->
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="/">
+                    <img class="uk-margin-small-right food-icon"
+                         src="/img/logo/icons8-french-fries-100.png">
+                    <div class="tagline">
+                        <div class="tagline-cell">
+                            <p id="tagline-main">Dish Spawn</p>
+                            <p id="tagline-sub">Virtual Cook Apprentice</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
-<h3>Search result:</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Add</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="i : ${ingredientSearchResult}" th:field="${i}">
-<!--        <td th:text="${iStat.index+1}"></td>-->
-        <td th:text="${i.id}"></td>
-        <td th:text="${i.name}"></td>
-        <td th:text="${i.category}"></td>
-        <td>
-            <form th:action="@{/spawn/add/{id}(id=${i.id})}" th:object="${i}"
-                  method="post">
-                <input type="submit" value="add to spawn">
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <!--            search-->
+            <div class="uk-navbar-center">
+                <div>
+                    <a class="uk-navbar-toggle" uk-search-icon></a>
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
+                        <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
+                            <input id="searchField" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-<!--ALTERNATIVE TO ADD INGREDIENT TO SPAWN - NOT WORKING!-->
-<!--<li th:each="i : ${ingredientResult}">-->
-<!--    <form th:action="@{/spawn/add}" th:object="${i}" method="post">-->
-<!--        <span th:text="${i.name}"></span>-->
-<!--        <input type="submit" value="add to spawn">-->
-<!--    </form>-->
-<!--</li>-->
+            <!--            chefs / recipes / login / register-->
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                    <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+                    <li><a class="uk-link-text" href="/chef/login">Login</a></li>
+                    <li><a class="uk-link-text" href="/chef/add">Register</a></li>
+                </ul>
+            </div>
 
-<!--button to reset ingredient search result-->
-<form th:action="@{/spawn/resetingredients}" method="post">
-    <input type="submit" value="reset ingredient search">
-</form>
+        </nav>
 
-<hr>
+    </div>
 
-<h3>Ingredients to spawn with:</h3>
-<li th:each="ingredient : ${ingredientSpawnSet}">
-    <span th:text="${ingredient.name}"></span>
-</li>
-<br>
+</div>
 
-<!--button to reset spawn ingredients-->
-<form th:action="@{/spawn/resetspawn}" method="post">
-    <input type="submit" value="reset spawn ingredient">
-</form>
-<br>
-<form th:action="@{/spawn/findrecipes}" method="get">
-    <input type="submit" value="find recipes">
-</form>
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+
+    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+        <!--        now set row with 2 elements: title of form + image-->
+
+        <div class="uk-grid">
+            <p class="uk-width-1-2 rotate">Spawn me a dish!</p>
+            <div class="uk-width-1-2">
+                <img id="swedish-chef" src="/img/swedish-chef.png"
+                     alt="swedish-chef-image">
+            </div>
+        </div>
+
+    </div> <!-- container -->
+
+</div> <!-- subhdr-wrapper -->
 
 <hr>
 
-<h3> Recipe(s) found with spawn ingredient(s):</h3>
+<main>
 
-<table>
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="r : ${recipeList}" th:field="${r}">
-        <!--        <td th:text="${iStat.index+1}"></td>-->
-        <td th:text="${r.id}"></td>
-        <td th:text="${r.name}"></td>
-        <td>
-            <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}"
-                  method="post">
-                <input type="submit" value="spawn recipe">
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div class="content-wrapper"> <!-- div without width spanning browser width -->
+
+        <div class="uk-container"> <!-- UIKit class to center + set max
+        width -->
+<!--            now set up the form-->
+
+            <div class="container-form">
+
+                <div class="uk-margin">
+                    <h3>Ingredient selector</h3>
+                    <form class="uk-form-horizontal"
+                          th:action="@{/spawn/search}" method="get">
+                        <input class="uk-input" type="text" name="search"
+                               placeholder="aubergine"/>
+                        <button class="uk-button-small" type="submit"
+                                value="search">search</button>
+                    </form>
+
+
+                    <h3>Search result:</h3>
+
+
+                    <table class="uk-table uk-table-middle uk-table-divider">
+                        <thead>
+                        <tr>
+                            <!--<th>Id</th>-->
+                            <th class="uk-width-small">Name</th>
+                            <th>Category</th>
+                            <th>Add</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="i : ${ingredientSearchResult}" th:field="${i}">
+                            <!--<td th:text="${iStat.index+1}"></td>-->
+                            <!--<td th:text="${i.id}"></td>-->
+                            <td th:text="${i.name}"></td>
+                            <td th:text="${i.category}"></td>
+                            <td>
+                                <a class="uk-button uk-button-small"
+                                   th:href="@{/spawn/add/{id}(id=${i.id})}">Add to spawn</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <!--ALTERNATIVE TO ADD INGREDIENT TO SPAWN - NOT WORKING!-->
+                <!--<li th:each="i : ${ingredientResult}">-->
+                <!--    <form th:action="@{/spawn/add}" th:object="${i}" method="post">-->
+                <!--        <span th:text="${i.name}"></span>-->
+                <!--        <input type="submit" value="add to spawn">-->
+                <!--    </form>-->
+                <!--</li>-->
+
+
+                <!--button to reset ingredient search result-->
+                <form th:action="@{/spawn/resetingredients}" method="get">
+                    <input type="submit" value="reset ingredient search">
+                </form>
+
+                <hr>
+
+                <h3>Ingredients to spawn with:</h3>
+                <li th:each="ingredient : ${ingredientSpawnSet}">
+                    <span th:text="${ingredient.name}"></span>
+                </li>
+                <br>
+
+                <!--button to reset spawn ingredients-->
+                <form th:action="@{/spawn/resetspawn}" method="get">
+                    <input type="submit" value="reset spawn ingredient">
+                </form>
+                <br>
+                <form th:action="@{/spawn/findrecipes}" method="get">
+                    <input type="submit" value="find recipes">
+                </form>
+
+                <hr>
+
+                <h3> Recipe(s) found with spawn ingredient(s):</h3>
+
+                <table class="uk-table uk-table-middle uk-table-divider">
+                    <thead>
+                    <tr>
+<!--                        <th>Id</th>-->
+                        <th>Name</th>
+                        <th>By</th>
+                        <th>Spawn</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${recipeList}" th:field="${r}">
+                        <!--        <td th:text="${iStat.index+1}"></td>-->
+<!--                        <td th:text="${r.id}"></td>-->
+                        <td th:text="${r.name}"></td>
+                        <td th:text="${r.chef.userName}"></td>
+                        <td>
+                            <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}"
+                                  method="post">
+                                <input type="submit" value="spawn recipe">
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
 
 </body>
 </html>

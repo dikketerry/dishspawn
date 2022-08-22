@@ -75,7 +75,7 @@ public class SpawnController {
     // TODO: inefficient adding of ingredient to spawn selection -
     //  investigate how a search result can directly be bound to spawn
     //  selection, without collecting it again from the DB
-    @PostMapping("/add/{id}")
+    @GetMapping("/add/{id}")
     public String addIngredientToSpawn(@PathVariable String id, Model model) {
 
         System.out.println("AddIngredientToSpawn method processing");
@@ -107,13 +107,13 @@ public class SpawnController {
         return "redirect:/spawn";
     }
 
-    @PostMapping("/resetspawn")
+    @GetMapping("/resetspawn")
     public String resetSpawnSet() {
         ingredientSpawnSet.clear();
         return "redirect:/spawn";
     }
 
-    @PostMapping("/resetingredients")
+    @GetMapping("/resetingredients")
     public String resetIngredientSearch() {
         ingredientSearchResult.clear();
         return "redirect:/spawn";
