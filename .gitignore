@@ -1,6 +1,8 @@
 HELP.md
 target/
 extra-resources/
+/src/main/resources/static/js/p5.js
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

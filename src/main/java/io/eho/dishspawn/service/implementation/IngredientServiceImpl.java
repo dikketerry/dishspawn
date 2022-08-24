@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -39,6 +40,17 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient getIngredientById(Long id) {
-        return ingredientRepository.findById(id).get();
+        Optional<Ingredient> optionalIngredient = ingredientRepository.findById(id);
+
+        Ingredient ingredient = null;
+        if (optionalIngredient.isPresent()) {
+            ingredient = optionalIngredient.get();
+        } else {
+            // ingredient not found
+            throw new RuntimeException("ingredient with id " + id + " not " +
+                                               "found");
+        }
+
+        return ingredient;
     }
 }

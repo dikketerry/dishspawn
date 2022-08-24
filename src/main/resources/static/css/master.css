@@ -159,5 +159,11 @@ body {
         /*margin-bottom: 8px;*/
     }
 
+    #canvas-holder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
 
 

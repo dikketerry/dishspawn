@@ -11,13 +11,15 @@
     <title>SpawnDish</title>
 
     <!-- UIKit css -->
-    <link rel="stylesheet" href="/css/uikit.min.css">
+    <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
     <!-- own css -->
-    <link rel="stylesheet" href="/css/master.css">
+    <link rel="stylesheet" th:href="@{/css/master.css}">
 
     <!-- UIKit js -->
-    <script src="/js/uikit.min.js"></script>
-    <script src="/js/uikit.icons.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uikit.icons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/p5.js}"></script>
+    <script type="text/javascript" th:src="@{/js/testjs_noisescript}"></script>
 
 </head>
 <body>
@@ -86,8 +88,8 @@
                         <span>Hi! I'm Dish Spawn.</span>
                     </div>
                     <div class="feedme">
-                        <p>Feed me an ingredient or two, and I</p>
-                        <p>will spawn you a nice dish!</p>
+                        <p>Feed me an ingredient or two, and I<br>
+                        will spawn you a nice dish!</p>
                     </div>
                     <div class="gotospawnbutton">
                         <a class="uk-button uk-button-primary"
@@ -119,17 +121,26 @@
             <div class="main-title">
                 <p>latest spawn</p>
             </div>
-<!--                latest spawn-->
+            <hr>
+            <div id="canvas-holder">
+<!--                for JS sketch-->
+            </div>
+
+<!--            <script th:src="@{/js/testjs_noisescript.js}"></script>-->
+
+<!--            div subtitle-->
+            <div class="main-subtitle">
+                <!--name latest spawn by username chef-->
+                <p th:text="${lastRecipe.name} + ' by ' + ${lastRecipe.chef.userName}"></p>
+
+                <!--date and time of creation                  TODO: #likes-->
+                <p th:text="${lastRecipe.timestampCreated}"></p>
+            </div>
 <!--            hr-->
             <hr>
 <!--            -->
-<!--            div subtitle-->
-<!--                name latest spawn by username chef-->
-<!--                date and time of creation                       #likes-->
-<!--            hr-->
-<!--            -->
 <!--            div img-->
-<!--                IMAGE!-->
+
 <!--            hr-->
 <!--            -->
 <!--            div 2nd title header-->

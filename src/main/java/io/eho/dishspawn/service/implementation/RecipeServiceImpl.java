@@ -4,6 +4,10 @@ import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.repository.RecipeRepository;
 import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +33,14 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Page<Recipe> findPage(int pageNr) {
+        Pageable pageable = PageRequest.of(pageNr - 1, 4,
+                                           Sort.by(Sort.Direction.DESC,
+                                                   "timestampCreated"));
+
+        return recipeRepository.findAll(pageable);
     }
 }
