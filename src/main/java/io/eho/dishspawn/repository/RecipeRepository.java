@@ -11,6 +11,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     // all crud database methods
 
+    // add method to sort by timestamp created
+    public List<Recipe> findAllByOrderByTimestampCreatedDesc();
+
 //    List<Recipe> findAllRecipesWithIngredientName(String ingredientName);
 
     // findAllRecipesByIngredientName (String ingredientName)

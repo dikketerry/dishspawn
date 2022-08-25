@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +15,9 @@ public class RecipeController {
 
     // property RecipeService
     private RecipeService recipeService;
+
+    // property lastRecipe - global, needed in multiple methods
+    private Recipe lastRecipe;
 
     // dependency injection via constructor
     public RecipeController() {
@@ -29,15 +29,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/")
-    public String getLastRecipes() {
-
-        return "redirect:/home/page/1";
-//        return "index";
-    }
-
+    // add get mapping for "/home/page/pageNr" (paginated version of recipes)
     @GetMapping("/home/page/{pageNr}")
-    public String getRecipePage(Model model, @PathVariable("pageNr") int currentPage) {
+    public String getRecipesHome(Model model, @PathVariable("pageNr") int currentPage) {
 
         // get recipes paged from DB
         Page<Recipe> recipePage = recipeService.findPage(currentPage);
@@ -46,9 +40,11 @@ public class RecipeController {
         List<Recipe> recipes = recipePage.getContent();
 
         // get out most recent recipe
-        Recipe lastRecipe = recipes.get(0);
+        lastRecipe = recipes.get(0);
 
-        // TODO: remove most recent entry from list
+        // TODO: remove most recent entry from list - might need a
+        //  work-around @service level; generate full list first, split it in
+        //  2 (last Recipe vs. the rest of recipes)
 //        recipes.remove(0);
 
         // add most recent and list to model
@@ -58,11 +54,22 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
 
         // use model in index view
-        return "index";
+        return "home";
     }
 
-    // get methods
-    // all recipes
+    // add get mapping for "/recipe/{id}" - should contain paginated version
+    // of belonging visuals
+    @GetMapping("/recipe")
+    public String showRecipe(@RequestParam Long recipeId,
+                             Model model) {
+        Recipe recipe = recipeService.findById(recipeId);
+
+        model.addAttribute(recipe);
+
+        return "recipe";
+    }
+
+    // add get mapping for "/recipe/all"
     @GetMapping("/recipe/all")
     public String getAllRecipes(Model model) {
         List<Recipe> recipesFromDB = recipeService.getAllRecipes();

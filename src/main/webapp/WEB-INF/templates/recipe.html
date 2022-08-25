@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- viewport tag for enabling responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SpawnDish</title>
+
+    <!-- UIKit css -->
+    <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
+    <!-- own css -->
+    <link rel="stylesheet" th:href="@{/css/master.css}">
+
+    <!-- UIKit js -->
+    <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/p5.js}"></script>
+    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>
+
+</head>
+<body>
+
+<!--HEADER-->
+<div class="hdr-wrapper"> <!-- div without width spanning browser width -->
+
+    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+        <!-- now set-up row/column structure -->
+
+        <nav class="uk-navbar">
+<!--            logo part (includes the text (name and tagline)-->
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="/">
+                    <img class="uk-margin-small-right food-icon"
+                         src="/img/logo/icons8-sunny-side-up-eggs-100.png">
+                    <div class="tagline">
+                        <div class="tagline-cell">
+                            <p id="tagline-main">Dish Spawn</p>
+                            <p id="tagline-sub">Virtual Cook Apprentice</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+<!--            search-->
+            <div class="uk-navbar-center">
+                <div>
+                    <a class="uk-navbar-toggle" uk-search-icon></a>
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
+                        <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
+                            <input id="searchField" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+<!--            chefs / recipes / login / register-->
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                    <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+                    <li><a class="uk-link-text" href="/chef/login">Login</a></li>
+                    <li><a class="uk-link-text" href="/chef/add">Register</a></li>
+                </ul>
+            </div>
+
+        </nav>
+
+    </div>
+
+
+</div>
+
+<!--<hr>-->
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+
+    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+        <!--        now set row with 2 elements: title of form + image-->
+
+        <div class="uk-grid">
+            <p class="uk-width-1-2 rotate">Spawned recipe..</p>
+            <div class="uk-width-expand">
+                <img id="swedish-chef" src="/img/swedish-chef.png"
+                     alt="swedish-chef-image">
+            </div>
+        </div>
+
+    </div> <!-- container -->
+
+</div> <!-- subhdr-wrapper -->
+
+<hr>
+
+
+<main>
+    <div class="content-wrapper"> <!-- div without width spanning browser width -->
+
+        <div class="uk-container"> <!-- UIKit class to center + set max width -->
+<!--            now set up the main content -->
+
+<!--            div title header-->
+            <div class="main-title">
+                <p>latest spawn</p>
+            </div>
+            <hr>
+            <div id="canvas-holder">
+<!--                for JS sketch-->
+            </div>
+
+<!--            <script th:src="@{/js/testjs_noisescript.js}"></script>-->
+
+<!--            div subtitle-->
+            <div class="main-subtitle">
+                <!--name latest spawn by username chef-->
+                <p
+                        th:text="${recipe.name} + ' by ' + ${recipe.chef.userName}"></p>
+
+                <!--date and time of creation                  TODO: #likes-->
+                <p th:text="${recipe.timestampCreated}"></p>
+            </div>
+<!--            hr-->
+            <hr>
+<!--            -->
+<!--            div img-->
+
+<!--            hr-->
+<!--            -->
+<!--            div 2nd title header-->
+<!--                more spawns-->
+<!--            hr-->
+<!--            -->
+<!--            div-->
+<!--                horizontal row with 3 images:-->
+<!--                    line 1 # of likes top-right per item-->
+<!--                    line 2 images-->
+<!--                    line 3 name recipe image-->
+<!--                    line 4 username chef-->
+<!--                    line 5 date and time of creation-->
+<!--            hr-->
+
+        </div>
+
+    </div>
+
+
+
+</main>
+
+</body>
+</html>

@@ -26,13 +26,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public Recipe findById(Long id) {
+        return recipeRepository.getReferenceById(id);
+    }
+
+    @Override
     public void saveRecipe(Recipe recipe) {
         this.recipeRepository.save(recipe);
     }
 
     @Override
     public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+        return recipeRepository.findAllByOrderByTimestampCreatedDesc();
     }
 
     @Override

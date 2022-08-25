@@ -17,9 +17,9 @@
 
     <!-- UIKit js -->
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/uikit.icons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/p5.js}"></script>
-    <script type="text/javascript" th:src="@{/js/testjs_noisescript}"></script>
+    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>
 
 </head>
 <body>
@@ -131,7 +131,16 @@
 <!--            div subtitle-->
             <div class="main-subtitle">
                 <!--name latest spawn by username chef-->
-                <p th:text="${lastRecipe.name} + ' by ' + ${lastRecipe.chef.userName}"></p>
+<!--                <p th:text="${lastRecipe.name} + ' by ' + ${lastRecipe.chef.userName}"></p>-->
+
+<!--                th:href="@{/blogpost/{postId}/(postId = ${post.id})}"-->
+
+                <a
+                        th:href="@{/recipe(recipeId=${lastRecipe.id})}"
+                   th:text="${lastRecipe.name}" class="uk-link-text">recipename</a>
+                <span>by</span>
+                <a th:href="@{/chef/{chefId}(chefId=${lastRecipe.chef.id})}"
+                   th:text="${lastRecipe.chef.userName}" class="uk-link-text">chefname</a>
 
                 <!--date and time of creation                  TODO: #likes-->
                 <p th:text="${lastRecipe.timestampCreated}"></p>
