@@ -212,31 +212,83 @@ body {
 
 }
 
+.ingredients-directions-titles-wrapper {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    text-align: left;
+    font-size: calc(0.8vw + 1vh + .3vmin);
+    font-weight: bold;
+}
+
+#ingredients-title {
+    width: 59%;
+}
+
+#directions-title {;
+    margin-left: 10%;
+    width: 59%;
+    font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;
+    color: #f0506e;
+}
+
 .recipe-ingredients-directions-wrapper {
     display: flex;
     text-align: left;
 }
 
-
-#ingredients {
-    margin-top: 20px;
-    width: 31%;
-    /*font-family: "PT Serif", serif;*/
+.ingredients-directions-content-wrapper {
+    display: flex;
+    /*margin-top: 20px;*/
+    text-align: left;
     font-size: calc(0.8vw + 0.8vh + .2vmin);
-    font-weight: bold;
-    /*border: 3px solid green;*/
+    /*font-weight: bold;*/
 }
 
-#directions {
-    margin-top: 20px;
+#ingredients-content {
+    width: 59%;
+}
+
+#directions-content {
     margin-left: 10%;
     width: 59%;
     font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;
-    /*font-family: Helvetica, Geneva, sans-serif;*/
-    font-size: calc(0.8vw + 0.8vh + .2vmin);
     color: #f0506e;
-    /*border: 3px solid red;*/
 }
+
+/*#ingredients {*/
+/*    margin-top: 20px;*/
+/*    width: 31%;*/
+/*}*/
+
+/*.ingredients-title {*/
+/*    font-size: calc(0.8vw + 1vh + .3vmin);*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.ingredients-content {*/
+/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
+/*}*/
+
+/*#directions {*/
+/*    margin-top: 20px;*/
+/*    margin-left: 10%;*/
+/*    width: 59%;*/
+/*    font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;*/
+/*    !*font-family: Helvetica, Geneva, sans-serif;*!*/
+/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
+/*    color: #f0506e;*/
+/*    !*border: 3px solid red;*!*/
+/*}*/
+
+/*.directions-title {*/
+/*    font-size: calc(0.8vw + 1vh + .3vmin);*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.directions-content {*/
+/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
+/*}*/
 
 #canvas-holder {
     display: flex;

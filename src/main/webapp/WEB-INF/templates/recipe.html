@@ -18,8 +18,6 @@
     <!-- UIKit js -->
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/p5.js}"></script>
-    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>
 
 </head>
 <body>
@@ -124,29 +122,34 @@
             <!--            hr-->
             <hr class="custom-hr">
 
-            <div class="recipe-ingredients-directions-wrapper">
-                <div id="ingredients" class="margin16">
-                    <p>Ingredients</p>
-<!--                    TODO: find way to access labels of enums.. Best way
-                            would probably be to refactor MassCopnverter and
-                            VolumeConverter into Converter (and have only 1 enum
-                            for all units-->
+            <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
+                <div id="ingredients-title">
+                    <span>Ingredients</span>
+                </div>
+                <div id="directions-title">
+                    <span>Directions</span>
+                </div>
+            </div>
+
+            <hr class="custom-hr">
+
+            <div class="ingredients-directions-content-wrapper">
+                <div id="ingredients-content">
+    <!--            TODO: find way to access labels of enums.. Best way
+                        would probably be to refactor MassCopnverter and
+                        VolumeConverter into Converter (and have only 1 enum
+                        for all units-->
                     <ul>
                         <li th:each="ingredient:${recipe.recipeIngredients}">
                             <span th:text="${ingredient.quantity} + ' ' + ${ingredient.unitName} + ' ' + ${ingredient.ingredient.name}"></span>
                         </li>
                     </ul>
                 </div>
-
-                <div id="directions">
-                    <p>Directions</p>
+                <div id="directions-content">
                     <p th:text="${recipe.instructions}">instructions</p>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
 </main>
