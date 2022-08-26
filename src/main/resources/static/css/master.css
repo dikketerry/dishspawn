@@ -4,6 +4,7 @@
 
 html {
     font-family: "Baloo 2", Helvetica, sans-serif;
+    background-color: #fcfcfc;
     color: #222222;
 }
 
@@ -29,7 +30,7 @@ body {
 /* HEADER STYLING */
 /* set container to 1270 to get true 1200px content area / 35px margin */
 .uk-container {
-    max-width: 1270px;
+    max-width: 1200px;
 }
 
 .hdr-wrapper {
@@ -39,7 +40,8 @@ body {
 
 /* override of uk-logo font */
 .uk-logo {
-    font-family: Helvetica, Geneva, sans-serif;
+    /*font-family: Helvetica, Geneva, sans-serif;*/
+    font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;
 }
 
 .food-icon {
@@ -92,58 +94,72 @@ body {
     text-align: center;
 }
 
-    /* for pages only */
-    .page-subhdr {
-        display: grid;
-        text-align: left;
-        font-family: "Baloo 2", Helvetica, sans-serif;
-        /*border: 3px solid green;*/
-    }
+/* for pages only */
+.page-subhdr {
+    display: grid;
+    text-align: left;
+    font-family: "Baloo 2", Helvetica, sans-serif;
+    /*border: 3px solid green;*/
+}
 
-        .imdishpawn {
-            margin-top: 2vh;
-            font-size: 3.2vw;
-            font-weight: bold;
-            color: #222222;
-            /*border: 3px solid red;*/
-            margin-bottom: 0px;
-        }
+.imdishpawn {
+    margin-top: 2vh;
+    font-size: 3.2vw;
+    font-weight: bold;
+    color: #f0506e;
+    /*border: 3px solid red;*/
+    margin-bottom: 0px;
+}
 
-        .feedme {
-            font-size: 18px;
-            color: #222222;
-            /*border: 3px solid orange;*/
-        }
+.feedme {
+    font-size: 18px;
+    /*color: #222222;*/
+    /*border: 3px solid orange;*/
+}
 
-        .feedme p {
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
+.feedme p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 
-        .spawn-button {
-            margin-top: 2vh;
-            width: 50%;
-            /*margin-left: 5vw;*/
-            /*border: 3px solid blueviolet;*/
-        }
+.spawn-button {
+    margin-top: 2vh;
+    width: 50%;
+    /*margin-left: 5vw;*/
+    /*border: 3px solid blueviolet;*/
+}
 
-    /* for forms only */
-    .rotate {
-        font-family: "Marker Felt", "Comic Sans MS", sans-serif;
-        font-size: 72px;
-        color: #222222;
-        width: 600px;
-        height: 200px;
-        line-height: 200px;
-        transform: rotateZ(-6deg);
-    }
+/* for forms only */
+.rotate-div {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
-    #swedish-chef {
-        height: auto;
-        width: auto;
-        max-height: 200px;
-        max-width: 266px;
-    }
+.rotate {
+    /*display: grid;*/
+    /*vertical-align: center;*/
+    /*text-align: center;*/
+    font-family: "Marker Felt", "Comic Sans MS", sans-serif;
+    font-size: calc(3vw + 3vh + .5vmin);
+    color: #f0506e;
+    /*width: 600px;*/
+    /*height: 200px;*/
+    /*line-height: 200px;*/
+    transform: rotateZ(-6deg);
+}
+
+#recipe-title {
+    font-size: calc(2vw + 2vh + .5vmin);
+}
+
+#swedish-chef {
+    height: auto;
+    width: auto;
+    max-height: 200px;
+    max-width: 266px;
+}
 
 /*MAIN*/
 .content-wrapper {
@@ -151,54 +167,82 @@ body {
     text-align: center;
 }
 
-    .container-form {
-        margin: 0 auto;
-        width: 50%;
-        height: auto;
-        /*border: solid 1px #222222;*/
-    }
+.container-form {
+    margin: 0 auto;
+    width: 50%;
+    height: auto;
+    /*border: solid 1px #222222;*/
+}
 
-        .form-label {
-            font-weight: bold;
-        }
+.form-label {
+    font-weight: bold;
+}
 
-    .main-headers {
-        text-align: left;
-    }
+.main-headers {
+    text-align: left;
+}
 
-    .main-titles {
-        font-weight: bold;
-        /*font-size: 1.6vw;*/
-        font-size: calc(0.8vw + 1vh + .3vmin)
-    }
+.main-titles {
+    font-weight: bold;
+    /*font-size: 1.6vw;*/
+    font-size: calc(0.8vw + 1vh + .3vmin)
+}
 
-    .main-titles p {
-        margin-top: 10px;
-        margin-bottom: 0px;
-    }
+.main-titles p {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
 
-    .recipe-name-and-chef {
-        font-style: italic;
-    }
+.recipe-and-chef-wrapper {
+    display: flex;
+    font-style: italic;
+}
 
-    .recipe-name {
-        font-weight: bold;
-        font-style: italic;
-    }
+/*#left, #middle, #right {display: inline-block; *display: inline; zoom: 1;}*/
+.recipe-name {
+    font-weight: bold;
+    color: #f0506e;
+}
 
-    .chef-name {
-        font-style: italic;
-    }
+.chef-name {
 
-    .timestamp {
+}
 
-    }
+.timestamp {
 
-    #canvas-holder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+}
+
+.recipe-ingredients-directions-wrapper {
+    display: flex;
+    text-align: left;
+}
+
+
+#ingredients {
+    margin-top: 20px;
+    width: 31%;
+    /*font-family: "PT Serif", serif;*/
+    font-size: calc(0.8vw + 0.8vh + .2vmin);
+    font-weight: bold;
+    /*border: 3px solid green;*/
+}
+
+#directions {
+    margin-top: 20px;
+    margin-left: 10%;
+    width: 59%;
+    font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;
+    /*font-family: Helvetica, Geneva, sans-serif;*/
+    font-size: calc(0.8vw + 0.8vh + .2vmin);
+    color: #f0506e;
+    /*border: 3px solid red;*/
+}
+
+#canvas-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
 

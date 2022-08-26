@@ -71,7 +71,6 @@
 
     </div>
 
-
 </div>
 
 <!--<hr>-->
@@ -124,12 +123,16 @@
                 <hr class="custom-hr">
 
                 <!--            div subtitle-->
-                <div class="recipe-name-and-chef margin16">
-                    <a th:href="@{/recipe(recipeId=${lastRecipe.id})}"
-                       th:text="${lastRecipe.name}" class="uk-link-text recipe-name">recipename</a>
-                    <span>by</span>
-                    <a th:href="@{/chef/{chefId}(chefId=${lastRecipe.chef.id})}"
-                       th:text="${lastRecipe.chef.userName}" class="uk-link-text">chefname</a>
+                <div class="recipe-and-chef-wrapper margin16">
+                    <div class="recipe-name">
+                        <a th:href="@{/recipe(recipeId=${lastRecipe.id})}"
+                           th:text="${lastRecipe.name}" class="uk-link-text">recipename</a>
+                    </div>
+                    <span>&nbspby&nbsp</span>
+                    <div class="chef-name">
+                        <a th:href="@{/chef/{chefId}(chefId=${lastRecipe.chef.id})}"
+                           th:text="${lastRecipe.chef.userName}" class="uk-link-text">chefname</a>
+                    </div>
                 </div>
                 <!--date and time of creation                  TODO: #likes-->
                 <div class="timestamp margin16">
@@ -147,7 +150,7 @@
                    href="/img/testspawn/testdish2.jpg"></a>
             </div>
 <!--            hr-->
-            <hr>
+            <hr class="custom-hr">
 
 <!--            div 2nd title header-->
 <!--                more spawns-->

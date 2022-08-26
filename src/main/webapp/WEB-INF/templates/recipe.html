@@ -82,19 +82,21 @@
         <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
-            <p class="uk-width-1-2 rotate">Spawned recipe..</p>
+            <div class="uk-width-2-3 rotate-div">
+                <p class="rotate" id="recipe-title"
+                   th:text="${recipe.name}">recipe-name</p>
+            </div>
             <div class="uk-width-expand">
                 <img id="swedish-chef" src="/img/swedish-chef.png"
                      alt="swedish-chef-image">
             </div>
         </div>
 
+        <hr class="custom-hr">
+
     </div> <!-- container -->
 
 </div> <!-- subhdr-wrapper -->
-
-<hr>
-
 
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
@@ -102,51 +104,50 @@
         <div class="uk-container"> <!-- UIKit class to center + set max width -->
 <!--            now set up the main content -->
 
+            <div class="main-headers">
 <!--            div title header-->
-            <div class="main-title">
-                <p>latest spawn</p>
+                <div class="main-titles margin16">
+                    <p th:text="'Spawned by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
+                </div>
+                <div class="timestamp margin16">
+                    <p th:text="'on ' +${recipe.timestampCreated}">timestamp -created</p>
+                </div>
+                <hr class="custom-hr">
             </div>
-            <hr>
-            <div id="canvas-holder">
-<!--                for JS sketch-->
+
+            <!--            div img-->
+            <div uk-lightbox>
+                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+                        data-src="/img/testspawn/testdish2.jpg" uk-img
+                        href="/img/testspawn/testdish2.jpg"></a>
             </div>
+            <!--            hr-->
+            <hr class="custom-hr">
 
-<!--            <script th:src="@{/js/testjs_noisescript.js}"></script>-->
+            <div class="recipe-ingredients-directions-wrapper">
+                <div id="ingredients" class="margin16">
+                    <p>Ingredients</p>
+<!--                    TODO: find way to access labels of enums.. Best way
+                            would probably be to refactor MassCopnverter and
+                            VolumeConverter into Converter (and have only 1 enum
+                            for all units-->
+                    <ul>
+                        <li th:each="ingredient:${recipe.recipeIngredients}">
+                            <span th:text="${ingredient.quantity} + ' ' + ${ingredient.unitName} + ' ' + ${ingredient.ingredient.name}"></span>
+                        </li>
+                    </ul>
+                </div>
 
-<!--            div subtitle-->
-            <div class="main-subtitle">
-                <!--name latest spawn by username chef-->
-                <p
-                        th:text="${recipe.name} + ' by ' + ${recipe.chef.userName}"></p>
+                <div id="directions">
+                    <p>Directions</p>
+                    <p th:text="${recipe.instructions}">instructions</p>
+                </div>
 
-                <!--date and time of creation                  TODO: #likes-->
-                <p th:text="${recipe.timestampCreated}"></p>
             </div>
-<!--            hr-->
-            <hr>
-<!--            -->
-<!--            div img-->
-
-<!--            hr-->
-<!--            -->
-<!--            div 2nd title header-->
-<!--                more spawns-->
-<!--            hr-->
-<!--            -->
-<!--            div-->
-<!--                horizontal row with 3 images:-->
-<!--                    line 1 # of likes top-right per item-->
-<!--                    line 2 images-->
-<!--                    line 3 name recipe image-->
-<!--                    line 4 username chef-->
-<!--                    line 5 date and time of creation-->
-<!--            hr-->
 
         </div>
 
     </div>
-
-
 
 </main>
 
