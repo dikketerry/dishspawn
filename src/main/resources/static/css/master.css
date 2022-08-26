@@ -1,12 +1,29 @@
 /* app specific css */
+/* global */
+
 
 html {
     font-family: "Baloo 2", Helvetica, sans-serif;
+    color: #222222;
 }
 
 body {
     /*font-family: Helvetica, Geneva, sans-serif;*/
     /*background-color: bisque;*/
+}
+
+.custom-hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.margin32 {
+    margin-left: 32px;
+    /*border: 3px solid olivedrab;*/
+}
+
+.margin16 {
+    margin-left: 16px;
 }
 
 /* HEADER STYLING */
@@ -83,37 +100,32 @@ body {
         /*border: 3px solid green;*/
     }
 
-        .margin50 {
-            margin-left: 50px;
-            /*border: 3px solid olivedrab;*/
+        .imdishpawn {
+            margin-top: 2vh;
+            font-size: 3.2vw;
+            font-weight: bold;
+            color: #222222;
+            /*border: 3px solid red;*/
+            margin-bottom: 0px;
         }
 
-            .imdishpawn {
-                margin-top: 2vh;
-                font-size: 3.2vw;
-                font-weight: bold;
-                color: #222222;
-                /*border: 3px solid red;*/
-                margin-bottom: 0px;
-            }
+        .feedme {
+            font-size: 18px;
+            color: #222222;
+            /*border: 3px solid orange;*/
+        }
 
-            .feedme {
-                font-size: 18px;
-                color: #222222;
-                /*border: 3px solid orange;*/
-            }
+        .feedme p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
 
-            .feedme p {
-                margin-top: 0px;
-                margin-bottom: 0px;
-            }
-
-            .gotospawnbutton {
-                margin-top: 2vh;
-                width: 50%;
-                margin-left: 5vw;
-                /*border: 3px solid blueviolet;*/
-            }
+        .spawn-button {
+            margin-top: 2vh;
+            width: 50%;
+            /*margin-left: 5vw;*/
+            /*border: 3px solid blueviolet;*/
+        }
 
     /* for forms only */
     .rotate {
@@ -150,13 +162,36 @@ body {
             font-weight: bold;
         }
 
-    .main-title {
-
+    .main-headers {
+        text-align: left;
     }
 
-    .main-title p {
-        margin-top: 20px;
-        /*margin-bottom: 8px;*/
+    .main-titles {
+        font-weight: bold;
+        /*font-size: 1.6vw;*/
+        font-size: calc(0.8vw + 1vh + .3vmin)
+    }
+
+    .main-titles p {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+
+    .recipe-name-and-chef {
+        font-style: italic;
+    }
+
+    .recipe-name {
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .chef-name {
+        font-style: italic;
+    }
+
+    .timestamp {
+
     }
 
     #canvas-holder {

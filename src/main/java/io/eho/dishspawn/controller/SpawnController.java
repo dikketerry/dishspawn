@@ -49,7 +49,7 @@ public class SpawnController {
         model.addAttribute("ingredientSearchResult", ingredientSearchResult);
         model.addAttribute("ingredientSpawnSet", ingredientSpawnSet);
         model.addAttribute("recipeList", recipeSpawnList);
-        return "spawn-dummy";
+        return "spawn-i";
     }
 
     @GetMapping("/search")
