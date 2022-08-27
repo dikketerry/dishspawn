@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +38,7 @@ public class Recipe {
     @CollectionTable(name="recipe_instructions", joinColumns = @JoinColumn(name="recipe_id"))
     @Column(name = "instructions")
     @Size(max = 4000)
-    private Set<String> instructions; // Set implementation: LinkedHashSet -
-    // values to be unique AND ordered
+    private Set<String> instructions;
 
     // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
     // exception - another solution could be to look into @Transactional
@@ -57,7 +57,7 @@ public class Recipe {
 
     // property for the graphic - to be saved / collected as part of recipe
     @OneToMany(mappedBy = "recipe", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Visual> visuals;
+    private List<Visual> visuals;
 
     // constructor with args
     public Recipe(String name, Set<String> instructions) {
@@ -76,7 +76,7 @@ public class Recipe {
     // convenience method visual
     public void addVisual(Visual visual) {
         if (this.visuals == null) {
-            visuals = new HashSet<>();
+            visuals = new ArrayList<>();
         }
         this.visuals.add(visual);
     }
@@ -90,17 +90,27 @@ public class Recipe {
         sb.append("Recipe name: ");
         sb.append(this.name);
         sb.append("\n");
+
         sb.append("Ingredients needed: ");
         sb.append("\n");
+
         for (RecipeIngredient ri : this.recipeIngredients) {
             sb.append(ri);
             sb.append("\n");
         }
+
         sb.append("Instructions: ");
         sb.append(this.instructions);
         sb.append("\n");
+
         sb.append("Made by: ");
         sb.append(this.chef.getUserName());
+        sb.append("\n");
+
+        for (Visual vi : this.visuals) {
+            sb.append(vi);
+            sb.append("\n");
+        }
 
         return sb.toString();
     }

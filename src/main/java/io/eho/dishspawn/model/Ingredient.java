@@ -41,6 +41,9 @@ public class Ingredient {
     @Column(name="ingredient_category")
     private IngredientCategory category;
 
+    // TODO - THIS SHOULD IDEALLY NOT BE REQUIRED..
+        // SEARCH RECIPE BASED ON INGREDIENT:
+        // findAllRecipesWhereRecipeIngredient.Ingredient = 'ingredient-name'
     @JsonIgnore
     @OneToMany(mappedBy = "ingredient", fetch = FetchType.EAGER) // no cascade
     // - RecipeIngredients are created with a recipe. not with an Ingredient
@@ -53,6 +56,7 @@ public class Ingredient {
     }
 
     // convenience method recipe ingredient
+    // TODO COMMENTED OUT WITH REFACTOR - DEPENDENT ON OUTCOME, REMOVE, PUT BACK
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
         if (recipeIngredients == null) {
             recipeIngredients = new HashSet<>();

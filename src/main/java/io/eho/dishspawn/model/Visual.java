@@ -13,6 +13,8 @@ import java.sql.Timestamp;
 @Table(name = "visual")
 
 public class Visual {
+    // the class Visual is there to represent the path to an image that will
+    // be stored outside the src path (in the end..)
 
     @CreationTimestamp
     @Column(name="timestamp_created")
@@ -25,12 +27,19 @@ public class Visual {
     @Column(name = "visual_id")
     private Long id;
 
-    @Column(name = "visual_name")
-    private String name;
+    @Column(name = "visual_fileName")
+    private String fileName;
+
+    @Column(name = "visual_location")
+    private String location;
 
     @ManyToOne(fetch = FetchType.EAGER) // EAGER is default, but hey..
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "chef_id")
+    private Chef chef;
 
     @Override
     public String toString() {
@@ -38,10 +47,10 @@ public class Visual {
         // belongs to
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Name of visual file: " + this.name + " ");
+        sb.append("File name of visual: " + this.fileName + " ");
+        sb.append("located at: " + this.location + " ");
         sb.append("belongs to recipe: " + this.recipe.getName());
 
         return sb.toString();
-
     }
 }

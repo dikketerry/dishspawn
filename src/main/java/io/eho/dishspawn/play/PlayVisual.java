@@ -1,4 +1,4 @@
 package io.eho.dishspawn.play;
 
-public class VisualInit {
+public class PlayVisual {
 }

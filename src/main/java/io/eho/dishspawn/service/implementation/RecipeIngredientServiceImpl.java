@@ -28,7 +28,7 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    @Override
+    @Override // TODO add Recipe as parameter
     public void saveRecipeIngredient(RecipeIngredient recipeIngredient) {
         recipeIngredientRepository.save(recipeIngredient);
     }
@@ -48,4 +48,5 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     public List<Recipe> findAllRecipesByIngredient(Ingredient ingredient) {
         return null;
     }
+
 }

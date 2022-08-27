@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChefServiceImpl implements ChefService {
@@ -28,6 +29,21 @@ public class ChefServiceImpl implements ChefService {
     @Override
     public List<Chef> getAllChefs() {
         return chefRepository.findAll();
+    }
+
+    @Override
+    public Chef findChefById(Long id) {
+        Optional<Chef> optionalChef = chefRepository.findById(id);
+
+        Chef chef = null;
+        if(optionalChef.isPresent()) {
+            chef = optionalChef.get();
+        } else {
+            // chef not found
+            throw new RuntimeException("chef with id " + id + "not found");
+        }
+
+        return chef;
     }
 
     @Override

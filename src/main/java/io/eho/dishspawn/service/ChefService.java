@@ -7,19 +7,11 @@ import java.util.List;
 
 public interface ChefService {
 
-    // create
     void saveChef(Chef chef);
-
-    // read - get all chefs from DB
     List<Chef> getAllChefs();
-
-    // read - get chef(s) based on string input
+    Chef findChefById(Long id);
     List<Chef> getAllChefsByUserNameContaining(String input);
-
-    // update
     void updateChef(Chef chef);
-
-    // delete
     void deleteChef(Chef chef);
 
 }

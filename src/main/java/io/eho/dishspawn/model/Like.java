@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Getter @Setter
 @Entity
-@Table(name = "likes")
+@Table(name = "like")
 public class Like {
 
     @CreationTimestamp
@@ -25,8 +25,8 @@ public class Like {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "recipe_id") // results in recipe id in like table
-    private Recipe recipe;
+    @JoinColumn(name = "visual_id") // results in recipe id in like table
+    private Visual visual;
 
     @ManyToOne
     @JoinColumn(name = "chef_id") // results in chef id (who gave the like) in
@@ -42,7 +42,8 @@ public class Like {
         sb.append("Like id: " + this.id);
         sb.append(": ");
         sb.append("by " + this.chef.getUserName() + " ");
-        sb.append("for recipe " + this.recipe.getName());
+        sb.append("for visual " + this.visual.getLocation());
+        sb.append("with recipe: " + this.visual.getRecipe().getName());
 
         return sb.toString();
 

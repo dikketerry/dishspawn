@@ -1,4 +1,4 @@
 package io.eho.dishspawn.play;
 
-public class IngredientInit {
+public class PlayIngredient {
 }

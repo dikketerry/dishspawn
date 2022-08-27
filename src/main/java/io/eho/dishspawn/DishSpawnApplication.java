@@ -1,52 +1,57 @@
 package io.eho.dishspawn;
 
 import io.eho.dishspawn.model.*;
-import io.eho.dishspawn.repository.*;
-import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
+import io.eho.dishspawn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @SpringBootApplication
-public class DishSpawnApplication /** implements CommandLineRunner */ {
+public class DishSpawnApplication /* implements CommandLineRunner */ {
+	// AFTER INIT: remove 'implements CommandLineRunner'
 
 //	public DishSpawnApplication() {}
+	// AFTER INIT: remove constructor
 
 	public static void main(String[] args) {
 		SpringApplication.run(DishSpawnApplication.class, args);
 	}
 
-	// to test, autowired on the field level for now..
+	/* INIT PROCEDURE - AFTER INIT - remove all below! */
 //	@Autowired
-//	private RecipeRepository recipeRepository;
+//	private RecipeService recipeService;
 //	@Autowired
-//	private IngredientRepository ingredientRepository;
+//	private IngredientService ingredientService;
 //	@Autowired
-//	private RecipeIngredientRepository recipeIngredientRepository;
+//	private RecipeIngredientService recipeIngredientService;
 //	@Autowired
-//	private LikeRepository likeRepository;
+//	private LikeService likeService;
 //	@Autowired
-//	private VisualRepository visualRepository;
+//	private VisualService visualService;
 //	@Autowired
-//	private ChefRepository chefRepository;
+//	private ChefService chefService;
 //
 //	@Override
 //	public void run(String... args) throws Exception {
+
+		// INIT 1 create new Chef
+//		Chef newChef = new Chef();
+//		newChef.setUserName("masterchef");
+//		newChef.setEmail("master@cooking.com");
+//		newChef.setPassword("test123");
+//		newChef.setAvatarPath("/img/default-avatar.png");
 //
-//		// register new chef
-//		Chef chefToDB = new Chef();
-//		chefToDB.setFirstName("erik");
-//		chefToDB.setLastName("hollanders");
-//		chefToDB.setUserName("masterchef");
-//		chefToDB.setPassword("test123");
-//		chefToDB.setEmail("erik.hollanders@gmail.com");
-//		chefRepository.save(chefToDB); // id 1
-//
-//		// add ingredients to DB (should be back-end operation only)
+//		System.out.println(newChef);
+//		chefService.saveChef(newChef); // id 1
+
+		// INIT 2 add ingredients to DB (should be back-end operation only)
 //		Ingredient egg = new Ingredient("egg", IngredientCategory.EGGS);
 //		Ingredient mayonaise = new Ingredient("mayonaise",
 //											  IngredientCategory.CONDIMENT);
@@ -55,33 +60,34 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		Ingredient mustard = new Ingredient("mustard", IngredientCategory.ADDITIVE);
 //		Ingredient persil = new Ingredient("persil", IngredientCategory.HERBS);
 //
-//		ingredientRepository.save(egg); // id 2
-//		ingredientRepository.save(mayonaise); // id 3
-//		ingredientRepository.save(chives); // id 4
-//		ingredientRepository.save(curry); // id 5
-//		ingredientRepository.save(mustard); // id 6
-//		ingredientRepository.save(persil); // id 7
+//		ingredientService.saveIngredient(egg); // id 2
+//		ingredientService.saveIngredient(mayonaise); // id 3
+//		ingredientService.saveIngredient(chives); // id 4
+//		ingredientService.saveIngredient(curry); // id 5
+//		ingredientService.saveIngredient(mustard); // id 6
+//		ingredientService.saveIngredient(persil); // id 7
 //
-//		// create new recipe
-//		Chef chefFromDB = chefRepository.getReferenceById(1l);
-//		Recipe eggSalad = new Recipe("Egg salad", "Boil the eggs, mash them " +
-//				"in " +
-//				"a bowl, add mustard, mayonaise, chives and curry, season to " +
-//				"taste, garnish with persil, eat");
-//		eggSalad.setChef(chefFromDB); // todo as the recipe is created by a
-//		// logged-in user, the chef for this new recipe should be
-//		// automatically set
+		// INIT 3 create new recipe
+//		Chef chefDB = chefService.findChefById(1l);
+//		Recipe eggSalad = new Recipe();
+//		eggSalad.setName("Egg Salad");
+//		eggSalad.setChef(chefDB);
+//		Set<String> instructions = new LinkedHashSet<>();
+//		instructions.add("Boil the eggs");
+//		instructions.add("Mash the boiled eggs in a bowl");
+//		instructions.add("Add mustard, mayonaise, chives and curry");
+//		instructions.add("Season to taste");
+//		instructions.add("Garnish with persil");
+//		instructions.add("Eat");
+//
 //
 //		// create recipe ingredients for recipe
 //		RecipeIngredient r1 = new RecipeIngredient();
-//		r1.setIngredient(egg);
-//		r1.setRecipe(eggSalad); // this should also probably not be set by
-//		// client, as a RecipeIngredient already should belong to a recipe
-//		// (new or existing)
+//		r1.setIngredient(ingredientService.findIngredientById(2l));
+//		r1.setRecipe(eggSalad);
 //		r1.setQuantity(1);
 //		r1.setUnitName("POUND");
-//		r1.massOrVolumeSetter(); // this should not be set by client - it should be
-//		// calculated prior to saving the recipe ingredient (same for volume)
+//		r1.massOrVolumeSetter();
 //		r1.setVisualImpact(true);
 //		r1.setForm(RecipeIngredientForm.EGG_LIKE);
 //		r1.setTexture(RecipeIngredientTexture.CHEWY);
@@ -89,7 +95,7 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		r1.setColor("EF9A35");
 //
 //		RecipeIngredient r2 = new RecipeIngredient();
-//		r2.setIngredient(mayonaise);
+//		r2.setIngredient(ingredientService.findIngredientById(3l));
 //		r2.setRecipe(eggSalad);
 //		r2.setQuantity(0.5);
 //		r2.setUnitName("CUP");
@@ -101,7 +107,7 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		r2.setColor("BC11AA");
 //
 //		RecipeIngredient r3 = new RecipeIngredient();
-//		r3.setIngredient(chives);
+//		r3.setIngredient(ingredientService.findIngredientById(4l));
 //		r3.setRecipe(eggSalad);
 //		r3.setQuantity(1);
 //		r3.setUnitName("CUP");
@@ -113,7 +119,7 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		r3.setColor("3399BB");
 //
 //		RecipeIngredient r4 = new RecipeIngredient();
-//		r4.setIngredient(curry);
+//		r4.setIngredient(ingredientService.findIngredientById(5l));
 //		r4.setRecipe(eggSalad);
 //		r4.setQuantity(2);
 //		r4.setUnitName("TEASPOON");
@@ -125,19 +131,16 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		r4.setColor("EE9A5D");
 //
 //		RecipeIngredient r5 = new RecipeIngredient();
-//		r5.setIngredient(mustard);
+//		r5.setIngredient(ingredientService.findIngredientById(6l));
 //		r5.setRecipe(eggSalad);
 //		r5.setQuantity(1);
 //		r5.setUnitName("TABLESPOON");
 //		r5.massOrVolumeSetter();
 //		r5.setVisualImpact(false);
-////		r5.setForm(RecipeIngredientForm.BLOBS);
-////		r5.setTexture(RecipeIngredientTexture.PASTY);
-////		r5.setCookingMethod(RecipeIngredientCookingMethod.MIX);
-////		r5.setColor("EE9A5D");
+//// 		no visual properties
 //
 //		RecipeIngredient r6 = new RecipeIngredient();
-//		r6.setIngredient(persil);
+//		r6.setIngredient(ingredientService.findIngredientById(7l));
 //		r6.setRecipe(eggSalad);
 //		r6.setQuantity(0.5);
 //		r6.setUnitName("CUP");
@@ -148,30 +151,26 @@ public class DishSpawnApplication /** implements CommandLineRunner */ {
 //		r6.setCookingMethod(RecipeIngredientCookingMethod.GARNISH);
 //		r6.setColor("BB9A9E");
 //
-//		// NO SAVE OF RI INDIVIDUALLY! AS SAVE OF RI IS IMPLIED BY CASCADE IN
-//		// RECIPE
-////		recipeIngredientRepository.save(r1);
-//
+////		no save of recipe-ingredients, cascaded through recipe save
 //		eggSalad.addRecipeIngredient(r1); // 9
 //		eggSalad.addRecipeIngredient(r2); // 10
 //		eggSalad.addRecipeIngredient(r3); // 11
 //		eggSalad.addRecipeIngredient(r4); // 12
 //		eggSalad.addRecipeIngredient(r5); // 13
 //		eggSalad.addRecipeIngredient(r6); // 14
-//
-//		// create visual
+//		recipeService.saveRecipe(eggSalad); // id 8 for recipe / then
+
+		// INIT 5: create visual with recipe
+//		String fileName = "testdish2.jpg";
 //		Visual visual = new Visual();
-//		visual.setName("visual1.jpg");
-//
-//		// attach visual to recipe
-//		eggSalad.addVisual(visual); // id 15
-//		recipeRepository.save(eggSalad); // id 8 for recipe / then
-//		// recipeIngredients 9 to 14 / then visual
-//
-//		// add a Like to eggSalad
+//		visual.setFileName(fileName);
+//		visual.setLocation("/img/testspawn/" + fileName);
+//		visual.setRecipe(recipeService.findById(8l));
+//		visualService.saveVisual(visual, chefService.findChefById(1l)); // id 15
+
+//		// INIT 6: add a Like to a visual TODO: NOT WORKING
 //		Like like = new Like();
-//		like.setRecipe(recipeRepository.getReferenceById(8l));
-//		likeRepository.save(like); // id 16
+//		likeService.saveLike(visualService.findVisualById(15l), chefService.findChefById(1l));
 //
 //	}
 }

@@ -165,7 +165,7 @@ public class SpawnController {
         Ingredient ingredientDB;
 
         try {
-            ingredientDB = ingredientService.getIngredientById(id);
+            ingredientDB = ingredientService.findIngredientById(id);
         } catch (NoSuchElementException e) {
             e.printStackTrace();
             return null;

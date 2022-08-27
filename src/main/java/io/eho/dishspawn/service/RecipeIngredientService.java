@@ -16,4 +16,5 @@ public interface RecipeIngredientService {
 
     List<Recipe> findAllRecipesByIngredient(Ingredient ingredient);
 
+
 }

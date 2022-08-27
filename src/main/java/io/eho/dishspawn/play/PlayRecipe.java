@@ -2,7 +2,7 @@ package io.eho.dishspawn.play;
 
 import io.eho.dishspawn.model.Chef;
 
-public class RecipeInit {
+public class PlayRecipe {
 
     public static void main(String[] args) {
 
