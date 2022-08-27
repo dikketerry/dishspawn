@@ -108,7 +108,7 @@
                     <p th:text="'Spawned by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
                 </div>
                 <div class="timestamp margin16">
-                    <p th:text="'on ' +${recipe.timestampCreated}">timestamp -created</p>
+                    <p th:text="'on ' +${recipe.timestampCreated}">timestamp-created</p>
                 </div>
                 <hr class="custom-hr">
             </div>
@@ -123,7 +123,7 @@
             <hr class="custom-hr">
 
             <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
-                <div id="ingredients-title">
+                <div id="ingredients-title" class="margin16">
                     <span>Ingredients</span>
                 </div>
                 <div id="directions-title">
@@ -134,7 +134,7 @@
             <hr class="custom-hr">
 
             <div class="ingredients-directions-content-wrapper">
-                <div id="ingredients-content">
+                <div id="ingredients-content" class="margin16">
     <!--            TODO: find way to access labels of enums.. Best way
                         would probably be to refactor MassCopnverter and
                         VolumeConverter into Converter (and have only 1 enum

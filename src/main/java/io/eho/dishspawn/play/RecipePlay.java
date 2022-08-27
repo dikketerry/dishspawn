@@ -8,6 +8,7 @@ import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class RecipePlay {
@@ -53,8 +54,13 @@ public class RecipePlay {
 
         // construct recipe
         instantCoffee.setName("Instant coffee");
-        instantCoffee.setInstructions("boil the water and stir in the instant" +
-                                              " coffee and milk");
+        Set<String> instructions = new LinkedHashSet<>();
+        instructions.add("boil water");
+        instructions.add("add instant coffee");
+        instructions.add("stir");
+        instructions.add("drink");
+        instantCoffee.setInstructions(instructions);
+
         Set<RecipeIngredient> recipeIngredients = new HashSet<>();
         recipeIngredients.add(i1);
         recipeIngredients.add(i2);

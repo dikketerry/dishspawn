@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
@@ -31,17 +33,21 @@ public class Chef {
     private Long id;
 
     @Column(name = "first_name")
+    @Size(max = 27, message = "first name cannot contain more than 27 characters")
     private String firstName;
 
     @Column(name = "last_name")
+    @Size(max = 27, message = "first name cannot contain more than 27 characters")
     private String lastName;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true) // TODO: exception handling
     @NotBlank(message = "Username is a required field")
+    @Size(min = 2, max = 27, message = "first name cannot contain more than 27 characters")
     private String userName;
 
     @Column(name = "email")
     @NotBlank(message = "Email is a required field")
+    @Pattern(regexp = "^(.+)@(\\S+)$", message="Invalid email format")
     private String email;
 
     @Column(name = "password")
@@ -80,8 +86,5 @@ public class Chef {
         return sb.toString();
 
     }
-
-
     // equals / hash
-
 }

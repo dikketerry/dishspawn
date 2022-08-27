@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor @Getter @Setter
@@ -32,9 +33,12 @@ public class Recipe {
     @Column(name = "recipe_name")
     private String name;
 
-    @Column(name = "recipe_instructions")
+    @ElementCollection
+    @CollectionTable(name="recipe_instructions", joinColumns = @JoinColumn(name="recipe_id"))
+    @Column(name = "instructions")
     @Size(max = 4000)
-    private String instructions;
+    private Set<String> instructions; // Set implementation: LinkedHashSet -
+    // values to be unique AND ordered
 
     // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
     // exception - another solution could be to look into @Transactional
@@ -56,7 +60,7 @@ public class Recipe {
     private Set<Visual> visuals;
 
     // constructor with args
-    public Recipe(String name, String instructions) {
+    public Recipe(String name, Set<String> instructions) {
         this.name = name;
         this.instructions = instructions;
     }

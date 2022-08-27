@@ -1,12 +1,13 @@
 package io.eho.dishspawn.play;
 
+import io.eho.dishspawn.model.Chef;
+
 public class RecipeInit {
 
     public static void main(String[] args) {
 
-        // create ingredients
-
-        // save ingredients to DB
+        // to fill DB with testing data - assumes no DB!
+        // spring.jpa.hibernate.ddl-auto=create
 
         // create recipe
 
