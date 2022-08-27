@@ -27,7 +27,7 @@ public class Visual {
     @Column(name = "visual_id")
     private Long id;
 
-    @Column(name = "visual_fileName")
+    @Column(name = "visual_file_name")
     private String fileName;
 
     @Column(name = "visual_location")

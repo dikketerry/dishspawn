@@ -146,7 +146,12 @@
                     </ul>
                 </div>
                 <div id="directions-content">
-                    <p th:text="${recipe.instructions}">instructions</p>
+                    <ol>
+                        <li th:each="instruction:${recipe.instructions}">
+                            <span th:text="${instruction}"></span>
+                        </li>
+                    </ol>
+<!--                    <p th:text="${recipe.instructions}">instructions</p>-->
                 </div>
             </div>
         </div>

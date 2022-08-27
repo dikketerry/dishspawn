@@ -7,9 +7,7 @@ import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class RecipePlay {
 
@@ -54,7 +52,7 @@ public class RecipePlay {
 
         // construct recipe
         instantCoffee.setName("Instant coffee");
-        Set<String> instructions = new LinkedHashSet<>();
+        List<String> instructions = new ArrayList<>();
         instructions.add("boil water");
         instructions.add("add instant coffee");
         instructions.add("stir");

@@ -38,7 +38,7 @@ public class Recipe {
     @CollectionTable(name="recipe_instructions", joinColumns = @JoinColumn(name="recipe_id"))
     @Column(name = "instructions")
     @Size(max = 4000)
-    private Set<String> instructions;
+    private List<String> instructions;
 
     // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
     // exception - another solution could be to look into @Transactional
@@ -60,7 +60,7 @@ public class Recipe {
     private List<Visual> visuals;
 
     // constructor with args
-    public Recipe(String name, Set<String> instructions) {
+    public Recipe(String name, List<String> instructions) {
         this.name = name;
         this.instructions = instructions;
     }

@@ -29,8 +29,7 @@ public class Like {
     private Visual visual;
 
     @ManyToOne
-    @JoinColumn(name = "chef_id") // results in chef id (who gave the like) in
-    // like table
+    @JoinColumn(name = "chef_id") // results in chef id (who gave the like) like table
     private Chef chef;
 
     // toString
