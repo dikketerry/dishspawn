@@ -1,6 +1,5 @@
 package io.eho.dishspawn.controller;
 
-import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class IngredientController {
     // collect all ingredients
     @GetMapping("/all")
     public String getAllIngredients(Model model) {
-        List<Ingredient> ingredientsFromDB = ingredientService.getAllIngredients();
+        List<Ingredient> ingredientsFromDB = ingredientService.findAllIngredients();
 
         if (ingredientsFromDB == null) {
             model.addAttribute("error", "no ingredients found");

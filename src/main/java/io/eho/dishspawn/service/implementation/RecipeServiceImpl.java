@@ -26,7 +26,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findRecipeById(Long id) {
         return recipeRepository.getReferenceById(id);
     }
 
@@ -36,7 +36,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public List<Recipe> getAllRecipes() {
+    public List<Recipe> findAllRecipes() {
         return recipeRepository.findAllByOrderByTimestampCreatedDesc();
     }
 

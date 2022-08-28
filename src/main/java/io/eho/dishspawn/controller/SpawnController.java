@@ -59,7 +59,7 @@ public class SpawnController {
         //diagnostic print
 //        System.out.println("searchIngredient method being executed");
         ingredientSearchResult =
-                ingredientService.getAllIngredientsByNameContaining(search);
+                ingredientService.findAllIngredientsByNameContaining(search);
 
         model.addAttribute("ingredientResult", ingredientSearchResult);
 

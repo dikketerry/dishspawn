@@ -34,18 +34,18 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     }
 
     @Override
-    public List<RecipeIngredient> getAllRecipeIngredients() {
+    public List<RecipeIngredient> findAllRecipeIngredients() {
         return null;
     }
 
     @Override
-    public List<RecipeIngredient> getAllRecipeIngredientsForRecipe(Recipe recipe) {
+    public List<RecipeIngredient> findAllRecipeIngredientsForRecipe(Recipe recipe) {
         return null;
     }
 
     @Override
 //    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
-    public List<Recipe> findAllRecipesByIngredient(Ingredient ingredient) {
+    public List<Recipe> findAllRecipeIngredientsByIngredient(Ingredient ingredient) {
         return null;
     }
 

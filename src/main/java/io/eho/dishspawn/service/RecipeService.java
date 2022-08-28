@@ -7,11 +7,8 @@ import java.util.List;
 
 public interface RecipeService {
 
-    Recipe findById(Long id);
-
+    Recipe findRecipeById(Long id);
     void saveRecipe(Recipe recipe);
-
-    List<Recipe> getAllRecipes();
-
+    List<Recipe> findAllRecipes();
     Page<Recipe> findPage(int pageNr);
 }

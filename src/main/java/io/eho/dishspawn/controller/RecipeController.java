@@ -62,7 +62,7 @@ public class RecipeController {
     @GetMapping("/recipe")
     public String showRecipe(@RequestParam Long recipeId,
                              Model model) {
-        Recipe recipe = recipeService.findById(recipeId);
+        Recipe recipe = recipeService.findRecipeById(recipeId);
 
         model.addAttribute(recipe);
 
@@ -72,7 +72,7 @@ public class RecipeController {
     // add get mapping for "/recipe/all"
     @GetMapping("/recipe/all")
     public String getAllRecipes(Model model) {
-        List<Recipe> recipesFromDB = recipeService.getAllRecipes();
+        List<Recipe> recipesFromDB = recipeService.findAllRecipes();
 
         if (recipesFromDB == null) {
             model.addAttribute("error", "no recipes found");

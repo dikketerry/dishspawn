@@ -6,6 +6,7 @@ public enum RecipeIngredientCookingMethod {
     BOIL("Boil"),
     BROIL("Broil"),
     BRAISE("Braise"),
+    DRIZZLE("Drizzle"),
     GARNISH("Garnish"),
     GRILL("Grill"),
     MELT("Melt"),

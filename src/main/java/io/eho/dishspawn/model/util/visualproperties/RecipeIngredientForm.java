@@ -6,6 +6,7 @@ public enum RecipeIngredientForm {
     CHOPPED("Chopped"),
     CONFETTI("Confetti"),
     CRUMBS("Crumbs"),
+    CRUSHED("Crushed"),
     CUBES("Cubes"),
     CURLS("Curls"),
     DICED("Diced"),

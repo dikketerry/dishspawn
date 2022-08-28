@@ -27,7 +27,7 @@ public class ChefRestController {
     // method for collecting chefs
     @GetMapping("/all")
     public List<Chef> getAllChefs() {
-        return chefService.getAllChefs();
+        return chefService.findAllChefs();
     }
 
     // method for collecting chefs, recipes and ingredients based on search

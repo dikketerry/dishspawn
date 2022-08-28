@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface IngredientService {
-    // create
+
     void saveIngredient(Ingredient ingredient);
-
-    List<Ingredient> getAllIngredients();
-
-    Set<Ingredient> getAllIngredientsByNameContaining(String name);
-
+    List<Ingredient> findAllIngredients();
+    Set<Ingredient> findAllIngredientsByNameContaining(String name);
     Ingredient findIngredientById(Long id);
 }

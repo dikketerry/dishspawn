@@ -31,7 +31,7 @@ public class ChefController {
     // collect all chefs
     @GetMapping("/all")
     public String getAllChefs(Model model) {
-        List<Chef> chefsFromDB = chefService.getAllChefs();
+        List<Chef> chefsFromDB = chefService.findAllChefs();
 
         if (chefsFromDB == null) {
             model.addAttribute("error", "no chefs found");

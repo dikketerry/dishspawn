@@ -30,7 +30,7 @@ public class VisualServiceImpl implements VisualService {
     }
 
     @Override
-    public List<Visual> getAllVisualForRecipe() {
+    public List<Visual> findAllVisualsForRecipe() {
         return null;
     }
 

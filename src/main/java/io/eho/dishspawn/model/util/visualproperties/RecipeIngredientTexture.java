@@ -8,6 +8,7 @@ public enum RecipeIngredientTexture {
     FIRM("Firm"),
     MOIST("Moist"),
     PASTY("Pasty"),
+    POWDERY("Powdery"),
     WATERY("Watery");
 
     private final String label;

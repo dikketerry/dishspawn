@@ -9,6 +9,7 @@ public interface VisualService {
 
     void saveVisual(Visual visual, Chef chef);
     void deleteVisual(Visual visual, Chef chef);
-    List<Visual> getAllVisualForRecipe();
+    List<Visual> findAllVisualsForRecipe();
     Visual findVisualById(Long id);
+
 }

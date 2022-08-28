@@ -29,12 +29,12 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public List<Ingredient> getAllIngredients() {
+    public List<Ingredient> findAllIngredients() {
         return ingredientRepository.findAll();
     }
 
     @Override
-    public Set<Ingredient> getAllIngredientsByNameContaining(String name) {
+    public Set<Ingredient> findAllIngredientsByNameContaining(String name) {
         return ingredientRepository.findAllByNameContaining(name);
     }
 

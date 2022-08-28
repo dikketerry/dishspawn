@@ -69,7 +69,6 @@
 
     </div>
 
-
 </div>
 
 <!--<hr>-->
@@ -141,7 +140,9 @@
                         for all units-->
                     <ul>
                         <li th:each="ingredient:${recipe.recipeIngredients}">
-                            <span th:text="${ingredient.quantity} + ' ' + ${ingredient.unitName} + ' ' + ${ingredient.ingredient.name}"></span>
+                            <span th:text="${ingredient.quantity != 0} ? ${ingredient.quantity} + ' ' : ''">quantity</span>
+                            <span th:text="${ingredient.unitName != null} ? ${ingredient.unitName} + ' ' : ''">unit-name</span>
+                            <span th:text="${ingredient.ingredient.name}">ingredient-name</span>
                         </li>
                     </ul>
                 </div>
@@ -151,7 +152,6 @@
                             <span th:text="${instruction}"></span>
                         </li>
                     </ol>
-<!--                    <p th:text="${recipe.instructions}">instructions</p>-->
                 </div>
             </div>
         </div>
