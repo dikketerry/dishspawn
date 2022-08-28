@@ -11,6 +11,6 @@ import java.util.List;
 public interface VisualRepository extends JpaRepository<Visual, Long> {
 
     List<Visual> findAllByOrderByTimestampCreatedDesc();
+    List<Visual> findTop200ByOrderByTimestampCreatedDesc();
     Visual findFirstByOrderByTimestampCreatedDesc();
-
 }

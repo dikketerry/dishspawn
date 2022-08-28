@@ -41,7 +41,7 @@ public class Like {
         sb.append("Like id: " + this.id);
         sb.append(": ");
         sb.append("by " + this.chef.getUserName() + " ");
-        sb.append("for visual " + this.visual.getLocation());
+        sb.append("for visual " + this.visual.getFileLocation());
         sb.append("with recipe: " + this.visual.getRecipe().getName());
 
         return sb.toString();

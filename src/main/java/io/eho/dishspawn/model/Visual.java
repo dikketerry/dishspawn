@@ -16,6 +16,8 @@ public class Visual {
     // the class Visual is there to represent the path to an image that will
     // be stored outside the src path (in the end..)
 
+    // TODO: add static counter, important for generating filename
+
     @CreationTimestamp
     @Column(name="timestamp_created")
     @Setter(AccessLevel.NONE)
@@ -31,7 +33,7 @@ public class Visual {
     private String fileName;
 
     @Column(name = "visual_location")
-    private String location;
+    private String fileLocation;
 
     @ManyToOne(fetch = FetchType.EAGER) // EAGER is default, but hey..
     @JoinColumn(name = "recipe_id")
@@ -48,8 +50,10 @@ public class Visual {
         StringBuilder sb = new StringBuilder();
 
         sb.append("File name of visual: " + this.fileName + " ");
-        sb.append("located at: " + this.location + " ");
+        sb.append("located at: " + this.fileLocation + " ");
         sb.append("belongs to recipe: " + this.recipe.getName());
+        sb.append("\n");
+        sb.append("created at: " + timestampCreated);
 
         return sb.toString();
     }

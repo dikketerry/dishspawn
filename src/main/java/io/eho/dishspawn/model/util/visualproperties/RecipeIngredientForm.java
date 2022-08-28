@@ -22,6 +22,7 @@ public enum RecipeIngredientForm {
     RINGS("Rings"),
     SHEETS("Sheets"),
     SHELLS("Shells"),
+    SHREDDED("Shredded"),
     SMASHED("Smashed"),
     SLICED("Sliced"),
     SPHERES("Spheres"),

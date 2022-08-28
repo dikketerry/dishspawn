@@ -4,10 +4,7 @@ import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.VisualService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +36,11 @@ public class VisualServiceImpl implements VisualService {
     }
 
     @Override
+    public List<Visual> findLast200Visuals() {
+        return visualRepository.findTop200ByOrderByTimestampCreatedDesc();
+    }
+
+    @Override
     public List<Visual> findAllVisualsForRecipe() {
         return null;
     }
@@ -50,8 +52,11 @@ public class VisualServiceImpl implements VisualService {
 
     @Override
     public Page<Visual> findPage(int pageNr) {
-        Pageable pageable = PageRequest.of(pageNr - 1, 4,
+
+        Pageable pageable = PageRequest.of(pageNr - 1, 3,
                 Sort.by(Sort.Direction.DESC, "timestampCreated"));
+
+
         return visualRepository.findAll(pageable);
     }
 

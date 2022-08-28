@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -34,10 +36,11 @@ public class Recipe {
     @Column(name = "recipe_name")
     private String name;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @CollectionTable(name="recipe_instructions", joinColumns = @JoinColumn(name="recipe_id"))
-    @Column(name = "instructions")
-    @Size(max = 4000)
+    @Column(length = 4000, name = "instructions")
+//    @Size(max = 4000)
     private List<String> instructions;
 
     // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
@@ -56,7 +59,8 @@ public class Recipe {
     private Chef chef;
 
     // property for the graphic - to be saved / collected as part of recipe
-    @OneToMany(mappedBy = "recipe", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipe", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Visual> visuals;
 
     // constructor with args

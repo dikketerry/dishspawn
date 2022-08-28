@@ -8,7 +8,7 @@ public enum IngredientCategory {
     CEREAL_RICE("Cereal - Rice"),
     CEREAL_MAIZE("Cereal - Corns"),
     CEREAL_OTHER("Cereal - Other (quinoa, etc.)"),
-    CONDIMENT("Condiment (sauces, powders, oils, butter, vinegars"),
+    CONDIMENT("Condiment (sauces, powders, butter, vinegars"),
     DAIRY_CHEESE("Dairy - Cheese"),
     DAIRY_CREAM("Dairy - Cream"),
     DAIRY_MILKS("Dairy - Milks"),

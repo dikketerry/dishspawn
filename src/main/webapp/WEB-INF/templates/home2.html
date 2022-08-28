@@ -125,26 +125,18 @@
                 <!--            div subtitle-->
                 <div class="recipe-and-chef-wrapper margin16">
                     <div class="recipe-name">
-
                         <a th:href="@{/recipe(recipeId=${latestVisual.recipe.id})}"
                            th:text="${latestVisual.recipe.name}" class="uk-link-text">recipename</a>
-
-<!--                        <a th:href="@{/recipe(recipeId=${latestVisual.id})}"-->
-<!--                           th:text="${latestVisual.fileName}" class="uk-link-text">recipename</a>-->
                     </div>
                     <span>&nbspby&nbsp</span>
                     <div class="chef-name">
                         <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"
                            th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>
-
-<!--                        <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"-->
-<!--                           th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>-->
                     </div>
                 </div>
-                <!--date and time of creation                  TODO: #likes-->
+<!--            date and time of creation                  TODO: #likes-->
                 <div class="timestamp margin16">
                     <span th:text="${latestVisual.timestampCreated}"></span>
-<!--                    <span th:text="${latestVisual.timestampCreated}"></span>-->
                 </div>
                 <!--            hr-->
                 <hr class="custom-hr">
@@ -152,10 +144,9 @@
 
 <!--            div img-->
             <div uk-lightbox>
-                <a
-                        class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                   data-src="/img/testspawn/testdish2.jpg" uk-img
-                   href="/img/testspawn/testdish2.jpg"></a>
+                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+                   th:attr="data-src=${latestVisual.fileLocation}"
+                   th:href="${latestVisual.fileLocation}" uk-img></a>
             </div>
 <!--            hr-->
             <hr class="custom-hr">
@@ -171,7 +162,8 @@
 
 <!--            gallery (3 recipes in a row) TODO: navigation pagination-->
                 <div class="uk-child-width-expand uk-text-center gallery" uk-grid>
-                    <div>
+                    <div th:each="visual : ${pagedVisuals}">
+
                         <div class="like">
 <!--                        like line -->
                             <p>&lt3</p> <!-- placeholder -->
@@ -179,98 +171,30 @@
 
                         <div uk-lightbox>
                             <a class="uk-height-medium uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                               data-src="/img/testspawn/testdish22.jpg" uk-img
-                               href="/img/testspawn/testdish22.jpg"></a>
+                               th:attr="data-src=${visual.fileLocation}" uk-img
+                               th:href="${visual.fileLocation}"></a>
                         </div>
 
                         <div class="recipe-name">
-                            <a th:href="@{/recipe(recipeId=${latestVisual.id})}"
-                               th:text="${latestVisual.fileName}"
+                            <a th:href="@{/recipe(recipeId=${visual.recipe.id})}"
+                               th:text="${visual.recipe.name}"
                                class="uk-link-text">recipename</a>
                         </div>
 
                         <div class="chef-name">
-                            <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"
-                               th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>
+                            <a th:href="@{/chef/{chefId}(chefId=${visual.chef.id})}"
+                               th:text="${visual.chef.userName}" class="uk-link-text">chefname</a>
                         </div>
                         <!--date and time of creation                  TODO: #likes-->
                         <div class="main-subtitle-timestamp">
-                            <span th:text="${latestVisual.timestampCreated}">timestamp</span>
-                        </div>
-
-                    </div>
-
-                    <div>
-                        <div class="like">
-                            <!--                        like line -->
-                            <p>&lt3</p> <!-- placeholder -->
-                        </div>
-
-                        <div uk-lightbox>
-                            <a class="uk-height-medium uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                               data-src="/img/testspawn/testdish1.png" uk-img
-                               href="/img/testspawn/testdish1.png"></a>
-                        </div>
-
-                        <div class="recipe-name">
-                            <a th:href="@{/recipe(recipeId=${latestVisual.id})}"
-                               th:text="${latestVisual.fileName}"
-                               class="uk-link-text">recipename</a>
-                        </div>
-
-                        <div class="chef-name">
-                            <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"
-                               th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>
-                        </div>
-                        <!--date and time of creation                  TODO: #likes-->
-                        <div class="main-subtitle-timestamp">
-                            <span th:text="${latestVisual.timestampCreated}">timestamp</span>
-                        </div>
-
-                    </div>
-
-                    <div>
-                        <div class="like">
-                            <!--                        like line -->
-                            <p>&lt3</p> <!-- placeholder -->
-                        </div>
-
-                        <div uk-lightbox>
-                            <a class="uk-height-medium uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                               data-src="/img/testspawn/testdish4.jpg" uk-img
-                               href="/img/testspawn/testdish4.jpg"></a>
-                        </div>
-
-                        <div class="recipe-name">
-                            <a th:href="@{/recipe(recipeId=${latestVisual.id})}"
-                               th:text="${latestVisual.fileName}"
-                               class="uk-link-text">recipename</a>
-                        </div>
-
-                        <div class="chef-name">
-                            <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"
-                               th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>
-                        </div>
-                        <!--date and time of creation                  TODO: #likes-->
-                        <div class="main-subtitle-timestamp">
-                            <span th:text="${latestVisual.timestampCreated}">timestamp</span>
+                            <span th:text="${visual.timestampCreated}">timestamp
+                            </span>
                         </div>
 
                     </div>
 
                 </div>
 
-
-                <!--                horizontal row with 3 images:-->
-<!--                    line 1 # of likes center per item-->
-<!--                    line 2 images-->
-<!--                    line 3 name recipe image-->
-<!--                    line 4 username chef-->
-<!--                    line 5 date and time of creation-->
-
-
-
-<!--            hr-->
                 <hr class="custom-hr">
 
             </div>
