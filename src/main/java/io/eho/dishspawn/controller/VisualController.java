@@ -5,12 +5,10 @@ import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class VisualController {
         this.visualService = visualService;
     }
 
-    @GetMapping("/home2/page/{pageNr}")
+    @GetMapping("/home/page/{pageNr}")
     @Primary
     public String getVisualsPaged(@PathVariable("pageNr") int currentPage,
                                   Model model) {
@@ -37,15 +35,23 @@ public class VisualController {
 
         // get all visuals paginated - ensure the first visual is not shown
         // in the view
-        Page<Visual> visualPage = visualService.findPage(currentPage);
-//        int totalPages = visualPage.getTotalPages();
-//        long totalVisuals = visualPage.getTotalElements();
-        List<Visual> pagedVisuals = visualPage.getContent();
+        Page<Visual> visualPage = visualService.findPageVisuals(currentPage);
+
+        List<Visual> pagedVisuals;
+//        if (currentPage == 1) {
+//            pagedVisuals = visualPage.getContent();
+//            pagedVisuals.remove(0);
+//        } else {
+//            pagedVisuals = visualPage.getContent();
+//        }
+
+        int totalPages = visualPage.getTotalPages();
+        long totalVisuals = visualPage.getTotalElements();
+        pagedVisuals = visualPage.getContent();
 
         model.addAttribute("latestVisual", latestVisual);
-//        model.addAttribute("allVisuals", allVisuals);
-//        model.addAttribute("totalPages", totalPages);
-//        model.addAttribute("totalVisuals", totalVisuals);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalVisuals", totalVisuals);
         model.addAttribute("pagedVisuals", pagedVisuals);
 
         // diagnostic print
@@ -53,8 +59,7 @@ public class VisualController {
             System.out.println(visual);
         }
 
-        return "home2";
-
+        return "home";
     }
 
 }

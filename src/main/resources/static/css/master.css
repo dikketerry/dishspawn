@@ -256,39 +256,36 @@ body {
     color: #f0506e;
 }
 
-/*#ingredients {*/
-/*    margin-top: 20px;*/
-/*    width: 31%;*/
+/*SPAWN*/
+
+.table-div {
+    /*width: 80%;*/
+    display: block;
+    margin: 20px auto auto;
+    max-width: 80%;
+
+}
+
+/*.table-result {*/
+/*    margin-left: auto;*/
+/*    margin-right: auto;*/
+/*    text-align: left;*/
 /*}*/
 
-/*.ingredients-title {*/
-/*    font-size: calc(0.8vw + 1vh + .3vmin);*/
-/*    font-weight: bold;*/
+/*table result th,*/
+/*table-result td {*/
+/*    padding: 2px;*/
 /*}*/
 
-/*.ingredients-content {*/
-/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
-/*}*/
+.content-td {
+    padding: 2px;
+    text-align: left;
+}
 
-/*#directions {*/
-/*    margin-top: 20px;*/
-/*    margin-left: 10%;*/
-/*    width: 59%;*/
-/*    font-family: "Neue Montreal", Helvetica, Geneva, sans-serif;*/
-/*    !*font-family: Helvetica, Geneva, sans-serif;*!*/
-/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
-/*    color: #f0506e;*/
-/*    !*border: 3px solid red;*!*/
-/*}*/
-
-/*.directions-title {*/
-/*    font-size: calc(0.8vw + 1vh + .3vmin);*/
-/*    font-weight: bold;*/
-/*}*/
-
-/*.directions-content {*/
-/*    font-size: calc(0.8vw + 0.8vh + .2vmin);*/
-/*}*/
+.action-td {
+    padding: 2px;
+    text-align: right;
+}
 
 #canvas-holder {
     display: flex;

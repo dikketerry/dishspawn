@@ -104,7 +104,7 @@
 
 <!--            div title header-->
             <div class="main-title">
-                <p>latest spawn</p>
+                <p>spawn?</p>
             </div>
             <hr>
             <div id="canvas-holder">
@@ -116,8 +116,7 @@
 <!--            div subtitle-->
             <div class="main-subtitle">
                 <!--name latest spawn by username chef-->
-                <p
-                        th:text="${recipe.name} + ' by ' + ${recipe.chef.userName}"></p>
+                <p th:text="${recipe.name} + ' by ' + ${recipe.chef.userName}"></p>
 
                 <!--date and time of creation                  TODO: #likes-->
                 <p th:text="${recipe.timestampCreated}"></p>

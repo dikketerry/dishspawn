@@ -4,6 +4,10 @@ import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.repository.IngredientRepository;
 import io.eho.dishspawn.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +38,29 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Set<Ingredient> findAllIngredientsByNameContaining(String name) {
-        return ingredientRepository.findAllByNameContaining(name);
+    public Set<Ingredient> findAllIngredientsByNameContaining(String searchKey) {
+        return ingredientRepository.findAllByNameContaining(searchKey);
+    }
+
+    @Override
+    public Page<Ingredient> findPageIngredientsByNameContaining(String searchKey, int pageNr) {
+        Pageable pageable = PageRequest.of(pageNr, 3, Sort.Direction.ASC, "name");
+        return ingredientRepository.findAllByNameContaining(searchKey, pageable);
+    }
+
+    @Override
+    public Page<Ingredient> findPageIngredients(int pageNr) {
+
+        int pageSize = 5;
+
+//        if (pageNumber == 1) {
+//            pageSize = 4;
+//        } else pageSize = 3;
+
+        Pageable pageable = PageRequest.of(2, pageSize,
+                                           Sort.by(Sort.Direction.ASC, "name"));
+        return ingredientRepository.findAll(pageable);
+
     }
 
     @Override
@@ -53,4 +78,5 @@ public class IngredientServiceImpl implements IngredientService {
 
         return ingredient;
     }
+
 }

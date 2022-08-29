@@ -7,6 +7,7 @@ import io.eho.dishspawn.service.IngredientService;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,14 @@ public class SpawnController {
     private RecipeIngredientService recipeIngredientService;
     private RecipeService recipeService;
 
-    private Set<Ingredient> ingredientSearchResult = new HashSet<>();
     private Set<Ingredient> ingredientSpawnSet = new HashSet<>();
-//    private Set<Recipe> recipeSpawnSet = new HashSet<>();
     private List<Recipe> recipeSpawnList = new ArrayList<>();
+    private List<Ingredient> ingredientListPage = new ArrayList<>();
+
+    private int totalFoundIngredientListPages;
+    private long totalFoundIngredients;
+
+//    private StringBuilder search;
 
     // dependency injection via constructor
     public SpawnController() { }
@@ -46,38 +51,69 @@ public class SpawnController {
 
     @GetMapping("")
     public String spawnGet(Model model) {
-        model.addAttribute("ingredientSearchResult", ingredientSearchResult);
+//        model.addAttribute("ingredientSearchResult", ingredientSearchResult);
         model.addAttribute("ingredientSpawnSet", ingredientSpawnSet);
         model.addAttribute("recipeList", recipeSpawnList);
+        model.addAttribute("ingredientListPage", ingredientListPage);
+        model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientListPages);
+        model.addAttribute("totalFoundIngredients", totalFoundIngredients);
+
+//        if (search != null) {
+//            model.addAttribute("searchTerm", search.toString());
+//        }
+
         return "spawn-i";
     }
 
     @GetMapping("/search")
-    public String searchIngredient(@RequestParam(value = "search",
-            required = false) String search, Model model) {
+    public String searchIngredient(
+            @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
+            @RequestParam(value="pageNr", required=false, defaultValue="0")int searchPageNr,
+            Model model) {
 
-        //diagnostic print
-//        System.out.println("searchIngredient method being executed");
-        ingredientSearchResult =
-                ingredientService.findAllIngredientsByNameContaining(search);
+//        if (searchKey != "") {
+//            search.append(searchKey);
+//        }
 
-        model.addAttribute("ingredientResult", ingredientSearchResult);
+        // paged search results
+        Page ingredientPage =
+                ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
+        ingredientListPage = ingredientPage.getContent();
+        totalFoundIngredientListPages = ingredientPage.getTotalPages();
+        totalFoundIngredients = ingredientPage.getTotalElements();
 
-        //diagnostic print
-        for (Ingredient i : ingredientSearchResult) {
+        // diagnostic print
+        for (Ingredient i : ingredientListPage) {
             System.out.println("found: " + i.getName());
         }
 
-//        return "spawn-dummy";
+        model.addAttribute("searchKey", searchKey);
+
         return "redirect:/spawn";
     }
 
-    // TODO: inefficient adding of ingredient to spawn selection -
-    //  investigate how a search result can directly be bound to spawn
-    //  selection, without collecting it again from the DB
+    @PostMapping("/spawn/{id}")
+    public String spawnGo(@PathVariable String id, Model model) {
+
+        Long idLong = convertStringIdToLong(id);
+
+        if (idLong == 0l) {
+            String noNumber = id + " is not a numeric format";
+            model.addAttribute("error", noNumber);
+            return "error-page";
+        }
+
+        Recipe recipe = recipeService.findRecipeById(idLong);
+
+        model.addAttribute(recipe);
+
+        return "spawn-o";
+    }
+
     @GetMapping("/add/{id}")
     public String addIngredientToSpawn(@PathVariable String id, Model model) {
 
+        // diagnostic print
         System.out.println("AddIngredientToSpawn method processing");
 
         Long idLong = convertStringIdToLong(id);
@@ -97,8 +133,13 @@ public class SpawnController {
             return "error-page";
         }
 
-        ingredientSpawnSet.add(ingredientDB);
-        ingredientSearchResult.clear();
+        // diagnostic print
+        System.out.println(ingredientDB);
+
+        ingredientSpawnSet.add(ingredientDB);   // add found ingredient
+        ingredientListPage = new ArrayList<>(); // reset ingredient search
+        totalFoundIngredients = 0;              // reset # of elements
+        totalFoundIngredientListPages = 0;      // reset # of pages
 
         // diagnostic prints
         for (Ingredient tempIngredient : ingredientSpawnSet) {
@@ -116,7 +157,7 @@ public class SpawnController {
 
     @GetMapping("/resetingredients")
     public String resetIngredientSearch() {
-        ingredientSearchResult.clear();
+        ingredientListPage.clear();
         return "redirect:/spawn";
     }
 

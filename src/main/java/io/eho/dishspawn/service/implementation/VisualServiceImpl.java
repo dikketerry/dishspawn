@@ -51,11 +51,17 @@ public class VisualServiceImpl implements VisualService {
     }
 
     @Override
-    public Page<Visual> findPage(int pageNr) {
+    public Page<Visual> findPageVisuals(int pageNr) {
 
-        Pageable pageable = PageRequest.of(pageNr - 1, 3,
+        int pageNumber = pageNr;
+        int pageSize;
+
+        if (pageNumber == 1) {
+            pageSize = 4;
+        } else pageSize = 3;
+
+        Pageable pageable = PageRequest.of(pageNr - 1, pageSize,
                 Sort.by(Sort.Direction.DESC, "timestampCreated"));
-
 
         return visualRepository.findAll(pageable);
     }

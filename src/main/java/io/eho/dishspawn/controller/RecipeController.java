@@ -30,7 +30,7 @@ public class RecipeController {
     }
 
     // add get mapping for "/home/page/pageNr" (paginated version of recipes)
-    @GetMapping("/home/page/{pageNr}")
+    @GetMapping("/home-old/page/{pageNr}")
     public String getRecipesHome(Model model, @PathVariable("pageNr") int currentPage) {
 
         // get recipes paged from DB
@@ -54,7 +54,7 @@ public class RecipeController {
         model.addAttribute("recipes", recipes);
 
         // use model in index view
-        return "home";
+        return "home-old";
     }
 
     // add get mapping for "/recipe/{id}" - should contain paginated version
