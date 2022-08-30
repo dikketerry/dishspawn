@@ -57,7 +57,7 @@ public class IngredientServiceImpl implements IngredientService {
 //            pageSize = 4;
 //        } else pageSize = 3;
 
-        Pageable pageable = PageRequest.of(2, pageSize,
+        Pageable pageable = PageRequest.of(pageNr, pageSize,
                                            Sort.by(Sort.Direction.ASC, "name"));
         return ingredientRepository.findAll(pageable);
 

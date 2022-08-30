@@ -65,6 +65,35 @@ public class SpawnController {
         return "spawn-i";
     }
 
+    // TODO: trials of getting pagination working...
+////    @GetMapping({"/search/", "/search/{searchKey}"})
+//    @GetMapping("/search/{searchKey}/page/{pageNr}")
+//    public String searchIngredient(
+//            @PathVariable(required=false)String searchKey,
+//            @PathVariable(required=false)int pageNr,
+//            Model model) {
+//
+//        // paged search results
+//        Page ingredientPage =
+//                ingredientService.findPageIngredientsByNameContaining(searchKey, pageNr);
+//        ingredientListPage = ingredientPage.getContent();
+//        totalFoundIngredientListPages = ingredientPage.getTotalPages();
+//        totalFoundIngredients = ingredientPage.getTotalElements();
+//
+//        // diagnostic print
+//        for (Ingredient i : ingredientListPage) {
+//            System.out.println("found: " + i.getName());
+//        }
+//
+//        model.addAttribute("ingredientListPage", ingredientListPage);
+//        model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientListPages);
+//        model.addAttribute("totalFoundIngredients", totalFoundIngredients);
+//
+////        model.addAttribute("searchKey", searchKey);
+////        return "redirect:/spawn";
+//        return "spawn-i-search";
+//    }
+
     @GetMapping("/search")
     public String searchIngredient(
             @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
@@ -87,27 +116,9 @@ public class SpawnController {
             System.out.println("found: " + i.getName());
         }
 
-        model.addAttribute("searchKey", searchKey);
+//        model.addAttribute("searchKey", searchKey);
 
         return "redirect:/spawn";
-    }
-
-    @PostMapping("/spawn/{id}")
-    public String spawnGo(@PathVariable String id, Model model) {
-
-        Long idLong = convertStringIdToLong(id);
-
-        if (idLong == 0l) {
-            String noNumber = id + " is not a numeric format";
-            model.addAttribute("error", noNumber);
-            return "error-page";
-        }
-
-        Recipe recipe = recipeService.findRecipeById(idLong);
-
-        model.addAttribute(recipe);
-
-        return "spawn-o";
     }
 
     @GetMapping("/add/{id}")
@@ -127,6 +138,7 @@ public class SpawnController {
 
         Ingredient ingredientDB = checkIngredientIdExists(idLong);
 
+        // silly if, ingredient was found in DB so will never be null...
         if (ingredientDB == null) {
             String idNotExist = "no ingredient with id: " + idLong;
             model.addAttribute("error", idNotExist);
@@ -146,6 +158,24 @@ public class SpawnController {
             System.out.println("Ingredient SpawnSet: " + tempIngredient.getName());
         }
         return "redirect:/spawn";
+    }
+
+    @PostMapping("/spawn/{id}")
+    public String spawnGo(@PathVariable String id, Model model) {
+
+        Long idLong = convertStringIdToLong(id);
+
+        if (idLong == 0l) {
+            String noNumber = id + " is not a numeric format";
+            model.addAttribute("error", noNumber);
+            return "error-page";
+        }
+
+        Recipe recipe = recipeService.findRecipeById(idLong);
+
+        model.addAttribute(recipe);
+
+        return "spawn-o";
     }
 
     @GetMapping("/resetspawn")

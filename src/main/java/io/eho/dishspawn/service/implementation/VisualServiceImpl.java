@@ -76,6 +76,6 @@ public class VisualServiceImpl implements VisualService {
         } else {
             throw new RuntimeException("visual with id " + id + " not found");
         }
-        return null;
+        return visual;
     }
 }

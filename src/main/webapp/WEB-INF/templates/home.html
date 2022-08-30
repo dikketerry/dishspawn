@@ -129,8 +129,11 @@
                     means also to update the controller method as it will get
                      an additional parameter
  -->
-                        <a th:href="@{/recipe(recipeId=${latestVisual.recipe.id})}"
+
+                        <a th:href="@{/visual(visualId=${latestVisual.id})}"
                            th:text="${latestVisual.recipe.name}" class="uk-link-text">recipename</a>
+<!--                        <a th:href="@{/recipe(recipeId=${latestVisual.recipe.id})}"-->
+<!--                           th:text="${latestVisual.recipe.name}" class="uk-link-text">recipename</a>-->
                     </div>
                     <span>&nbspby&nbsp</span>
                     <div class="chef-name">

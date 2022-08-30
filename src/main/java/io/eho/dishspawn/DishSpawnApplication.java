@@ -44,15 +44,15 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 
 		// INIT 1 create new Chef
 //		Chef newChef = new Chef();
-//		newChef.setUserName("alison");
-//		newChef.setEmail("alisonroman@email.food");
+//		newChef.setUserName("don valentino");
+//		newChef.setEmail("valentino@pasta.it");
 //		newChef.setPassword("test123");
-//		newChef.setFirstName("Alison");
-//		newChef.setLastName("Roman");
+//		newChef.setFirstName("Don");
+//		newChef.setLastName("Valentino");
 //		newChef.setAvatarPath("/img/default-avatar.png");
 //
-////		System.out.println(newChef);
-//		chefService.saveChef(newChef); // id 1
+//		System.out.println(newChef);
+//		chefService.saveChef(newChef);
 
 		// INIT 2 add ingredients to DB (should be back-end operation only)
 //		Ingredient oliveOil = new Ingredient("olive oil",
@@ -109,7 +109,7 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 
 //
 //		// INIT 3 create new recipe
-//		Chef chefDB = chefService.findChefById(18l);
+//		Chef chefDB = chefService.findChefById(17l);
 //		Recipe tomatoSalad = new Recipe();
 //		tomatoSalad.setName("Tomato Salad with Anchovies and Onion");
 //		tomatoSalad.setChef(chefDB);
@@ -231,8 +231,8 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		r10.setTexture(RecipeIngredientTexture.WATERY);
 //		r10.setCookingMethod(RecipeIngredientCookingMethod.DRIZZLE);
 //		r10.setColor("#f6ca8a");
-//
-////		no save of recipe-ingredients, cascaded through recipe save
+////
+//////		no save of recipe-ingredients, cascaded through recipe save
 //		tomatoSalad.addRecipeIngredient(r1);
 //		tomatoSalad.addRecipeIngredient(r2);
 //		tomatoSalad.addRecipeIngredient(r3);
@@ -246,7 +246,7 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		recipeService.saveRecipe(tomatoSalad);
 
 		// INIT 4: another recipe
-//		Chef chefDB = chefService.findChefById(18l);
+//		Chef chefDB = chefService.findChefById(17l);
 //		Recipe r = new Recipe();
 //		r.setName("Crispy Potato Kugel");
 //		r.setChef(chefDB);
@@ -263,7 +263,7 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //
 ////		create recipe ingredients for recipe
 //		RecipeIngredient r1 = new RecipeIngredient();
-//		r1.setIngredient(ingredientService.findIngredientById(55l));
+//		r1.setIngredient(ingredientService.findIngredientById(33l));
 //		r1.setRecipe(r);
 //		r1.setQuantity(4);
 //		r1.setUnitName("POUND");
@@ -295,7 +295,8 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		r3.setColor("#f7d599");
 //
 //		RecipeIngredient r4 = new RecipeIngredient();
-//		r4.setIngredient(ingredientService.findIngredientById(56l)); // chicken fat
+//		r4.setIngredient(ingredientService.findIngredientById(34l)); //
+//		// chicken fat
 //		r4.setRecipe(r);
 //		r4.setQuantity(10);
 //		r4.setUnitName("TABLESPOON");
@@ -333,13 +334,13 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		r.addRecipeIngredient(r7);
 //		recipeService.saveRecipe(r);
 
-//		// INIT 5: create visual with recipe
-//		String fileName = "testdish22.jpg";
+		// INIT 5: create visual with recipe
+//		String fileName = "testdish5.png";
 //		Visual visual = new Visual();
 //		visual.setFileName(fileName);
 //		visual.setFileLocation("/img/testspawn/" + fileName);
-//		visual.setRecipe(recipeService.findRecipeById(82l));
-//		visualService.saveVisual(visual, chefService.findChefById(18l));
+//		visual.setRecipe(recipeService.findRecipeById(36l));
+//		visualService.saveVisual(visual, chefService.findChefById(17l));
 
 //		// INIT 6: add a Like to a visual TODO: NOT WORKING
 //		Like like = new Like();

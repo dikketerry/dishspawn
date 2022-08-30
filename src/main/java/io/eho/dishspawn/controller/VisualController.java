@@ -1,6 +1,9 @@
 package io.eho.dishspawn.controller;
 
+import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.service.RecipeService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -16,12 +20,14 @@ import java.util.List;
 public class VisualController {
 
     private VisualService visualService;
+    private RecipeService recipeService;
 
 //    private Visual latestVisual;
 
     @Autowired
-    public VisualController(VisualService visualService) {
+    public VisualController(VisualService visualService, RecipeService recipeService) {
         this.visualService = visualService;
+        this.recipeService = recipeService;
     }
 
     @GetMapping("/home/page/{pageNr}")
@@ -38,12 +44,6 @@ public class VisualController {
         Page<Visual> visualPage = visualService.findPageVisuals(currentPage);
 
         List<Visual> pagedVisuals;
-//        if (currentPage == 1) {
-//            pagedVisuals = visualPage.getContent();
-//            pagedVisuals.remove(0);
-//        } else {
-//            pagedVisuals = visualPage.getContent();
-//        }
 
         int totalPages = visualPage.getTotalPages();
         long totalVisuals = visualPage.getTotalElements();
@@ -60,6 +60,36 @@ public class VisualController {
         }
 
         return "home";
+    }
+
+    @GetMapping("/visual")
+    public String showRecipe(@RequestParam Long visualId,
+                             Model model) {
+
+        Visual visual = visualService.findVisualById(visualId);
+//        Recipe recipeOfVisual = recipeService.findRecipeById(visual.getRecipe().getId());
+
+
+//        diagnostic print
+        System.out.println(visual);
+
+//        Long recipeId = visual.getRecipe().getId();
+//        System.out.println("recipe id: " + recipeId);
+
+//        Recipe r = visual.getRecipe();
+//        System.out.println("Recipe: " + r); // NULLLL???? WHAT THE F***...
+
+//        Chef c = visual.getChef();
+//        System.out.println("Chef: " + c);
+
+//
+//
+
+
+        model.addAttribute("visual", visual);
+//        model.addAttribute("recipe", recipeOfVisual);
+
+        return "visual";
     }
 
 }
