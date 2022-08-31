@@ -18,7 +18,7 @@ import java.util.List;
 public class DishSpawnApplication /*implements CommandLineRunner*/ {
 	// AFTER INIT: remove 'implements CommandLineRunner'
 
-//	public DishSpawnApplication() {}
+	public DishSpawnApplication() {}
 	// AFTER INIT: remove constructor
 
 	public static void main(String[] args) {
@@ -88,7 +88,13 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //											   IngredientCategory.CONDIMENT);
 //		Ingredient vegetableOil = new Ingredient("vegetable oil",
 //												 IngredientCategory.OILS);
-//
+
+
+//		Ingredient garlic = new Ingredient("garlic toes", IngredientCategory.VEGETABLES_ALLIUM);
+//		Ingredient mushroom = new Ingredient("mushroom", IngredientCategory.FUNGHI);
+//		Ingredient sauerkraut = new Ingredient("sauerkraut", IngredientCategory.VEGETABLES_CRUCIFEROUS);
+//		Ingredient whitewine = new Ingredient("white wine", IngredientCategory.LIQUIDS_ALCOHOL);
+
 //		ingredientService.saveIngredient(oliveOil);
 //		ingredientService.saveIngredient(tomato);
 //		ingredientService.saveIngredient(cherryTomato);
@@ -106,6 +112,11 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		ingredientService.saveIngredient(potatoes);
 //		ingredientService.saveIngredient(chickenFat);
 //		ingredientService.saveIngredient(vegetableOil);
+
+//		ingredientService.saveIngredient(garlic);
+//		ingredientService.saveIngredient(mushroom);
+//		ingredientService.saveIngredient(sauerkraut);
+//		ingredientService.saveIngredient(whitewine);
 
 //
 //		// INIT 3 create new recipe
@@ -334,13 +345,98 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		r.addRecipeIngredient(r7);
 //		recipeService.saveRecipe(r);
 
+		// INIT 3c: create another recipe
+//		Chef chefDB = chefService.findChefById(18l);
+//		Recipe r = new Recipe();
+//		r.setName("Choucroute à la Hollandaise");
+//		r.setChef(chefDB);
+//		List<String> instructions = new ArrayList<>();
+//		instructions.add("Cut the onions into rings, not too thick and not too thin.");
+//		instructions.add("Cut the garlic toes into fine pieces.");
+//		instructions.add("Place the sauerkraut in a appropriate cooking pan, add the wine - if you don't want to use wine, use apple juice - and boil the sauerkraut in 25 to 30 minutes.");
+//		instructions.add("Meanwhile, heat the olive oil in a skillet (add a little of butter if you want) and fruit the onions until they look nicely golden-brown.");
+//		instructions.add("Add the garlic to the skillet and bake until they're a little brown as well.");
+//		instructions.add("Add the mushrooms to the mix, add some extra olive oil and bake nicely brown as well.");
+//		instructions.add("When the sauerkraut is done, drain it, spread it over the plates and garnish it with the onion / garlic / mushroom mix.");
+//		instructions.add("Optional: bake a nice ausage with it, it enriches the taste of the onion / mushroom mix.");
+//		r.setInstructions(instructions);
+//
+//		RecipeIngredient onions = new RecipeIngredient();
+//		onions.setIngredient(ingredientService.findIngredientById(22l));
+//		onions.setRecipe(r);
+//		onions.setQuantity(3);
+//		onions.setUnitName("PIECE");
+//		onions.massOrVolumeSetter();
+//		onions.setVisualImpact(true);
+//		onions.setForm(RecipeIngredientForm.RINGS);
+//		onions.setTexture(RecipeIngredientTexture.CRUNCHY);
+//		onions.setCookingMethod(RecipeIngredientCookingMethod.GARNISH);
+//		onions.setColor("#bc5739");
+//
+//		RecipeIngredient garlic = new RecipeIngredient();
+//		garlic.setIngredient(ingredientService.findIngredientById(91l));
+//		garlic.setRecipe(r);
+//		garlic.setQuantity(2);
+//		garlic.setUnitName("PIECE");
+//		garlic.massOrVolumeSetter();
+//		garlic.setVisualImpact(false);
+//
+//		RecipeIngredient oliveoil = new RecipeIngredient();
+//		oliveoil.setIngredient(ingredientService.findIngredientById(19l));
+//		oliveoil.setRecipe(r);
+//		oliveoil.massOrVolumeSetter();
+//		oliveoil.setVisualImpact(false);
+//
+//		RecipeIngredient mushrooms = new RecipeIngredient();
+//		mushrooms.setIngredient(ingredientService.findIngredientById(92l));
+//		mushrooms.setRecipe(r);
+//		mushrooms.setQuantity(125);
+//		mushrooms.setUnitName("GRAM");
+//		mushrooms.massOrVolumeSetter();
+//		mushrooms.setVisualImpact(true);
+//		mushrooms.setForm(RecipeIngredientForm.CHOPPED);
+//		mushrooms.setTexture(RecipeIngredientTexture.CHEWY);
+//		mushrooms.setCookingMethod(RecipeIngredientCookingMethod.GARNISH);
+//		mushrooms.setColor("#cc8662");
+//
+//		RecipeIngredient sauerkraut = new RecipeIngredient();
+//		sauerkraut.setIngredient(ingredientService.findIngredientById(93l));
+//		sauerkraut.setRecipe(r);
+//		sauerkraut.setQuantity(500);
+//		sauerkraut.setUnitName("GRAM");
+//		sauerkraut.massOrVolumeSetter();
+//		sauerkraut.setVisualImpact(true);
+//		sauerkraut.setForm(RecipeIngredientForm.STRINGS);
+//		sauerkraut.setTexture(RecipeIngredientTexture.CHEWY);
+//		sauerkraut.setCookingMethod(RecipeIngredientCookingMethod.BOIL);
+//		sauerkraut.setColor("#cfc6b0");
+//
+//		RecipeIngredient wine = new RecipeIngredient();
+//		wine.setIngredient(ingredientService.findIngredientById(94l));
+//		wine.setRecipe(r);
+//		wine.setQuantity(5);
+//		wine.setUnitName("TABLESPOON");
+//		wine.massOrVolumeSetter();
+//		wine.setVisualImpact(false);
+//
+//		r.addRecipeIngredient(onions);
+//		r.addRecipeIngredient(garlic);
+//		r.addRecipeIngredient(oliveoil);
+//		r.addRecipeIngredient(mushrooms);
+//		r.addRecipeIngredient(sauerkraut);
+//		r.addRecipeIngredient(wine);
+//
+//		recipeService.saveRecipe(r);
+
+
+
 		// INIT 5: create visual with recipe
-//		String fileName = "testdish5.png";
+//		String fileName = "testdish6.png";
 //		Visual visual = new Visual();
 //		visual.setFileName(fileName);
 //		visual.setFileLocation("/img/testspawn/" + fileName);
-//		visual.setRecipe(recipeService.findRecipeById(36l));
-//		visualService.saveVisual(visual, chefService.findChefById(17l));
+//		visual.setRecipe(recipeService.findRecipeById(95l));
+//		visualService.saveVisual(visual, chefService.findChefById(18l));
 
 //		// INIT 6: add a Like to a visual TODO: NOT WORKING
 //		Like like = new Like();
