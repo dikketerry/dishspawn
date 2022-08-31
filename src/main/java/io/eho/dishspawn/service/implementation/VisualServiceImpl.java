@@ -2,6 +2,7 @@ package io.eho.dishspawn.service.implementation;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.repository.ChefRepository;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.data.domain.*;
@@ -77,5 +78,16 @@ public class VisualServiceImpl implements VisualService {
             throw new RuntimeException("visual with id " + id + " not found");
         }
         return visual;
+    }
+
+    @Override
+    public List<Visual> findAllVisualsForChef(Chef chef) {
+
+        return visualRepository.findByChefOrderByTimestampCreatedDesc(chef);
+    }
+
+    @Override
+    public Visual findLatestVisualForChef(Chef chef) {
+        return visualRepository.findTop1ByChefOrderByTimestampCreated(chef);
     }
 }

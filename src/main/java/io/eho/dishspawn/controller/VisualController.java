@@ -31,8 +31,8 @@ public class VisualController {
     }
 
     @GetMapping("/home/page/{pageNr}")
-    @Primary
-    public String getVisualsPaged(@PathVariable("pageNr") int currentPage,
+    @Primary // TODO
+    public String getVisualsPaged(@PathVariable(name = "pageNr", required = false)int currentPage,
                                   Model model) {
 
         // get latest visual

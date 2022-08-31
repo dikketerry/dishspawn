@@ -1,7 +1,9 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.ChefService;
+import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,13 +17,15 @@ public class ChefController {
 
     // property ChefService
     private ChefService chefService;
+    private VisualService visualService;
 
     public ChefController() {}
 
     // inject ChefService property via constructor
     @Autowired
-    public ChefController(ChefService chefService) {
+    public ChefController(ChefService chefService, VisualService visualService) {
         this.chefService = chefService;
+        this.visualService = visualService;
     }
 
     // set up mappings (GET, POST, etc.)
@@ -39,10 +43,17 @@ public class ChefController {
         return "all-chefs";
     }
 
-    @GetMapping("")
+    @GetMapping("/{chefId}")
     public String showChef(@PathVariable Long chefId, Model model) {
 
         Chef chef = chefService.findChefById(chefId);
+        Visual latestVisualForChef = visualService.findLatestVisualForChef(chef);
+        List<Visual> visuals = visualService.findAllVisualsForChef(chef);
+
+        model.addAttribute("chef", chef);
+        model.addAttribute("latestVisualForChef", latestVisualForChef);
+        model.addAttribute("visualsForChef", visuals);
+
         return "chef"; // TODO: chef page
     }
 
@@ -50,6 +61,7 @@ public class ChefController {
     // register a new chef
     @GetMapping("/add")
     public String registerChef(Model model) {
+
         model.addAttribute("chef", new Chef());
         return "add-chef";
     }
