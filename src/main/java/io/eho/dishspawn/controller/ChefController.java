@@ -5,10 +5,7 @@ import io.eho.dishspawn.service.ChefService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +38,14 @@ public class ChefController {
         model.addAttribute("chefs", chefsFromDB);
         return "all-chefs";
     }
+
+    @GetMapping("")
+    public String showChef(@PathVariable Long chefId, Model model) {
+
+        Chef chef = chefService.findChefById(chefId);
+        return "chef"; // TODO: chef page
+    }
+
 
     // register a new chef
     @GetMapping("/add")

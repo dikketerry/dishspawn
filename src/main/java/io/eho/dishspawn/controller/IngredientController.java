@@ -49,7 +49,8 @@ public class IngredientController {
         return "add-ingredient";
     }
 
-    // collect ingredients based on string input
+    // collect ingredients based on string input - not needed here - set-up
+    // in service, collect in searchcontroller
 
 
 

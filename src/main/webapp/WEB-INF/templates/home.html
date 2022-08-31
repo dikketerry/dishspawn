@@ -16,6 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/master.css}">
 
     <!-- UIKit js -->
+    <script type="text/javascript" th:src="@{/js/master.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
 <!--    <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
@@ -51,7 +52,7 @@
                     <a class="uk-navbar-toggle" uk-search-icon></a>
                     <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
                         <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
-                            <input id="searchField" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                            <input id="searchKey" class="uk-search-input" type="search" placeholder="Search" autofocus>
                         </form>
                     </div>
                 </div>
@@ -211,6 +212,16 @@
     </div>
 
 </main>
+
+<script>
+    // below code waits for page to get loaded. gets element that needs to be active. gets its id (in plain text). uses this value as parameter
+    document.addEventListener('readystatechange', event => {
+        if (document.readyState === "complete") {
+            let filterToActivate = [[${activeFilter}]].id;
+            setActiveFilter(filterToActivate);
+        }
+    });
+</script>
 
 </body>
 </html>

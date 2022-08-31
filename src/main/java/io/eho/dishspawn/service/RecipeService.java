@@ -11,4 +11,5 @@ public interface RecipeService {
     void saveRecipe(Recipe recipe);
     List<Recipe> findAllRecipes();
     Page<Recipe> findPage(int pageNr);
+    List<Recipe> findAllRecipeByNameContaining(String searchKey);
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ChefRepository extends JpaRepository<Chef, Long> {
     // all crud methods
-    List<Chef> findAllByUserNameContaining(String input);
+    List<Chef> findAllByUserNameContainingOrderByUserNameAsc(String searchKey);
 }

@@ -48,4 +48,10 @@ public class RecipeServiceImpl implements RecipeService {
 
         return recipeRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Recipe> findAllRecipeByNameContaining(String searchKey) {
+
+        return recipeRepository.findAllByNameContainingOrderByNameAsc(searchKey);
+    }
 }

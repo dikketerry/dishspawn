@@ -1,4 +1,9 @@
+function setActiveFilter(filterName) {
+    let filterElement = document.getElementById(filterName);
+    filterElement.className = "uk-active";
+}
+
 function executeSearch() {
-    let searchTerm = document.getElementById("searchField").value;
-    window.location.href = "http://localhost:8080/search?search=" + searchTerm;
+    let searchKey = document.getElementById("searchKey").value;
+    window.location.href = "http://localhost:8080/search?searchKey=" + searchKey;
 }

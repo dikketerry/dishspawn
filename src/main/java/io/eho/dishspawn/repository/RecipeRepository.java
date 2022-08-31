@@ -9,10 +9,8 @@ import java.util.List;
 // with @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    // all crud database methods
-
-    // add method to sort by timestamp created
     public List<Recipe> findAllByOrderByTimestampCreatedDesc();
+    List<Recipe> findAllByNameContainingOrderByNameAsc(String searchKey);
 
 //    List<Recipe> findAllRecipesWithIngredientName(String ingredientName);
 

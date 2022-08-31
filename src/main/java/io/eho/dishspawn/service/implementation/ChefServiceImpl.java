@@ -47,8 +47,8 @@ public class ChefServiceImpl implements ChefService {
     }
 
     @Override
-    public List<Chef> findAllChefByUserNameContaining(String input) {
-        return chefRepository.findAllByUserNameContaining(input);
+    public List<Chef> findAllChefByUserNameContaining(String searchKey) {
+        return chefRepository.findAllByUserNameContainingOrderByUserNameAsc(searchKey);
     }
 
     @Override
