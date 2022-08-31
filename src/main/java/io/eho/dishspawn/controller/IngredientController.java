@@ -19,7 +19,6 @@ public class IngredientController {
     // property IngredientService
     private IngredientService ingredientService;
 
-    // dependency injection with constructor
     public IngredientController() { }
 
     @Autowired
@@ -27,8 +26,6 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    // get method(s)
-    // collect all ingredients
     @GetMapping("/all")
     public String getAllIngredients(Model model) {
         List<Ingredient> ingredientsFromDB = ingredientService.findAllIngredients();
@@ -52,10 +49,6 @@ public class IngredientController {
     // collect ingredients based on string input - not needed here - set-up
     // in service, collect in searchcontroller
 
-
-
-    // post method(s)
-    // save ingredient
     @PostMapping("save")
     public String saveIngredient(@ModelAttribute("ingredient") Ingredient ingredient) {
 //        TODO: error handling + page redirection

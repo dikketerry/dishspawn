@@ -56,9 +56,11 @@ public class MassConverter implements AbstractUnitConverter<MassConverter.MassUn
     // enum embedded because it really belongs to this class only
     public enum MassUnit {
         GRAM("Grams"),
+        KILOGRAM("Kilograms"),      // 1000 grams
         OUNCE("Ounce"),             // 28 grams
-        POUND("Pounds"),            // 454 grams
-        KILOGRAM("Kilograms");      // 100 grams
+        PIECE("Pieces"),            // NO MASS CONVERSION!
+        POUND("Pounds");            // 454 grams
+
 
         private final String label;
 

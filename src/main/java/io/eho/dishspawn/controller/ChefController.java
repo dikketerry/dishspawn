@@ -5,6 +5,7 @@ import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,17 +45,28 @@ public class ChefController {
     }
 
     @GetMapping("/{chefId}")
-    public String showChef(@PathVariable Long chefId, Model model) {
+    public String showChef(@PathVariable Long chefId,
+                           @RequestParam (name = "pageNr", required = false)Integer pageNr,
+                           Model model) {
 
         Chef chef = chefService.findChefById(chefId);
         Visual latestVisualForChef = visualService.findLatestVisualForChef(chef);
-        List<Visual> visuals = visualService.findAllVisualsForChef(chef);
+        List<Visual> visualsChef = visualService.findAllVisualsForChef(chef);
+
+//        Page<Visual> pagedVisualsForChef = visualService.findPageVisualsForChef(chef);
+//        List<Visual> pageVisual = pagedVisualsForChef.getContent();
+//        int totalPages = pagedVisualsForChef.getTotalPages();
+//        long totalVisuals = pagedVisualsForChef.getTotalElements();
 
         model.addAttribute("chef", chef);
         model.addAttribute("latestVisualForChef", latestVisualForChef);
-        model.addAttribute("visualsForChef", visuals);
+        model.addAttribute("visualsChef", visualsChef);
 
-        return "chef"; // TODO: chef page
+//        model.addAttribute("pagedVisualsForChef", pagedVisualsForChef);
+//        model.addAttribute("totalPages", totalPages);
+//        model.addAttribute("totalVisuals", totalVisuals);
+
+        return "chef";
     }
 
 

@@ -3,6 +3,7 @@ package io.eho.dishspawn.repository;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Visual;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,8 @@ public interface VisualRepository extends JpaRepository<Visual, Long> {
 
     List<Visual> findByChefOrderByTimestampCreatedDesc(Chef chef);
 
-    Visual findTop1ByChefOrderByTimestampCreated(Chef chef);
+    // TODO - custom query for pagination
+//    List<Visual> findByChefOrderByTimestampCreatedDesc(Chef chef, Pageable pageable);
+
+    Visual findTop1ByChefOrderByTimestampCreatedDesc(Chef chef);
 }

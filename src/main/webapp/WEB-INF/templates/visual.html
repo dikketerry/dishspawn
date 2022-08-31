@@ -26,7 +26,6 @@
 <div class="hdr-wrapper"> <!-- div without width spanning browser width -->
 
     <div class="uk-container"> <!-- UIKit class to center + set max width -->
-        <!-- now set-up row/column structure -->
 
         <nav class="uk-navbar">
 <!--            logo part (includes the text (name and tagline)-->
@@ -71,18 +70,16 @@
 
 </div>
 
-<!--<hr>-->
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+    <div class="uk-container"> <!--div to center + set max width -->
 
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
-        <!--        now set row with 2 elements: title of form + image-->
-
-        <div class="uk-grid">
+        <div class="uk-grid"> <!-- div to align content horizontally -->
             <div class="uk-width-2-3 rotate-div">
                 <p class="rotate" id="recipe-title"
                    th:text="${visual.recipe.name}">recipe-name</p>
             </div>
+
             <div class="uk-width-expand">
                 <img id="swedish-chef" src="/img/swedish-chef.png"
                      alt="swedish-chef-image">
@@ -92,36 +89,32 @@
         <hr class="custom-hr">
 
     </div> <!-- container -->
-
 </div> <!-- subhdr-wrapper -->
 
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
-
-        <div class="uk-container"> <!-- UIKit class to center + set max width -->
-<!--            now set up the main content -->
+        <div class="uk-container"> <!-- div to center + set max width -->
 
             <div class="main-headers">
-<!--            div title header-->
-                <div class="main-titles margin16">
-                    <p
-                            th:text="'Spawned by ' +${visual.recipe.chef.userName}">spawned-by
-                        -chef-username</p>
+                <div class="main-titles margin16"> <!-- div title header -->
+                    <p th:text="'Spawned by ' +${visual.recipe.chef.userName}">
+                        spawned-by-chef-username</p>
                 </div>
+
                 <div class="timestamp margin16">
                     <p th:text="'on ' +${visual.recipe.timestampCreated}">
                         timestamp-created</p>
                 </div>
+
                 <hr class="custom-hr">
             </div>
 
-            <!--            div img-->
-            <div uk-lightbox>
+            <div uk-lightbox> <!-- div main img -->
                 <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
                    th:attr="data-src=${visual.fileLocation}"
                    th:href="${visual.fileLocation}" uk-img></a>
             </div>
-            <!--            hr-->
+
             <hr class="custom-hr">
 
             <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
@@ -142,8 +135,7 @@
                         VolumeConverter into Converter (and have only 1 enum
                         for all units-->
                     <ul>
-                        <li
-                                th:each="ingredient:${visual.recipe.recipeIngredients}">
+                        <li th:each="ingredient:${visual.recipe.recipeIngredients}">
                             <span th:text="${ingredient.quantity != 0} ? ${ingredient.quantity} + ' ' : ''">quantity</span>
                             <span th:text="${ingredient.unitName != null} ? ${ingredient.unitName} + ' ' : ''">unit-name</span>
                             <span th:text="${ingredient.ingredient.name}">ingredient-name</span>

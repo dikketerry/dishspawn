@@ -22,8 +22,6 @@ public class VisualController {
     private VisualService visualService;
     private RecipeService recipeService;
 
-//    private Visual latestVisual;
-
     @Autowired
     public VisualController(VisualService visualService, RecipeService recipeService) {
         this.visualService = visualService;
@@ -31,23 +29,19 @@ public class VisualController {
     }
 
     @GetMapping("/home/page/{pageNr}")
-    @Primary // TODO
     public String getVisualsPaged(@PathVariable(name = "pageNr", required = false)int currentPage,
                                   Model model) {
 
         // get latest visual
         Visual latestVisual = visualService.findLatestVisual();
-//        List<Visual> allVisuals = visualService.findAllVisuals();
 
-        // get all visuals paginated - ensure the first visual is not shown
-        // in the view
+        // get all visuals paginated - TODO: except first visual
         Page<Visual> visualPage = visualService.findPageVisuals(currentPage);
 
-        List<Visual> pagedVisuals;
+        List<Visual> pagedVisuals = visualPage.getContent();
 
         int totalPages = visualPage.getTotalPages();
         long totalVisuals = visualPage.getTotalElements();
-        pagedVisuals = visualPage.getContent();
 
         model.addAttribute("latestVisual", latestVisual);
         model.addAttribute("totalPages", totalPages);
@@ -67,27 +61,11 @@ public class VisualController {
                              Model model) {
 
         Visual visual = visualService.findVisualById(visualId);
-//        Recipe recipeOfVisual = recipeService.findRecipeById(visual.getRecipe().getId());
-
 
 //        diagnostic print
         System.out.println(visual);
 
-//        Long recipeId = visual.getRecipe().getId();
-//        System.out.println("recipe id: " + recipeId);
-
-//        Recipe r = visual.getRecipe();
-//        System.out.println("Recipe: " + r); // NULLLL???? WHAT THE F***...
-
-//        Chef c = visual.getChef();
-//        System.out.println("Chef: " + c);
-
-//
-//
-
-
         model.addAttribute("visual", visual);
-//        model.addAttribute("recipe", recipeOfVisual);
 
         return "visual";
     }

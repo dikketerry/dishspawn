@@ -2,7 +2,6 @@ package io.eho.dishspawn.service.implementation;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
-import io.eho.dishspawn.repository.ChefRepository;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.data.domain.*;
@@ -82,12 +81,17 @@ public class VisualServiceImpl implements VisualService {
 
     @Override
     public List<Visual> findAllVisualsForChef(Chef chef) {
-
         return visualRepository.findByChefOrderByTimestampCreatedDesc(chef);
     }
 
     @Override
     public Visual findLatestVisualForChef(Chef chef) {
-        return visualRepository.findTop1ByChefOrderByTimestampCreated(chef);
+        return visualRepository.findTop1ByChefOrderByTimestampCreatedDesc(chef);
     }
+
+//    @Override
+//    public Page<Visual> findPageVisualsForChef(Chef chef, int pageNr) {
+//        Pageable pageable = PageRequest.of(pageNr - 1, 3, Sort.by(Sort.Direction.DESC, "timestampCreated"));
+//        return visualRepository.findByChefOrderByTimestampCreatedDesc(chef);
+//    }
 }

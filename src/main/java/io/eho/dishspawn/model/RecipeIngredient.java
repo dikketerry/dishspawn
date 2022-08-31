@@ -74,26 +74,34 @@ public class RecipeIngredient {
     // move to service?
     public void massOrVolumeSetter() {
 
-        switch (this.unitName) {
-            case "MILLILITER":
-            case "CUP":
-            case "DROP":
-            case "FLUID_OUNCE":
-            case "GALLON":
-            case "LITER":
-            case "PINT":
-            case "QUART":
-            case "TABLESPOON":
-            case "TEASPOON":
-                this.volume = calculateVolume();
-                break;
-            case "GRAM":
-            case "OUNCE":
-            case "KILOGRAM":
-            case "POUND":
-                this.mass = calculateMass();
-                break;
-            default: throw new UnsupportedOperationException();
+        if (this.unitName == "PIECE") {
+            this.mass = -1;
+            this.volume = -1;
+        } else if (this.unitName == null) {
+            this.mass = 0;
+            this.volume = 0;
+        } else {
+            switch (this.unitName) {
+                case "MILLILITER":
+                case "CUP":
+                case "DROP":
+                case "FLUID_OUNCE":
+                case "GALLON":
+                case "LITER":
+                case "PINT":
+                case "QUART":
+                case "TABLESPOON":
+                case "TEASPOON":
+                    this.volume = calculateVolume();
+                    break;
+                case "GRAM":
+                case "OUNCE":
+                case "KILOGRAM":
+                case "POUND":
+                    this.mass = calculateMass();
+                    break;
+                default: throw new UnsupportedOperationException();
+            }
         }
     }
 

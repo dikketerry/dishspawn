@@ -19,4 +19,5 @@ public interface VisualService {
     Visual findVisualById(Long id);
     List<Visual> findAllVisualsForChef(Chef chef);
     Visual findLatestVisualForChef(Chef chef);
+//    Page<Visual> findPageVisualsForChef(Chef chef);
 }
