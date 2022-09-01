@@ -48,10 +48,10 @@
 
 <!--            search-->
             <div class="uk-navbar-center">
-                <div>
+                <div id="nav-search">
                     <a class="uk-navbar-toggle" uk-search-icon></a>
-                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
-                        <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: -50">
+                        <form class="uk-search uk-search-navbar uk-width-expand" action="javascript:executeSearch()">
                             <input id="searchKey" class="uk-search-input" type="search" placeholder="Search" autofocus>
                         </form>
                     </div>
@@ -180,7 +180,7 @@
 
                         <div class="recipe-name">
 
-                            <a th:href="@{/visual(visualId=${latestVisual.id})}"
+                            <a th:href="@{/visual(visualId=${visual.id})}"
                                th:text="${visual.recipe.name}" class="uk-link-text">recipename</a>
                         </div>
 

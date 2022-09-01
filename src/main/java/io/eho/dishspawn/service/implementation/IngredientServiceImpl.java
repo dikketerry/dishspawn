@@ -37,7 +37,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientRepository.findAll();
     }
 
-    @Override
+    @Override // not used but can be handy
     public List<Ingredient> findAllIngredientsByNameContaining(String searchKey) {
         return ingredientRepository.findAllByNameContaining(searchKey);
     }
@@ -46,17 +46,6 @@ public class IngredientServiceImpl implements IngredientService {
     public Page<Ingredient> findPageIngredientsByNameContaining(String searchKey, int pageNr) {
         Pageable pageable = PageRequest.of(pageNr - 1, 3, Sort.Direction.ASC, "name");
         return ingredientRepository.findAllByNameContaining(searchKey, pageable);
-    }
-
-    @Override
-    public Page<Ingredient> findPageIngredients(int pageNr) {
-
-        int pageSize = 5;
-
-        Pageable pageable = PageRequest.of(pageNr, pageSize,
-                                           Sort.by(Sort.Direction.ASC, "name"));
-        return ingredientRepository.findAll(pageable);
-
     }
 
     @Override
