@@ -12,7 +12,7 @@ public interface IngredientService {
 
     void saveIngredient(Ingredient ingredient);
     List<Ingredient> findAllIngredients();
-    Set<Ingredient> findAllIngredientsByNameContaining(String searchKey);
+    List<Ingredient> findAllIngredientsByNameContaining(String searchKey);
     Page<Ingredient> findPageIngredientsByNameContaining(String searchKey, int pageNr);
     Page<Ingredient> findPageIngredients(int pageNr);
     Ingredient findIngredientById(Long id);

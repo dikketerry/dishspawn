@@ -135,11 +135,10 @@
                             </tr>
                             </tbody>
                         </table>
-<!--                        Trial of getting pagination to work, damn..-->
+
                         <ul class="uk-pagination uk-flex-center" uk-margin>
                             <li th:each="i: ${#numbers.sequence(1, totalFoundIngredientListPages)}">
-<!--                                <a th:href="@{/spawn/search(searchKey=${searchKey},pageNr=${i})}">[[${i}]]</a></li>-->
-                                <a th:href="@{/spawn/search/{searchKey}/page/{pageNr}(searchKey = ${searchKey}, pageNr = ${i}pageNr=${i})}">[[${i}]]</a></li>
+                                <a th:href="@{/spawn/search(searchKey=${searchKey},pageNr=${i})}">[[${i}]]</a></li>
 <!--                            <input type="hidden" th:value="${searchKey}"/>-->
 <!--                            <input type="hidden" th:value="${totalFoundIngredientListPages}"/>-->
                         </ul>

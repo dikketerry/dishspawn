@@ -7,6 +7,7 @@ public enum RecipeIngredientTexture {
     CRUNCHY("Crunchy"),
     FIRM("Firm"),
     MOIST("Moist"),
+    OILY("Oily"),
     PASTY("Pasty"),
     POWDERY("Powdery"),
     WATERY("Watery");

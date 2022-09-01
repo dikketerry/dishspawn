@@ -35,7 +35,7 @@ public class SpawnController {
     private int totalFoundIngredientListPages;
     private long totalFoundIngredients;
 
-//    private StringBuilder search;
+    private StringBuilder searchKey = new StringBuilder();
 
     // dependency injection via constructor
     public SpawnController() { }
@@ -51,72 +51,56 @@ public class SpawnController {
 
     @GetMapping("")
     public String spawnGet(Model model) {
-//        model.addAttribute("ingredientSearchResult", ingredientSearchResult);
+
+        // null check on searchKey to avoid NPE when launching spawn page without a searchKey
+        if (searchKey != null) {
+            model.addAttribute("searchKey", searchKey.toString());
+        }
+
         model.addAttribute("ingredientSpawnSet", ingredientSpawnSet);
         model.addAttribute("recipeList", recipeSpawnList);
         model.addAttribute("ingredientListPage", ingredientListPage);
         model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientListPages);
         model.addAttribute("totalFoundIngredients", totalFoundIngredients);
 
-//        if (search != null) {
-//            model.addAttribute("searchTerm", search.toString());
-//        }
-
         return "spawn-i";
     }
-
-    // TODO: trials of getting pagination working...
-////    @GetMapping({"/search/", "/search/{searchKey}"})
-//    @GetMapping("/search/{searchKey}/page/{pageNr}")
-//    public String searchIngredient(
-//            @PathVariable(required=false)String searchKey,
-//            @PathVariable(required=false)int pageNr,
-//            Model model) {
-//
-//        // paged search results
-//        Page ingredientPage =
-//                ingredientService.findPageIngredientsByNameContaining(searchKey, pageNr);
-//        ingredientListPage = ingredientPage.getContent();
-//        totalFoundIngredientListPages = ingredientPage.getTotalPages();
-//        totalFoundIngredients = ingredientPage.getTotalElements();
-//
-//        // diagnostic print
-//        for (Ingredient i : ingredientListPage) {
-//            System.out.println("found: " + i.getName());
-//        }
-//
-//        model.addAttribute("ingredientListPage", ingredientListPage);
-//        model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientListPages);
-//        model.addAttribute("totalFoundIngredients", totalFoundIngredients);
-//
-////        model.addAttribute("searchKey", searchKey);
-////        return "redirect:/spawn";
-//        return "spawn-i-search";
-//    }
 
     @GetMapping("/search")
     public String searchIngredient(
             @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
-            @RequestParam(value="pageNr", required=false, defaultValue="0")int searchPageNr,
-            Model model) {
+            @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-//        if (searchKey != "") {
-//            search.append(searchKey);
-//        }
+        // clean up searchKe StringBuilder, as each new search should give a clean search term
+        this.searchKey.setLength(0);
+
+        // store provided param searchKey in the newly created fresh StringBuilder
+        this.searchKey.append(searchKey);
+
+        // full list search-query for diagnostics
+        List<Ingredient> ingredientList = ingredientService.findAllIngredientsByNameContaining(searchKey);
 
         // paged search results
-        Page ingredientPage =
-                ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
+        Page ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
+
+        // convert page result to global search-ingredient-result list
         ingredientListPage = ingredientPage.getContent();
+
+        // get the total # of pages
         totalFoundIngredientListPages = ingredientPage.getTotalPages();
+
+        // get the total # of elements
         totalFoundIngredients = ingredientPage.getTotalElements();
 
         // diagnostic print
-        for (Ingredient i : ingredientListPage) {
+        for (Ingredient i : ingredientList) {
             System.out.println("found: " + i.getName());
         }
 
-//        model.addAttribute("searchKey", searchKey);
+        // diagnostic print 2
+        for (Ingredient i : ingredientListPage) {
+            System.out.println("found on page " + searchPageNr + ": " + i.getName());
+        }
 
         return "redirect:/spawn";
     }
@@ -149,15 +133,16 @@ public class SpawnController {
         System.out.println(ingredientDB);
 
         ingredientSpawnSet.add(ingredientDB);   // add found ingredient
-        ingredientListPage = new ArrayList<>(); // reset ingredient search
-        totalFoundIngredients = 0;              // reset # of elements
-        totalFoundIngredientListPages = 0;      // reset # of pages
+//        ingredientListPage = new ArrayList<>(); // reset ingredient search
+//        totalFoundIngredients = 0;              // reset # of elements
+//        totalFoundIngredientListPages = 0;      // reset # of pages
 
         // diagnostic prints
         for (Ingredient tempIngredient : ingredientSpawnSet) {
             System.out.println("Ingredient SpawnSet: " + tempIngredient.getName());
         }
         return "redirect:/spawn";
+//        return "spawn-i-search";
     }
 
     @PostMapping("/spawn/{id}")
@@ -188,6 +173,10 @@ public class SpawnController {
     @GetMapping("/resetingredients")
     public String resetIngredientSearch() {
         ingredientListPage.clear();
+
+        // clear the StringBuilder 'searchKey'
+        this.searchKey.setLength(0);
+
         return "redirect:/spawn";
     }
 

@@ -15,7 +15,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     // all crud methods
 
-    Set<Ingredient> findAllByNameContaining(String name);
+    List<Ingredient> findAllByNameContaining(String name);
     Page<Ingredient> findAllByNameContaining(String name, Pageable pageable);
 //    Ingredient findById(Long id);
 //    List<Ingredient> getAllByIngredientCategory(IngredientCategory ingredientCategory);
