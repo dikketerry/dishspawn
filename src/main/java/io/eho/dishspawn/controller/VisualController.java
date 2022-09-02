@@ -35,7 +35,7 @@ public class VisualController {
         // get latest visual
         Visual latestVisual = visualService.findLatestVisual();
 
-        // get all visuals paginated - TODO: except first visual
+        // get paged visuals
         Page<Visual> visualPage = visualService.findPageVisuals(currentPage);
 
         List<Visual> pagedVisuals = visualPage.getContent();

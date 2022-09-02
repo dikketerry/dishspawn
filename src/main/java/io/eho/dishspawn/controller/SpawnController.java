@@ -4,6 +4,7 @@ import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.service.IngredientService;
+import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ public class SpawnController {
 
     private IngredientService ingredientService;
     private RecipeService recipeService;
+    private RecipeIngredientService recipeIngredientService;
 
     private Set<Ingredient> ingredientSpawnSet = new HashSet<>();
     private List<Recipe> recipeSpawnList = new ArrayList<>();
@@ -33,9 +35,11 @@ public class SpawnController {
     public SpawnController() { }
 
     @Autowired
-    public SpawnController(IngredientService ingredientService, RecipeService recipeService) {
+    public SpawnController(IngredientService ingredientService, RecipeService recipeService,
+                           RecipeIngredientService recipeIngredientService) {
         this.ingredientService = ingredientService;
         this.recipeService = recipeService;
+        this.recipeIngredientService = recipeIngredientService;
     }
 
     @GetMapping("")
@@ -113,6 +117,29 @@ public class SpawnController {
         resetRecipeList();
         resetIngredientSearch();
 
+        for (int x = 0; x < ingredientSpawnSet.size(); x++) {
+
+            // 1 find recipeingredient belonging to ingredient
+//            RecipeIngredient ri = recipeIngredientService.findAllRecipeIngredientsByIngredient(Ingredient ingredient);
+
+            // 2 get recipe belonging to recipeingredient
+
+            // 3 get recipeingredientset belonging to recipe
+
+            // 4 check if ingredient(x+1) is in recipeingredientset
+
+                // 4a if true check if ingredient(x+2) is in recipeingredientset
+
+                    // if true store recipe in result
+
+                    // if false go back to 1, continue with find next recipeingredient
+
+                // if false go back to 1, continue with next recipeingredient
+
+
+
+        }
+
         // for each ingredient in selection, create its recipe-ingredients array
         for (Ingredient ingredient : ingredientSpawnSet) {
             RecipeIngredient[] recipeIngredientArr =
@@ -126,6 +153,7 @@ public class SpawnController {
                 recipeSpawnList.add(recipe);
             }
         }
+
         // TODO: only recipes which have ALL ingredients should be shown
         model.addAttribute("recipeList", recipeSpawnList);
 
