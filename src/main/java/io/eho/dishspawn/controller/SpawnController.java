@@ -22,14 +22,17 @@ public class SpawnController {
     private RecipeService recipeService;
     private RecipeIngredientService recipeIngredientService;
 
-    private Set<Ingredient> ingredientSpawnSet = new HashSet<>();
+    private List<Ingredient> ingredientSpawnList = new ArrayList<>();
     private List<Recipe> recipeSpawnList = new ArrayList<>();
     private List<Ingredient> ingredientListPage = new ArrayList<>();
 
-    private int totalFoundIngredientListPages;
+    private int totalFoundIngredientPages;
+    private int totalFoundRecipeIngredientPages;
     private long totalFoundIngredients;
+    private long totalFoundRecipeIngredients;
 
     private StringBuilder searchKey = new StringBuilder();
+    private StringBuilder message = new StringBuilder();
 
     // dependency injection via constructor
     public SpawnController() { }
@@ -50,11 +53,14 @@ public class SpawnController {
             model.addAttribute("searchKey", searchKey.toString());
         }
 
-        model.addAttribute("ingredientSpawnSet", ingredientSpawnSet);
+        model.addAttribute("ingredientSpawnSet", ingredientSpawnList);
         model.addAttribute("recipeList", recipeSpawnList);
         model.addAttribute("ingredientListPage", ingredientListPage);
-        model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientListPages);
+        model.addAttribute("totalFoundIngredientListPages", totalFoundIngredientPages);
         model.addAttribute("totalFoundIngredients", totalFoundIngredients);
+        model.addAttribute("totalFoundRecipeIngredientPages", totalFoundRecipeIngredientPages);
+        model.addAttribute("totalFoundRecipeIngredients", totalFoundRecipeIngredients);
+        model.addAttribute("message", message.toString());
 
         return "spawn-i";
     }
@@ -73,11 +79,11 @@ public class SpawnController {
         // paged search results
         Page ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
 
-        // convert page result to global search-ingredient-result list
+        // convert page result to search-ingredient list
         ingredientListPage = ingredientPage.getContent();
 
         // get the total # of pages
-        totalFoundIngredientListPages = ingredientPage.getTotalPages();
+        totalFoundIngredientPages = ingredientPage.getTotalPages();
 
         // get the total # of elements
         totalFoundIngredients = ingredientPage.getTotalElements();
@@ -106,56 +112,63 @@ public class SpawnController {
             return "error-page";
         }
 
-        ingredientSpawnSet.add(ingredientDB);   // add found ingredient
+        ingredientSpawnList.add(ingredientDB);   // add found ingredient
 
         return "redirect:/spawn";
     }
 
     @GetMapping("/findrecipes")
-    public String findRecipes(Model model) {
+    public String findRecipes(
+            @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
+
         // before finding new recipes, first clear old list recipe and search
         resetRecipeList();
         resetIngredientSearch();
 
-        for (int x = 0; x < ingredientSpawnSet.size(); x++) {
+        // check size of ingredient list, as it impacts the algorithm to generate the recipe list
+        int selectedIngredientListSize = ingredientSpawnList.size();
 
-            // 1 find recipeingredient belonging to ingredient
-//            RecipeIngredient ri = recipeIngredientService.findAllRecipeIngredientsByIngredient(Ingredient ingredient);
-
-            // 2 get recipe belonging to recipeingredient
-
-            // 3 get recipeingredientset belonging to recipe
-
-            // 4 check if ingredient(x+1) is in recipeingredientset
-
-                // 4a if true check if ingredient(x+2) is in recipeingredientset
-
-                    // if true store recipe in result
-
-                    // if false go back to 1, continue with find next recipeingredient
-
-                // if false go back to 1, continue with next recipeingredient
-
-
-
+        if (selectedIngredientListSize == 0)
+        { // size = 0 --> return a message or something
+            message.append("please select ingredient(s) for spawn");
         }
 
-        // for each ingredient in selection, create its recipe-ingredients array
-        for (Ingredient ingredient : ingredientSpawnSet) {
-            RecipeIngredient[] recipeIngredientArr =
-                    ingredient.getRecipeIngredients().toArray(
-                            new RecipeIngredient[0]);
+        else if (selectedIngredientListSize == 1)
+        { // only 1 ingredient -> no need to find intersection, but might find many recipes, so ensure paged results
+            Ingredient i1 = ingredientSpawnList.get(0);
 
-            // loop through each recipe-ingredient array, get per r-i the
-            // belonging recipe and add to recipe-spawn-list
-            for (int i = 0; i < recipeIngredientArr.length; i++) {
-                Recipe recipe = recipeIngredientArr[i].getRecipe();
-                recipeSpawnList.add(recipe);
+            // recipeIngredient.recipe.name
+
+            // provide ingredient, get back on timestamp sorted recipe-ingredient page
+            Page<RecipeIngredient> recipeIngredientPage =
+                    recipeIngredientService.findPageRecipeIngredientsByIngredient(i1, searchPageNr);
+
+            // get the total # of pages
+            totalFoundRecipeIngredientPages = recipeIngredientPage.getTotalPages();
+            totalFoundRecipeIngredients = recipeIngredientPage.getTotalElements();
+            List<RecipeIngredient> recipeIngredientList = recipeIngredientPage.getContent();
+
+            for (RecipeIngredient ri : recipeIngredientList) {
+                recipeSpawnList.add(ri.getRecipe());
             }
         }
 
+        // for each ingredient in selection, create its recipe-ingredients array
+//        for (Ingredient ingredient : ingredientSpawnList) {
+//            RecipeIngredient[] recipeIngredientArr =
+//                    ingredient.getRecipeIngredients().toArray(
+//                            new RecipeIngredient[0]);
+//
+//            // loop through each recipe-ingredient array, get per r-i the
+//            // belonging recipe and add to recipe-spawn-list
+//            for (int i = 0; i < recipeIngredientArr.length; i++) {
+//                Recipe recipe = recipeIngredientArr[i].getRecipe();
+//                recipeSpawnList.add(recipe);
+//            }
+//        }
+
         // TODO: only recipes which have ALL ingredients should be shown
-        model.addAttribute("recipeList", recipeSpawnList);
+//        model.addAttribute("recipeList", recipeSpawnList);
 
         return "redirect:/spawn";
     }
@@ -180,7 +193,7 @@ public class SpawnController {
     @GetMapping("/reset")
     public String reset() {
         resetIngredientSearch();
-        ingredientSpawnSet.clear();
+        ingredientSpawnList.clear();
         resetRecipeList();
         return "redirect:/spawn";
     }

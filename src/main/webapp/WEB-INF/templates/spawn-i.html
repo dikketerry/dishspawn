@@ -194,6 +194,10 @@
                         </tr>
                         </tbody>
                     </table>
+                    <ul class="uk-pagination uk-flex-center" uk-margin>
+                        <li th:each="i: ${#numbers.sequence(1, totalFoundRecipeIngredientPages)}">
+                            <a th:href="@{/spawn/findrecipes(pageNr=${i})}">[[${i}]]</a></li>
+                    </ul>
 <!--                button to reset recipes and selected ingredients-->
                     <form th:action="@{/spawn/reset}" method="get">
                         <button class="uk-button uk-button-small uk-button-primary uk-border-pill" type="submit">
