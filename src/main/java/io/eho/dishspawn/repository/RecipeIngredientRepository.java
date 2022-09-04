@@ -17,4 +17,5 @@ public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredie
 //    List<RecipeIngredient> findByRecipe(Recipe recipe);
 //    Page<RecipeIngredient> findAllByNameContaining(String name, Pageable pageable);
     Page findAllByIngredient(Ingredient ingredient, Pageable pageable);
+    List<RecipeIngredient> findAllByIngredient(Ingredient ingredient);
 }

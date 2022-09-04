@@ -98,14 +98,14 @@ public class Recipe {
         sb.append("Ingredients needed: ");
         sb.append("\n");
 
-        for (RecipeIngredient ri : this.recipeIngredients) {
-            sb.append(ri);
-            sb.append("\n");
-        }
+//        for (RecipeIngredient ri : this.recipeIngredients) {
+//            sb.append(ri);
+//            sb.append("\n");
+//        }
 
-        sb.append("Instructions: ");
-        sb.append(this.instructions);
-        sb.append("\n");
+//        sb.append("Instructions: ");
+//        sb.append(this.instructions);
+//        sb.append("\n");
 
         sb.append("Made by: ");
         sb.append(this.chef.getUserName());

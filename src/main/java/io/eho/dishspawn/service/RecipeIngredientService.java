@@ -12,7 +12,7 @@ public interface RecipeIngredientService {
     void saveRecipeIngredient(RecipeIngredient recipeIngredient);
     List<RecipeIngredient> findAllRecipeIngredients();
     List<RecipeIngredient> findAllRecipeIngredientsForRecipe(Recipe recipe);
-    List<Recipe> findAllRecipeIngredientsByIngredient(Ingredient ingredient);
+    List<RecipeIngredient> findAllRecipeIngredientByIngredient(Ingredient ingredient);
 
     Page findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr);
 }

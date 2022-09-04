@@ -49,8 +49,8 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
 
     @Override
 //    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
-    public List<Recipe> findAllRecipeIngredientsByIngredient(Ingredient ingredient) {
-        return null;
+    public List<RecipeIngredient> findAllRecipeIngredientByIngredient(Ingredient ingredient) {
+        return recipeIngredientRepository.findAllByIngredient(ingredient);
     }
 
     @Override

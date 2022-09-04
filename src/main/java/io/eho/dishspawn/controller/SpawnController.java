@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/spawn")
@@ -150,6 +151,39 @@ public class SpawnController {
 
             for (RecipeIngredient ri : recipeIngredientList) {
                 recipeSpawnList.add(ri.getRecipe());
+            }
+        }
+
+        else if (selectedIngredientListSize == 2) {
+            Ingredient i1 = ingredientSpawnList.get(0);
+            Ingredient i2 = ingredientSpawnList.get(1);
+
+            // get recipes with recipeingredient.ingredient(i1) AND recipeingredient.ingredient(i2)
+            List<RecipeIngredient> recipeIngredientList1 = recipeIngredientService.findAllRecipeIngredientByIngredient(i1);
+            List<Recipe> recipeList1 = new ArrayList<>();
+            for (RecipeIngredient ri : recipeIngredientList1) {
+                Recipe r = ri.getRecipe();
+                recipeList1.add(r);
+            }
+
+            List<RecipeIngredient> recipeIngredientList2 = recipeIngredientService.findAllRecipeIngredientByIngredient(i2);
+            List<Recipe> recipeList2 = new ArrayList<>();
+            for (RecipeIngredient ri : recipeIngredientList1) {
+                Recipe r = ri.getRecipe();
+                recipeList2.add(r);
+            }
+
+
+            // todo: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
+            // needs a converter
+
+            Set<Recipe> intersection = recipeList1.stream()
+                    .distinct()
+                    .filter(recipeList2::contains)
+                    .collect(Collectors.toSet());
+
+            for (Recipe r : intersection) {
+                System.out.println(r);
             }
         }
 

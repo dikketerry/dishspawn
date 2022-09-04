@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class DishSpawnApplication /*implements CommandLineRunner*/ {
+public class DishSpawnApplication /* implements CommandLineRunner */ {
 	// AFTER INIT: remove 'implements CommandLineRunner'
 
 //	public DishSpawnApplication() {}
@@ -38,7 +38,7 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //	private VisualService visualService;
 //	@Autowired
 //	private ChefService chefService;
-
+//
 //	@Override
 //	public void run(String... args) throws Exception {
 
@@ -55,40 +55,41 @@ public class DishSpawnApplication /*implements CommandLineRunner*/ {
 //		chefService.saveChef(newChef);
 
 		// INIT 2 add ingredients to DB (should be back-end operation only)
-//		Ingredient groundPork = new Ingredient("ground pork", IngredientCategory.MEAT);
-//		ingredientService.saveIngredient(groundPork);
+//		Ingredient greekYoghurt = new Ingredient("Greek yoghurt", IngredientCategory.DAIRY_CREAM);
+//		ingredientService.saveIngredient(greekYoghurt);
 
 		// INIT 3 create new recipe
 //		Chef chefDB = chefService.findChefById(18l);
-//		Recipe aNoodleSoup = new Recipe();
-//		aNoodleSoup.setName("Pork Noodle Soup with Broccoli Rabe and Fennel");
-//		aNoodleSoup.setChef(chefDB);
+//		Recipe matzoBrei = new Recipe();
+//		matzoBrei.setName("Matzo Brei");
+//		matzoBrei.setChef(chefDB);
 //		List<String> instructions = new ArrayList<>();
-//		instructions.add("Heat one tablespoon olive oil in a large pot over medium-high heat. Add pork and season with salt and pepper. Cook, resisting the urge to break it up too much at first. As it browns, break it up into small pieces; some of the pork will get very small (these will get very brown and crispy) and some will stay larger in sausage-like clumps (these will stay tender and juicer). Once the pork is about 80% browned to your liking, about 8–10 minutes, add the garlic. Continue cooking until the pork is well browned throughout and the garlic is softened and starting to brown around the edges, another 4–5 minutes.");
-//		aNoodleSoup.setInstructions(instructions);
-
-		// create recipe ingredients for recipe
-//		RecipeIngredient groundPork = new RecipeIngredient();
-//		groundPork.setIngredient(ingredientService.findIngredientById(103l));
-//		groundPork.setRecipe(aNoodleSoup);
-//		groundPork.setQuantity(1);
-//		groundPork.setUnitName("POUND");
-//		groundPork.massOrVolumeSetter();
-//		groundPork.setVisualImpact(true);
-//		groundPork.setForm(RecipeIngredientForm.WEDGES);
-//		groundPork.setTexture(RecipeIngredientTexture.FIRM);
-//		groundPork.setCookingMethod(RecipeIngredientCookingMethod.ADD);
-//		groundPork.setColor("#ca321d");
-
-		// no save of recipe-ingredients, cascaded through recipe save
-//		aNoodleSoup.addRecipeIngredient(groundPork);
+//		instructions.add("Heat oil in a medium/large non-stick skillet (regular stainless steel skillet works fine, too). Add onion and season with salt and pepper. Cook, tossing occasionally until the onions are completely tender with a deep, dark brown color and fried and frizzled edges, 8–10 minutes. Taste them along the way and make sure they’re salty and peppery enough.");
+//		matzoBrei.setInstructions(instructions);
+//
+//		// create recipe ingredients for recipe
+//		RecipeIngredient matzo = new RecipeIngredient();
+//		matzo.setIngredient(ingredientService.findIngredientById(128l));
+//		matzo.setRecipe(matzoBrei);
+//		matzo.setQuantity(4);
+//		matzo.setUnitName("PIECE");
+//		matzo.massOrVolumeSetter();
+//		matzo.setVisualImpact(true);
+//		matzo.setForm(RecipeIngredientForm.SHEETS);
+//		matzo.setTexture(RecipeIngredientTexture.CRUNCHY);
+//		matzo.setCookingMethod(RecipeIngredientCookingMethod.BAKE);
+//		matzo.setColor("#f8ebb2");
+//
+//		// no save of recipe-ingredients, cascaded through recipe save
+//		matzoBrei.addRecipeIngredient(matzo);
+//		recipeService.saveRecipe(matzoBrei);
 
 		// INIT 5: create visual with recipe
-//		String fileName = "testdish7.jpg";
+//		String fileName = "testdish8.png";
 //		Visual visual = new Visual();
 //		visual.setFileName(fileName);
 //		visual.setFileLocation("/img/testspawn/" + fileName);
-//		visual.setRecipe(recipeService.findRecipeById(111l));
+//		visual.setRecipe(recipeService.findRecipeById(134l));
 //		visualService.saveVisual(visual, chefService.findChefById(18l));
 
 //		// INIT 6: add a Like to a visual TODO: NOT WORKING
