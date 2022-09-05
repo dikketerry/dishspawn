@@ -7,6 +7,7 @@ import io.eho.dishspawn.service.IngredientService;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,11 +28,16 @@ public class SpawnController {
     private List<Recipe> recipeSpawnList = new ArrayList<>();
     private List<Ingredient> ingredientListPage = new ArrayList<>();
 
+    // vars for paging of search results ingredients / recipes
     private int totalFoundIngredientPages;
     private int totalFoundRecipeIngredientPages;
     private long totalFoundIngredients;
     private long totalFoundRecipeIngredients;
 
+    // boolean for show/hide search recipe result container
+    private boolean findRecipeUse;
+
+    // StringBuilder vars for storing searchKey ingredient search and message for recipe search
     private StringBuilder searchKey = new StringBuilder();
     private StringBuilder message = new StringBuilder();
 
@@ -61,6 +67,7 @@ public class SpawnController {
         model.addAttribute("totalFoundIngredients", totalFoundIngredients);
         model.addAttribute("totalFoundRecipeIngredientPages", totalFoundRecipeIngredientPages);
         model.addAttribute("totalFoundRecipeIngredients", totalFoundRecipeIngredients);
+        model.addAttribute("findRecipe", findRecipeUse);
         model.addAttribute("message", message.toString());
 
         return "spawn-i";
@@ -119,12 +126,14 @@ public class SpawnController {
     }
 
     @GetMapping("/findrecipes")
-    public String findRecipes(
-            @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
+    public String findRecipes(@RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-        // before finding new recipes, first clear old list recipe and search
+        // before finding new recipes, first clear old recipe-list and ingredient-search
         resetRecipeList();
         resetIngredientSearch();
+
+        // when using 'find recipes', boolean findRecipeUse to true
+        findRecipeUse = true;
 
         // check size of ingredient list, as it impacts the algorithm to generate the recipe list
         int selectedIngredientListSize = ingredientSpawnList.size();
@@ -132,77 +141,64 @@ public class SpawnController {
         if (selectedIngredientListSize == 0)
         { // size = 0 --> return a message or something
             message.append("please select ingredient(s) for spawn");
-        }
+        } // this is only relevant if user types in find-recipe endpoint manually in browser
 
         else if (selectedIngredientListSize == 1)
         { // only 1 ingredient -> no need to find intersection, but might find many recipes, so ensure paged results
             Ingredient i1 = ingredientSpawnList.get(0);
 
-            // recipeIngredient.recipe.name
-
             // provide ingredient, get back on timestamp sorted recipe-ingredient page
             Page<RecipeIngredient> recipeIngredientPage =
                     recipeIngredientService.findPageRecipeIngredientsByIngredient(i1, searchPageNr);
 
-            // get the total # of pages
+            // get the total # of pages and recipe-ingredients
             totalFoundRecipeIngredientPages = recipeIngredientPage.getTotalPages();
             totalFoundRecipeIngredients = recipeIngredientPage.getTotalElements();
             List<RecipeIngredient> recipeIngredientList = recipeIngredientPage.getContent();
 
+            // add the paged recipes to the recipe spawn list
             for (RecipeIngredient ri : recipeIngredientList) {
                 recipeSpawnList.add(ri.getRecipe());
             }
+            noRecipesFoundMessage(recipeSpawnList);
         }
 
-        else if (selectedIngredientListSize == 2) {
+        else if (selectedIngredientListSize == 2)
+        {
             Ingredient i1 = ingredientSpawnList.get(0);
             Ingredient i2 = ingredientSpawnList.get(1);
 
-            // get recipes with recipeingredient.ingredient(i1) AND recipeingredient.ingredient(i2)
-            List<RecipeIngredient> recipeIngredientList1 = recipeIngredientService.findAllRecipeIngredientByIngredient(i1);
-            List<Recipe> recipeList1 = new ArrayList<>();
-            for (RecipeIngredient ri : recipeIngredientList1) {
-                Recipe r = ri.getRecipe();
-                recipeList1.add(r);
-            }
+            // get recipes with recipeIngredient.ingredient(i1) AND recipeIngredient.ingredient(i2)
+            List<Recipe> recipeList1 = createRecipeList(i1); // see help-method
+            List<Recipe> recipeList2 = createRecipeList(i2);
 
-            List<RecipeIngredient> recipeIngredientList2 = recipeIngredientService.findAllRecipeIngredientByIngredient(i2);
-            List<Recipe> recipeList2 = new ArrayList<>();
-            for (RecipeIngredient ri : recipeIngredientList1) {
-                Recipe r = ri.getRecipe();
-                recipeList2.add(r);
-            }
+            // create intersection of 2 lists
+            List<Recipe> intersectionRecipes = createIntersectionRecipes(recipeList1, recipeList2);
 
-
-            // todo: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
-            // needs a converter
-
-            Set<Recipe> intersection = recipeList1.stream()
-                    .distinct()
-                    .filter(recipeList2::contains)
-                    .collect(Collectors.toSet());
-
-            for (Recipe r : intersection) {
-                System.out.println(r);
-            }
+            // page the intersection result, assign it to recipeSpawnList
+            recipeSpawnList = createPageRecipesSpawnList(intersectionRecipes, searchPageNr);
+            noRecipesFoundMessage(recipeSpawnList);
         }
 
-        // for each ingredient in selection, create its recipe-ingredients array
-//        for (Ingredient ingredient : ingredientSpawnList) {
-//            RecipeIngredient[] recipeIngredientArr =
-//                    ingredient.getRecipeIngredients().toArray(
-//                            new RecipeIngredient[0]);
-//
-//            // loop through each recipe-ingredient array, get per r-i the
-//            // belonging recipe and add to recipe-spawn-list
-//            for (int i = 0; i < recipeIngredientArr.length; i++) {
-//                Recipe recipe = recipeIngredientArr[i].getRecipe();
-//                recipeSpawnList.add(recipe);
-//            }
-//        }
+        else if (selectedIngredientListSize == 3)
+        {
+            Ingredient i1 = ingredientSpawnList.get(0);
+            Ingredient i2 = ingredientSpawnList.get(1);
+            Ingredient i3 = ingredientSpawnList.get(2);
 
-        // TODO: only recipes which have ALL ingredients should be shown
-//        model.addAttribute("recipeList", recipeSpawnList);
+            // get recipes with recipeIngredient.ingredient(i1) AND recipeIngredient.ingredient(i2)
+            List<Recipe> recipeList1 = createRecipeList(i1); // see help-method
+            List<Recipe> recipeList2 = createRecipeList(i2);
+            List<Recipe> recipeList3 = createRecipeList(i3);
+
+            // create intersection of 3 lists
+            List<Recipe> intermediateIntersectionRecipes = createIntersectionRecipes(recipeList1, recipeList2);
+            List<Recipe> intersectionRecipes = createIntersectionRecipes(intermediateIntersectionRecipes, recipeList3);
+
+            // page the intersection result, assign it to recipeSpawnList
+            recipeSpawnList = createPageRecipesSpawnList(intersectionRecipes, searchPageNr);
+            noRecipesFoundMessage(recipeSpawnList);
+        }
 
         return "redirect:/spawn";
     }
@@ -229,10 +225,54 @@ public class SpawnController {
         resetIngredientSearch();
         ingredientSpawnList.clear();
         resetRecipeList();
+        findRecipeUse = false;
         return "redirect:/spawn";
     }
 
     // private helpers below
+
+    private void noRecipesFoundMessage(List<Recipe> recipeList) {
+        if (recipeList.size() == 0) {
+            message.append("no recipes found for selection of ingredients");
+        }
+    }
+
+    private List createIntersectionRecipes(List<Recipe> recipeList1, List<Recipe> recipeList2) {
+        List<Recipe> intersection = recipeList1.stream()
+                .distinct()
+                .filter(recipeList2::contains)
+                .collect(Collectors.toList());
+        return intersection;
+    }
+
+    private List createPageRecipesSpawnList(List<Recipe> intersectionRecipes, int searchPageNr) {
+        PagedListHolder page = new PagedListHolder(intersectionRecipes);
+        page.setPageSize(3);
+        page.setPage(searchPageNr - 1);
+
+        totalFoundRecipeIngredientPages = page.getPageCount();
+        recipeSpawnList = page.getPageList();
+
+        return recipeSpawnList;
+    }
+
+    private List createRecipeList(Ingredient ingredient) {
+        // todo: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
+        // needs a converter
+
+        List<RecipeIngredient> recipeIngredientList =
+                recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
+
+        List<Recipe> recipeList = new ArrayList<>();
+
+        for (RecipeIngredient ri : recipeIngredientList) {
+            Recipe r = ri.getRecipe();
+            recipeList.add(r);
+        }
+
+        return recipeList;
+    }
+
     private void resetIngredientSearch() {
         // initiate new IngredientListPage
         ingredientListPage = new ArrayList<>();
@@ -242,8 +282,8 @@ public class SpawnController {
 
     private void resetRecipeList() {
         recipeSpawnList.clear();
+        this.message.setLength(0);
     }
-
 
     private Long convertStringIdToLong(String id) {
         Long idLong;

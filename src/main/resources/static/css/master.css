@@ -276,11 +276,9 @@ body {
 /*SPAWN*/
 
 .table-div {
-    /*width: 80%;*/
     display: block;
     margin: 20px auto auto;
     max-width: 80%;
-
 }
 
 .table-result th {
@@ -297,6 +295,14 @@ body {
 
 .action-td {
     text-align: right;
+}
+
+#spawn-recipe-message {
+    font-family: "Marker Felt", "Comic Sans MS", sans-serif;
+    font-size: calc(1.2vw + 1.2vh + .2vmin);
+    color: #f0506e;
+    transform: rotateZ(1deg);
+
 }
 
 #canvas-holder {
