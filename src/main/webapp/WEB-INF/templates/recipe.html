@@ -104,7 +104,7 @@
             <div class="main-headers">
 <!--            div title header-->
                 <div class="main-titles margin16">
-                    <p th:text="'Spawned by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
+                    <p th:text="'Latest spawn by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
                 </div>
                 <div class="timestamp margin16">
                     <p th:text="'on ' +${recipe.timestampCreated}">timestamp-created</p>
@@ -115,12 +115,18 @@
             <!--            div img-->
             <div uk-lightbox>
                 <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                        data-src="/img/testspawn/testdish2.jpg" uk-img
-                        href="/img/testspawn/testdish2.jpg"></a>
+                   th:attr="data-src=${recipeLastVisual.fileLocation}"
+                   th:href="${recipeLastVisual.fileLocation}" uk-img></a>
 <!--                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"-->
 <!--                   th:attr="data-src=${recipe.visual.fileLocation}"-->
 <!--                   th:href="${recipe.visual.fileLocation}" uk-img></a>-->
             </div>
+
+<!--            <div uk-lightbox>-->
+<!--                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"-->
+<!--                   th:attr="data-src=${latestVisual.fileLocation}"-->
+<!--                   th:href="${latestVisual.fileLocation}" uk-img></a>-->
+<!--            </div>-->
             <!--            hr-->
             <hr class="custom-hr">
 

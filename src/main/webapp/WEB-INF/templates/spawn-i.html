@@ -183,7 +183,13 @@
                             </thead>
                             <tbody>
                             <tr th:each="r : ${recipeList}" th:field="${r}">
-                                <td class="content-td" th:text="${r.name}"></td>
+                                <td class="content-td">
+                                    <a th:href="@{/recipe(recipeId=${r.id})}"
+                                       th:text="${r.name}"
+                                       class="uk-link-text">recipename</a>
+<!--                                    <a th:href="@{/recipe/}" th:text="${r.name}">-->
+<!--                                        <a th:href="@{/spawn/findrecipes(pageNr=${i})}">[[${i}]]</a>-->
+                                </td>
                                 <td class="content-td" th:text="${r.chef.userName}"></td>
                                 <td class="action-td">
                                     <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}" method="post">

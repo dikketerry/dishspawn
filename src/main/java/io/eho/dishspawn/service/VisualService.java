@@ -1,6 +1,7 @@
 package io.eho.dishspawn.service;
 
 import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -19,5 +20,7 @@ public interface VisualService {
     Visual findVisualById(Long id);
     List<Visual> findAllVisualsForChef(Chef chef);
     Visual findLatestVisualForChef(Chef chef);
+
+    Visual findLastVisualForRecipe(Recipe recipe);
 //    Page<Visual> findPageVisualsForChef(Chef chef);
 }

@@ -1,7 +1,9 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Recipe;
+import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.RecipeService;
+import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ public class RecipeController {
 
     // property RecipeService
     private RecipeService recipeService;
+    private VisualService visualService;
 
     // property lastRecipe - global, needed in multiple methods
     private Recipe lastRecipe;
@@ -25,8 +28,9 @@ public class RecipeController {
     }
 
     @Autowired
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, VisualService visualService) {
         this.recipeService = recipeService;
+        this.visualService = visualService;
     }
 
     // add get mapping for "/home/page/pageNr" (paginated version of recipes)
@@ -63,8 +67,10 @@ public class RecipeController {
     public String showRecipe(@RequestParam Long recipeId,
                              Model model) {
         Recipe recipe = recipeService.findRecipeById(recipeId);
+        Visual recipeLastVisual = visualService.findLastVisualForRecipe(recipe);
 
         model.addAttribute(recipe);
+        model.addAttribute("recipeLastVisual", recipeLastVisual);
 
         return "recipe";
     }

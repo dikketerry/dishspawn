@@ -1,6 +1,7 @@
 package io.eho.dishspawn.service.implementation;
 
 import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.VisualService;
@@ -87,6 +88,11 @@ public class VisualServiceImpl implements VisualService {
     @Override
     public Visual findLatestVisualForChef(Chef chef) {
         return visualRepository.findTop1ByChefOrderByTimestampCreatedDesc(chef);
+    }
+
+    @Override
+    public Visual findLastVisualForRecipe(Recipe recipe) {
+        return visualRepository.findTop1ByRecipeOrderByTimestampCreatedDesc(recipe);
     }
 
 //    @Override
