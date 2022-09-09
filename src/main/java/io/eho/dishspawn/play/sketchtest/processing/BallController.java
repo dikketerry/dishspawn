@@ -14,25 +14,25 @@ public class BallController {
         BallDB ballDB = new BallDB();
         ballsDB.add(ballDB);
 
-        // convert BallDB to Ball
+        // convert BallDB to BallOld
         provideBalls(ballsDB);
 
 
 
-        List<Ball> balls = new ArrayList<>();
+        List<BallOld> ballOlds = new ArrayList<>();
 
 
         return "ball test";
     }
 
-    private List<Ball> provideBalls(List<BallDB> ballsDB) {
-        List<Ball> balls = new ArrayList<>();
+    private List<BallOld> provideBalls(List<BallDB> ballsDB) {
+        List<BallOld> ballOlds = new ArrayList<>();
 
         for (BallDB ballDB : ballsDB) {
-            Ball ball = TransformBall.from(ballDB);
-            balls.add(ball);
+            BallOld ballOld = TransformBall.from(ballDB);
+            ballOlds.add(ballOld);
         }
-        return balls;
+        return ballOlds;
     }
 
 }

@@ -1,4 +1,4 @@
-package io.eho.dishspawn.play;
+package io.eho.dishspawn.play.modeltest;
 
 import io.eho.dishspawn.exception.UnitDoesNotExistException;
 import io.eho.dishspawn.model.Ingredient;

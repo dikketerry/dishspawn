@@ -15,14 +15,12 @@ import java.util.List;
 @Controller
 public class RecipeController {
 
-    // property RecipeService
     private RecipeService recipeService;
     private VisualService visualService;
 
     // property lastRecipe - global, needed in multiple methods
     private Recipe lastRecipe;
 
-    // dependency injection via constructor
     public RecipeController() {
 
     }
@@ -33,36 +31,7 @@ public class RecipeController {
         this.visualService = visualService;
     }
 
-    // add get mapping for "/home/page/pageNr" (paginated version of recipes)
-    @GetMapping("/home-old/page/{pageNr}")
-    public String showRecipe(Model model, @PathVariable("pageNr") int currentPage) {
-
-        // get recipes paged from DB
-        Page<Recipe> recipePage = recipeService.findPage(currentPage);
-        int totalPages = recipePage.getTotalPages();
-        long totalRecipes = recipePage.getTotalElements();
-        List<Recipe> recipes = recipePage.getContent();
-
-        // get out most recent recipe
-        lastRecipe = recipes.get(0);
-
-        // TODO: remove most recent entry from list - might need a
-        //  work-around @service level; generate full list first, split it in
-        //  2 (last Recipe vs. the rest of recipes)
-//        recipes.remove(0);
-
-        // add most recent and list to model
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalRecipes", totalRecipes);
-        model.addAttribute("lastRecipe", lastRecipe);
-        model.addAttribute("recipes", recipes);
-
-        // use model in index view
-        return "home-old";
-    }
-
-    // add get mapping for "/recipe/{id}" - should contain paginated version
-    // of belonging visuals
+    // recipe page is shown with latest visual. TODO: functionality to browse different visuals for recipe
     @GetMapping("/recipe")
     public String showRecipe(@RequestParam Long recipeId,
                              Model model) {
@@ -82,17 +51,17 @@ public class RecipeController {
 
         if (recipesFromDB == null) {
             model.addAttribute("error", "no recipes found");
-            return "error-page";
+            return "error-page"; // TODO - layout page
         }
 
         model.addAttribute("recipes", recipesFromDB);
-        return "all-recipes";
+        return "all-recipes"; // TODO - layout page
     }
 
     @GetMapping("/recipe/add")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new Recipe());
-        return "add-recipe";
+        return "add-recipe"; // TODO: complete form
     }
 
     // recipe(s) with ingredients

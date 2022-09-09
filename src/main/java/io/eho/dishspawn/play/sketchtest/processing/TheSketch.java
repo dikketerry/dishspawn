@@ -1,14 +1,17 @@
 package io.eho.dishspawn.play.sketchtest.processing;
 
+import org.springframework.stereotype.Component;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//@Component
 public class TheSketch extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main("io.eho.dishspawn.play.sketchtest.processing.TheSketch");
+        System.out.println("in main method of TheSketch");
+        PApplet.main("TheSketch");
     }
 
     @Override

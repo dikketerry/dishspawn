@@ -6,31 +6,31 @@ import java.awt.*;
 
 public class TransformBall {
 
-//    Function<BallDB, Ball> ballDBToBall = new Function<BallDB, Ball>() {
+//    Function<BallDB, BallOld> ballDBToBall = new Function<BallDB, BallOld>() {
 //
 //        @Override
-//        public Ball apply(BallDB ballDB) {
-//            Ball ball = new Ball();
+//        public BallOld apply(BallDB ballDB) {
+//            BallOld ball = new BallOld();
 //
 //            return null;
 //        }
 //    };
 
-    public static Ball from(BallDB ballDB) {
-        Ball ball = new Ball();
+    public static BallOld from(BallDB ballDB) {
+        BallOld ballOld = new BallOld();
         // map logic
-        ball.setpApplet(new PApplet());
-        ball.setSize(ballDB.getAmount() / 10);
-        ball.setColor(hex2Rgb(ballDB.getColor()));
-        ball.setX(100);
-        ball.setY(200);
-        ball.setxSpeed(2);
-        ball.setySpeed(5);
-//        ball.setX(ballDB.getForm().name());
-        return ball;
+        ballOld.setpApplet(new PApplet());
+        ballOld.setSize(ballDB.getAmount() / 10);
+        ballOld.setColor(hex2Rgb(ballDB.getColor()));
+        ballOld.setX(100);
+        ballOld.setY(200);
+        ballOld.setxSpeed(2);
+        ballOld.setySpeed(5);
+//        ballOld.setX(ballDB.getForm().name());
+        return ballOld;
     }
 
-    public static BallDB from(Ball ball) {
+    public static BallDB from(BallOld ballOld) {
         BallDB ballDB = new BallDB();
         // map logic
         return ballDB;
@@ -51,7 +51,7 @@ BallDB
     private String form; --> xSpeed, x
     private String texture; --> ySpeed, y
 
-Ball
+BallOld
     private PApplet pApplet;
     private float x;
     private float y;

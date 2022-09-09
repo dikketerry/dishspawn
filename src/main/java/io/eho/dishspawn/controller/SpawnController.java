@@ -1,5 +1,6 @@
 package io.eho.dishspawn.controller;
 
+import io.eho.dishspawn.controller.util.Parser;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
@@ -24,6 +25,7 @@ public class SpawnController {
     private RecipeService recipeService;
     private RecipeIngredientService recipeIngredientService;
 
+    // model-attribute vars are defined globally to enable returning always the same page
     private List<Ingredient> ingredientSpawnList = new ArrayList<>();
     private List<Recipe> recipeSpawnList = new ArrayList<>();
     private List<Ingredient> ingredientListPage = new ArrayList<>();
@@ -35,7 +37,7 @@ public class SpawnController {
     private long totalFoundRecipeIngredients;
 
     // boolean for show/hide search recipe result container
-    private boolean findRecipeUse;
+    private boolean findRecipeIsUsed;
 
     // StringBuilder vars for storing searchKey ingredient search and message for recipe search
     private StringBuilder searchKey = new StringBuilder();
@@ -67,7 +69,7 @@ public class SpawnController {
         model.addAttribute("totalFoundIngredients", totalFoundIngredients);
         model.addAttribute("totalFoundRecipeIngredientPages", totalFoundRecipeIngredientPages);
         model.addAttribute("totalFoundRecipeIngredients", totalFoundRecipeIngredients);
-        model.addAttribute("findRecipe", findRecipeUse);
+        model.addAttribute("findRecipe", findRecipeIsUsed);
         model.addAttribute("message", message.toString());
 
         return "spawn-i";
@@ -78,22 +80,14 @@ public class SpawnController {
             @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
             @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-        // clean up searchKey StringBuilder, as each new search should give a clean search term
-        this.searchKey.setLength(0);
 
-        // store provided param searchKey in the newly created fresh StringBuilder
-        this.searchKey.append(searchKey);
+        this.searchKey.setLength(0); // clean up searchKey StringBuilder (a new search should start clean)
+        this.searchKey.append(searchKey); // store provided searchKey in the fresh StringBuilder
 
-        // paged search results
+        // paged search results ingredients
         Page ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
-
-        // convert page result to search-ingredient list
         ingredientListPage = ingredientPage.getContent();
-
-        // get the total # of pages
         totalFoundIngredientPages = ingredientPage.getTotalPages();
-
-        // get the total # of elements
         totalFoundIngredients = ingredientPage.getTotalElements();
 
         return "redirect:/spawn";
@@ -102,7 +96,7 @@ public class SpawnController {
     @GetMapping("/add/{id}")
     public String addIngredientToSpawn(@PathVariable String id, Model model) {
 
-        Long idLong = convertStringIdToLong(id);
+        Long idLong = Parser.convertStringIdToLong(id);
 
         // help method returns 0 if conversion to nr. didn't work
         if (idLong == 0l) {
@@ -113,14 +107,14 @@ public class SpawnController {
 
         Ingredient ingredientDB = checkIngredientIdExists(idLong);
 
-        // silly if here, ingredient was found in DB so will never be null..., but hey anyway
+        // silly if check here, ingredient was found in DB so will never be null..., but hey anyway
         if (ingredientDB == null) {
             String idNotExist = "no ingredient with id: " + idLong;
             model.addAttribute("error", idNotExist);
             return "error-page";
         }
 
-        ingredientSpawnList.add(ingredientDB);   // add found ingredient
+        ingredientSpawnList.add(ingredientDB);
 
         return "redirect:/spawn";
     }
@@ -133,7 +127,7 @@ public class SpawnController {
         resetIngredientSearch();
 
         // when using 'find recipes', boolean findRecipeUse to true
-        findRecipeUse = true;
+        findRecipeIsUsed = true;
 
         // check size of ingredient list, as it impacts the algorithm to generate the recipe list
         int selectedIngredientListSize = ingredientSpawnList.size();
@@ -203,34 +197,16 @@ public class SpawnController {
         return "redirect:/spawn";
     }
 
-    @PostMapping("/spawn/{id}")
-    public String spawnGo(@PathVariable String id, Model model) {
-        // help method to convert String to Long and catch non-numerical input
-        Long idLong = convertStringIdToLong(id);
-
-        if (idLong == 0l) {
-            String noNumber = id + " is not a numeric format";
-            model.addAttribute("error", noNumber);
-            return "error-page";
-        }
-
-        Recipe recipe = recipeService.findRecipeById(idLong);
-        model.addAttribute(recipe);
-
-        return "spawn-o";
-    }
-
     @GetMapping("/reset")
     public String reset() {
         resetIngredientSearch();
         ingredientSpawnList.clear();
         resetRecipeList();
-        findRecipeUse = false;
+        findRecipeIsUsed = false;
         return "redirect:/spawn";
     }
 
     // private helpers below
-
     private void noRecipesFoundMessage(List<Recipe> recipeList) {
         if (recipeList.size() == 0) {
             message.append("no recipes found for selection of ingredients");
@@ -257,8 +233,7 @@ public class SpawnController {
     }
 
     private List createRecipeList(Ingredient ingredient) {
-        // todo: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
-        // needs a converter
+        // todo: needs a converter: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
 
         List<RecipeIngredient> recipeIngredientList =
                 recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
@@ -283,19 +258,6 @@ public class SpawnController {
     private void resetRecipeList() {
         recipeSpawnList.clear();
         this.message.setLength(0);
-    }
-
-    private Long convertStringIdToLong(String id) {
-        Long idLong;
-
-        try {
-            idLong = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return 0l;
-        }
-
-        return idLong;
     }
 
     private Ingredient checkIngredientIdExists(Long id) {

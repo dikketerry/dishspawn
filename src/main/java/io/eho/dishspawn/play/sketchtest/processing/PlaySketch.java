@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PlaySketch extends PApplet {
 
-//    private List<Ball> balls = new ArrayList<>();
+//    private List<BallOld> balls = new ArrayList<>();
 
     @Override
     public void setup()
@@ -19,13 +19,13 @@ public class PlaySketch extends PApplet {
     @Override
     public void settings() {
         size(400, 400);
-//        balls.add(new Ball(this, width/2, height/2));
+//        balls.add(new BallOld(this, width/2, height/2));
     }
 
     @Override
     public void draw() {
 //        background(64);
-//        for (Ball b : balls) {
+//        for (BallOld b : balls) {
 //            b.step();
 //            b.render();
 //        }
@@ -33,13 +33,13 @@ public class PlaySketch extends PApplet {
 
 //    @Override
 //    public void mousePressed() {
-//        balls.add(new Ball(this, width/2, height/2));
+//        balls.add(new BallOld(this, width/2, height/2));
 //    }
 
-//    public static void main(String[] args) {
-//
-//        String[] processingArgs = {"PlaySketch"};
-//        PlaySketch playSketch = new PlaySketch();
-//        PApplet.runSketch(processingArgs, playSketch);
-//    }
+    public static void main(String[] args) {
+
+        String[] processingArgs = {"PlaySketch"};
+        PlaySketch playSketch = new PlaySketch();
+        PApplet.runSketch(processingArgs, playSketch);
+    }
 }

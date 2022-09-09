@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import java.awt.*;
 
 
-public class Ball {
+public class BallOld {
 
     private PApplet pApplet;
     private float x;
@@ -15,15 +15,15 @@ public class Ball {
     private float ySpeed;
     private Color color;
 
-    public Ball() {
+    public BallOld() {
         this(new PApplet());
     }
 
-    public Ball(PApplet sketch) {
+    public BallOld(PApplet sketch) {
         this(sketch, sketch.width/2, sketch.height/2);
     }
 
-    public Ball(PApplet sketch, float x, float y) {
+    public BallOld(PApplet sketch, float x, float y) {
         this.pApplet = sketch;
         this.x = x;
         this.y = y;
