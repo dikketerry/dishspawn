@@ -10,7 +10,6 @@ import java.util.List;
 public class TheSketch extends PApplet {
 
     public static void main(String[] args) {
-        System.out.println("in main method of TheSketch");
         PApplet.main("TheSketch");
     }
 
