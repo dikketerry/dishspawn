@@ -1,11 +1,10 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.controller.util.Parser;
-import io.eho.dishspawn.graphics.ImageCanvas;
-import io.eho.dishspawn.graphics.ImageWindow;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
-import io.eho.dishspawn.play.sketchtest.vanillajava.Image;
+import io.eho.dishspawn.play.sketchtest.processing.SketchThread;
+import io.eho.dishspawn.play.sketchtest.processing.TheSketch;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import processing.core.PApplet;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -90,12 +85,47 @@ public class ImageController {
 
         // generate sketch 2
         System.setProperty("java.awt.headless", "false");
-        JFrame window = new ImageWindow();
-        ImageCanvas canvas = new ImageCanvas();
-        window.add(canvas);
-        canvas.draw();
-        window.setVisible(true);
+//
+//
+//        SketchThread sketchThread = new SketchThread();
+//        sketchThread.start();
+//
+//        try {
+//            sketchThread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        sketchThread.doStop();
 
+//        Runnable runnable = new TheSketch();
+//        Thread thread = new Thread(runnable);
+//        thread.start();
+        PApplet.main("io.eho.dishspawn.play.sketchtest.processing.TheSketch");
+
+        // alternative to get an instance of the PApplet
+//        TheSketch theSketch = new TheSketch();
+//        PApplet.runSketch(.., theSketch);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            System.out.println("diagnostic: interrupted during sleep");
+        }
+
+
+
+//        JFrame window = new ImageWindow();
+//        window.setSize(ImageWindow.WIDTH, ImageWindow.HEIGHT);
+//        window.setResizable(false);
+//        window.setLocationRelativeTo(null);
+//        ImageCanvas canvas = new ImageCanvas();
+//        window.add(canvas);
+//        canvas.draw();
+//        window.setVisible(true);
+
+
+        // below not needed right now
 //		SwingUtilities.invokeLater(() -> {
 //			JFrame window = new ImageWindow();
 //			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,6 +146,7 @@ public class ImageController {
 //        PApplet.main("PlaySketch");
 
         model.addAttribute(recipe);
+        System.out.println("counter: " + spawnCounter);
         return "spawn-o";
     }
 

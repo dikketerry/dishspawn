@@ -15,17 +15,24 @@ public class TheSketch extends PApplet {
     }
 
     @Override
-    public void settings() {
-        size(500, 500);
+    public void setup() {
+        background(111, 222, 11);
+        fill(145, 34, 245);
     }
 
     @Override
-    public void setup() {
-        fill(120, 50, 240);
+    public void settings() {
+        size(800, 800);
     }
 
     @Override
     public void draw() {
         ellipse(width/2, height/2, second(), second());
+        // second() returns an int coming from clock (0 - 59)
     }
+
+//    @Override
+//    public void run() {
+//        System.out.println("running as runnable");
+//    }
 }

@@ -1,4 +1,4 @@
-package io.eho.dishspawn.graphics;
+package io.eho.dishspawn.graphics.vanillajava;
 
 import java.awt.*;
 

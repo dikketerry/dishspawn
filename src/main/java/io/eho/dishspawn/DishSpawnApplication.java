@@ -1,14 +1,7 @@
 package io.eho.dishspawn;
 
-import io.eho.dishspawn.graphics.ImageWindow;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import processing.core.PApplet;
-
-import javax.swing.*;
-import java.awt.*;
 
 @SpringBootApplication
 public class DishSpawnApplication {
