@@ -3,10 +3,13 @@ package io.eho.dishspawn.controller;
 import io.eho.dishspawn.controller.util.Parser;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
-import io.eho.dishspawn.play.sketchtest.processing.SketchThread;
-import io.eho.dishspawn.play.sketchtest.processing.TheSketch;
+import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.graphics.processing.TheSketch;
+import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
+import io.eho.dishspawn.service.VisualService;
+import io.eho.dishspawn.service.implementation.ChefServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,24 +26,23 @@ public class ImageController {
 
     private RecipeService recipeService;
     private RecipeIngredientService recipeIngredientService;
-
-    private static int spawnCounter;
+    private VisualService visualService;
+    private ChefService chefService;
 
     @Autowired
-    public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService) {
+    public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService,
+                           VisualService visualService, ChefServiceImpl chefService) {
         this.recipeService = recipeService;
         this.recipeIngredientService = recipeIngredientService;
+        this.visualService = visualService;
+        this.chefService = chefService;
     }
 
     @PostMapping("/spawn/{id}")
     public String spawnGo(@PathVariable String id, Model model) {
-        // increase counter (needed for filename)
-        spawnCounter++;
-
         // get recipe
         // help method to convert String to Long and catch non-numerical input
         Long idLong = Parser.convertStringIdToLong(id);
-
 
         if (idLong == 0l) {
             String noNumber = id + " is not a numeric format";
@@ -50,16 +52,20 @@ public class ImageController {
         Recipe recipe = recipeService.findRecipeById(idLong);
 
         // get recipe-ingredients
-        List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientsForRecipe(recipe);
+        List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
-        // translate recipe-ingredients to visual properties
+        // TODO translate recipe-ingredients to visual properties
 
-        System.setProperty("java.awt.headless", "false");
+        // SKETCH
+        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow functions which make
+        // use of display / mouse / keyboard
+
         // alternative to get an instance of the PApplet
         TheSketch theSketch = new TheSketch();
         String[] a = {"MAIN"};
         PApplet.runSketch(a, theSketch);
 
+        // short intermezzo. lets the sketch run for time specified
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -67,22 +73,39 @@ public class ImageController {
             e.printStackTrace();
         }
 
-        theSketch.dispose(); // this stops the animation but does not close the window with the sketch
+        theSketch.dispose(); // stops animation; does NOT close the window with the sketch
         // todo: idea: make the sketch static, re-use it for each new spawn (clean it up, intialize, fill new)
 
-        // save image (should move to saveImage method)
-        // todo: should first be written to BufferedImage (in memory) - dedicated save method for save to directory
-        theSketch.save("src/main/resources/static/img/spawns/sketch.png");
+        Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
+        String fileName = "visual" + newId + ".png";
+        theSketch.save("src/main/resources/static/img/spawns/" + fileName); // save sketch as .png
+        // todo: real save to move to saveImage method -> first 'save' to BufferedImage only (in memory)
 
-        // show generated image in browser
-            // read image from file location
+        // assign .png to new Visual
+        Visual newVisual = new Visual();
+        newVisual.setRecipe(recipe);
+        newVisual.setChef(chefService.findChefById(17l)); // todo: with security, get chef from user
+        newVisual.setFileName(fileName);
+        newVisual.setFileLocation("/img/spawns/" + fileName);
+        visualService.saveVisual(newVisual);
 
+        // short intermezzo. testing if time is needed to get img shown in browser (not working yet)
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            System.out.println("diagnostic: interrupted during sleep");
+            e.printStackTrace();
+        }
 
-        // relative path: "/src/main/resources/static/img/image" + counter + ".png"
+        // read saved image from file location - not needed I think?
+        Visual visual = visualService.findVisualById(newId);
+        System.out.println(visual);
 
+        // add recipe and visual to model / show on page
         model.addAttribute(recipe);
-        System.out.println("counter: " + spawnCounter);
-        return "spawn-o";
+        model.addAttribute("visual", visual);
+        return "redirect:/visual?visualId=" + newId;
+//        return "spawn-o";
     }
 
 }
@@ -136,7 +159,7 @@ public class ImageController {
         Runnable runnable = new TheSketch();
         Thread thread = new Thread(runnable);
         thread.start();
-        PApplet.main("io.eho.dishspawn.play.sketchtest.processing.TheSketch");
+        PApplet.main("io.eho.dishspawn.graphics.processing.TheSketch");
 
 
 

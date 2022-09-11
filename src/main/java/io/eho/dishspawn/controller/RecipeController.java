@@ -37,8 +37,9 @@ public class RecipeController {
                              Model model) {
         Recipe recipe = recipeService.findRecipeById(recipeId);
         Visual recipeLastVisual = visualService.findLastVisualForRecipe(recipe);
+        System.out.println(recipe);
 
-        model.addAttribute(recipe);
+        model.addAttribute("recipe", recipe);
         model.addAttribute("recipeLastVisual", recipeLastVisual);
 
         return "recipe";

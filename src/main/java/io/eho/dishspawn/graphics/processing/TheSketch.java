@@ -1,4 +1,4 @@
-package io.eho.dishspawn.play.sketchtest.processing;
+package io.eho.dishspawn.graphics.processing;
 
 import org.springframework.stereotype.Component;
 import processing.core.PApplet;
@@ -15,8 +15,13 @@ public class TheSketch extends PApplet {
 
     @Override
     public void setup() {
-        background(111, 222, 11);
-        fill(145, 34, 245);
+
+        int red = (int) random(0, 255);
+        int green = (int) random(0, 255);
+        int blue = (int) random(0, 255);
+
+        background(red, green, blue);
+        fill(255 - red, 255 - green, 255 - blue);
     }
 
     @Override

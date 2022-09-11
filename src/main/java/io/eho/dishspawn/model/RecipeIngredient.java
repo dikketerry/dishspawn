@@ -26,8 +26,7 @@ public class RecipeIngredient {
     @Column(name="recipe_ingredient_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default @ManyToOne, but
-    // hey, let's get it explicit to understand what's happening
+    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default 4 @ManyToOne
     @JoinColumn(name="ingredient_id")
     private Ingredient ingredient;
 
@@ -35,16 +34,12 @@ public class RecipeIngredient {
     @JoinColumn(name="recipe_id")
     private Recipe recipe;
 
-    // the unit name and quantity the recipe_ingredient are provided with
-    // ( 3 teaspoon, 1.5 tablespoon, etc.) are stored in DB to enable
-    // returning these when giving when a recipe is returned from the DB
     @Column(name="unit_name")
     private String unitName;
 
     @Column(name="quantity")
     private double quantity;
 
-    // additional values join table recipe-ingredient
     @Column(name="mass")
     @Setter(AccessLevel.NONE)
     private double mass;
@@ -54,7 +49,7 @@ public class RecipeIngredient {
     private double volume;
 
     @Column(name="visual_impact")
-    private boolean visualImpact = true;                        // default value
+    private boolean visualImpact = true; // default value
 
     @Enumerated(EnumType.STRING)
     @Column(name="form")
@@ -71,9 +66,13 @@ public class RecipeIngredient {
     @Column(name="color")
     private String color;
 
-    // move to service?
-    public void massOrVolumeSetter() {
+    // defining a getter specifically does override the basic getter provided by Lombok (nice!)
+    public double getQuantity() {
+        // todo: format quantity for view (1.0 -> 1; 1.5 -> 1.5; 10.0 -> 10, ...)
+        return quantity;
+    }
 
+    public void massOrVolumeSetter() {
         if (this.unitName == "PIECE") {
             this.mass = -1;
             this.volume = -1;

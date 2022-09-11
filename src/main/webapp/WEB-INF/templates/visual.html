@@ -97,12 +97,12 @@
 
             <div class="main-headers">
                 <div class="main-titles margin16"> <!-- div title header -->
-                    <p th:text="'Spawned by ' +${visual.recipe.chef.userName}">
+                    <p th:text="'Spawned by ' +${visual.chef.userName}">
                         spawned-by-chef-username</p>
                 </div>
 
                 <div class="timestamp margin16">
-                    <p th:text="'on ' +${visual.recipe.timestampCreated}">
+                    <p th:text="'on ' +${visual.timestampCreated}">
                         timestamp-created</p>
                 </div>
 
@@ -130,15 +130,15 @@
 
             <div class="ingredients-directions-content-wrapper">
                 <div id="ingredients-content" class="margin16">
-    <!--            TODO: find way to access labels of enums.. Best way
-                        would probably be to refactor MassCopnverter and
-                        VolumeConverter into Converter (and have only 1 enum
-                        for all units-->
+    <!-- TODO: find way to access labels of enums... refactor MassConverter and VolumeConverter into Converter? -->
                     <ul>
                         <li th:each="ingredient:${visual.recipe.recipeIngredients}">
+                            <span th:text="${#strings.capitalize(ingredient.ingredient.name)}">ingredient-name</span>
                             <span th:text="${ingredient.quantity != 0} ? ${ingredient.quantity} + ' ' : ''">quantity</span>
-                            <span th:text="${ingredient.unitName != null} ? ${ingredient.unitName} + ' ' : ''">unit-name</span>
-                            <span th:text="${ingredient.ingredient.name}">ingredient-name</span>
+
+<!--                            <span th:if="${ingredient.quantity}"-->
+
+                            <span th:text="${ingredient.unitName != null} ? ${#strings.toLowerCase(ingredient.unitName)} + ' ' : ''">unit-name</span>
                         </li>
                     </ul>
                 </div>

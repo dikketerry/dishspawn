@@ -115,8 +115,8 @@
                 <h4>Recipes</h4>
                 <ul>
                     <li th:each="recipe:${searchRecipeResult}">
-                        <a th:href="@{/recipe/{recipeId}(recipeId = ${recipe.id})}"
-                           th:text="${recipe.name}">recipe-username</a>
+                        <a th:href="@{/recipe(recipeId=${recipe.id})}"
+                           th:text="${recipe.name}"></a>
                     </li>
                 </ul>
 

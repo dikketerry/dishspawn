@@ -18,8 +18,8 @@
     <!-- UIKit js -->
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/p5.js}"></script>
-    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
+<!--    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
 
 </head>
 <body>
@@ -107,11 +107,20 @@
                 <p>spawn?</p>
             </div>
             <hr>
-            <div id="canvas-holder">
-<!--                for JS sketch-->
+<!--            <div id="canvas-holder">-->
+<!--&lt;!&ndash;                for JS sketch&ndash;&gt;-->
+<!--            </div>-->
+
+            <div uk-lightbox>
+                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+                   th:attr="data-src=${newVisualFromDB.fileLocation}"
+                   th:href="${newVisualFromDB.fileLocation}" uk-img></a>
             </div>
 
-<!--            <script th:src="@{/js/testjs_noisescript.js}"></script>-->
+<!--            <div>-->
+<!--&lt;!&ndash;                <a href="" th:src="@{/img/spawns/visual153.png}"></a>&ndash;&gt;-->
+<!--                <img src="http://localhost:8080/img/spawns/visual155.png" alt="image">-->
+<!--            </div>-->
 
 <!--            div subtitle-->
             <div class="main-subtitle">

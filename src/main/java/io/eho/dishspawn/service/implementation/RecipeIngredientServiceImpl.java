@@ -39,12 +39,12 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
 
     @Override
     public List<RecipeIngredient> findAllRecipeIngredients() {
-        return null;
+        return null; // TODO
     }
 
     @Override
-    public List<RecipeIngredient> findAllRecipeIngredientsForRecipe(Recipe recipe) {
-        return null;
+    public List<RecipeIngredient> findAllRecipeIngredientByRecipe(Recipe recipe) {
+        return null; // TODO
     }
 
     @Override
@@ -55,10 +55,8 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
 
     @Override
     public Page findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr) {
-
         Pageable pageable = PageRequest.of(pageNr - 1, 3, Sort.Direction.ASC, "timestampCreated");
         return recipeIngredientRepository.findAllByIngredient(ingredient, pageable);
-
     }
 
 }

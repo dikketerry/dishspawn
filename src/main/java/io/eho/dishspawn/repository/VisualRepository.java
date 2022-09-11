@@ -6,12 +6,17 @@ import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
 public interface VisualRepository extends JpaRepository<Visual, Long> {
+
+    @Query(value = "SELECT next_val FROM dishspawn_db.hibernate_sequence", nativeQuery = true)
+    Long getNextValSequence();
 
     List<Visual> findAllByOrderByTimestampCreatedDesc();
 

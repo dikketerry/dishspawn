@@ -46,15 +46,10 @@ public class IngredientController {
         return "add-ingredient";
     }
 
-    // collect ingredients based on string input - not needed here - set-up
-    // in service, collect in searchcontroller
-
     @PostMapping("save")
     public String saveIngredient(@ModelAttribute("ingredient") Ingredient ingredient) {
 //        TODO: error handling + page redirection
-
         ingredientService.saveIngredient(ingredient);
         return "redirect:all";
-
     }
 }

@@ -6,12 +6,14 @@ import io.eho.dishspawn.model.Visual;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface VisualService {
 
-    void saveVisual(Visual visual, Chef chef);
-    void deleteVisual(Visual visual, Chef chef);
+    Long findNextIdValue();
+    void saveVisual(Visual visual);
+    void deleteVisual(Visual visual);
     List<Visual> findAllVisuals();
     List<Visual> findLast200Visuals();
     List<Visual> findAllVisualsForRecipe();

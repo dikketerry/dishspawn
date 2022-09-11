@@ -8,6 +8,7 @@ import io.eho.dishspawn.service.VisualService;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +22,18 @@ public class VisualServiceImpl implements VisualService {
     }
 
     @Override
-    public void saveVisual(Visual visual, Chef chef) {
-        visual.setChef(chef);
+    public Long findNextIdValue() {
+        return visualRepository.getNextValSequence();
+    }
+
+    @Override
+    public void saveVisual(Visual visual) {
         visualRepository.save(visual);
     }
 
     @Override
-    public void deleteVisual(Visual visual, Chef chef) {
+    public void deleteVisual(Visual visual) {
+        visualRepository.delete(visual);
 
     }
 

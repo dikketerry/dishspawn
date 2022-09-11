@@ -80,7 +80,6 @@ public class SpawnController {
             @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
             @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-
         this.searchKey.setLength(0); // clean up searchKey StringBuilder (a new search should start clean)
         this.searchKey.append(searchKey); // store provided searchKey in the fresh StringBuilder
 
@@ -120,32 +119,28 @@ public class SpawnController {
     }
 
     @GetMapping("/findrecipes")
-    public String findRecipes(@RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
+    public String findRecipes(
+            @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-        // before finding new recipes, first clear old recipe-list and ingredient-search
+        // clear old recipe-list and ingredient-search
         resetRecipeList();
         resetIngredientSearch();
 
-        // when using 'find recipes', boolean findRecipeUse to true
-        findRecipeIsUsed = true;
-
-        // check size of ingredient list, as it impacts the algorithm to generate the recipe list
-        int selectedIngredientListSize = ingredientSpawnList.size();
+        findRecipeIsUsed = true; // use of the find recipe function to 'true'
+        int selectedIngredientListSize = ingredientSpawnList.size(); // size is needed in following if statements
 
         if (selectedIngredientListSize == 0)
-        { // size = 0 --> return a message or something
+        {
             message.append("please select ingredient(s) for spawn");
-        } // this is only relevant if user types in find-recipe endpoint manually in browser
+        }
 
-        else if (selectedIngredientListSize == 1)
-        { // only 1 ingredient -> no need to find intersection, but might find many recipes, so ensure paged results
+        else if (selectedIngredientListSize == 1) // 1 ingredient selected
+        {
             Ingredient i1 = ingredientSpawnList.get(0);
 
-            // provide ingredient, get back on timestamp sorted recipe-ingredient page
+            // create page recipe-ingredients
             Page<RecipeIngredient> recipeIngredientPage =
                     recipeIngredientService.findPageRecipeIngredientsByIngredient(i1, searchPageNr);
-
-            // get the total # of pages and recipe-ingredients
             totalFoundRecipeIngredientPages = recipeIngredientPage.getTotalPages();
             totalFoundRecipeIngredients = recipeIngredientPage.getTotalElements();
             List<RecipeIngredient> recipeIngredientList = recipeIngredientPage.getContent();
@@ -234,7 +229,6 @@ public class SpawnController {
 
     private List createRecipeList(Ingredient ingredient) {
         // todo: needs a converter: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
-
         List<RecipeIngredient> recipeIngredientList =
                 recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
 

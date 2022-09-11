@@ -1,4 +1,4 @@
-package io.eho.dishspawn.play.sketchtest.processing;
+package io.eho.dishspawn.graphics.processing;
 
 import processing.core.PApplet;
 
@@ -17,7 +17,7 @@ public class SketchThread extends Thread {
     @Override
     public void run() {
         System.out.println("diagnostic: in SketchThread");
-        PApplet.main("io.eho.dishspawn.play.sketchtest.processing.TheSketch");
+        PApplet.main("io.eho.dishspawn.graphics.processing.TheSketch");
 
         while(keepRunning()) {
             System.out.println("diagnostic: SketchThread running");
