@@ -11,7 +11,9 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     public List<Recipe> findAllByOrderByTimestampCreatedDesc();
-    List<Recipe> findAllByNameContainingOrderByNameAsc(String searchKey);
+//    List<Recipe> findAllByNameContainingOrderByNameAsc(String searchKey);
+
+    List<Recipe> findAllByNameContainingIgnoreCaseOrderByNameAsc(String searchKey);
 
 
     // select the sets of recipeingredients where the set contains ingredient a, ingredient b and ingredient c
@@ -23,7 +25,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     select u from User u where u.emailAddress = ?1 and u.lastname = ?2
      */
 
-//    List<Recipe> findAllRecipesWithIngredientName(String ingredientName);
+    //    List<Recipe> findAllRecipesWithIngredientName(String ingredientName);
 
     // findAllRecipesByIngredientName (String ingredientName)
     // 1. collect the ingredient from Ingredient table

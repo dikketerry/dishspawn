@@ -5,17 +5,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SpawnDish</title>
 
-    <!-- UIKit css -->
     <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
-    <!-- own css -->
     <link rel="stylesheet" th:href="@{/css/master.css}">
 
-    <!-- UIKit js -->
+    <script type="text/javascript" th:src="@{/js/master.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
 
@@ -43,13 +40,13 @@
                 </a>
             </div>
 
-<!--            search-->
+            <!--search-->
             <div class="uk-navbar-center">
                 <div>
                     <a class="uk-navbar-toggle" uk-search-icon></a>
-                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: 0">
-                        <form class="uk-search uk-search-navbar uk-width-1-1" action="javascript:executeSearch()">
-                            <input id="searchField" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: -50">
+                        <form class="uk-search uk-search-navbar uk-width-expand" action="javascript:executeSearch()">
+                            <input id="searchKey" class="uk-search-input" type="search" placeholder="Search" autofocus>
                         </form>
                     </div>
                 </div>
@@ -71,12 +68,10 @@
 
 </div>
 
-<!--<hr>-->
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
 
     <div class="uk-container"> <!-- UIKit class to center + set max width -->
-        <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
             <div class="uk-width-2-3 rotate-div">
@@ -117,17 +112,8 @@
                 <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
                    th:attr="data-src=${recipeLastVisual.fileLocation}"
                    th:href="${recipeLastVisual.fileLocation}" uk-img></a>
-<!--                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"-->
-<!--                   th:attr="data-src=${recipe.visual.fileLocation}"-->
-<!--                   th:href="${recipe.visual.fileLocation}" uk-img></a>-->
             </div>
 
-<!--            <div uk-lightbox>-->
-<!--                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"-->
-<!--                   th:attr="data-src=${latestVisual.fileLocation}"-->
-<!--                   th:href="${latestVisual.fileLocation}" uk-img></a>-->
-<!--            </div>-->
-            <!--            hr-->
             <hr class="custom-hr">
 
             <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
@@ -142,19 +128,23 @@
             <hr class="custom-hr">
 
             <div class="ingredients-directions-content-wrapper">
+
                 <div id="ingredients-content" class="margin16">
-    <!--            TODO: find way to access labels of enums.. Best way
-                        would probably be to refactor MassCopnverter and
-                        VolumeConverter into Converter (and have only 1 enum
-                        for all units-->
+                    <!-- TODO: find way to access labels of enums... refactor MassConverter and VolumeConverter into Converter? -->
                     <ul>
-                        <li th:each="ingredient:${recipe.recipeIngredients}">
-                            <span th:text="${ingredient.quantity != 0} ? ${ingredient.quantity} + ' ' : ''">quantity</span>
-                            <span th:text="${ingredient.unitName != null} ? ${ingredient.unitName} + ' ' : ''">unit-name</span>
-                            <span th:text="${ingredient.ingredient.name}">ingredient-name</span>
+                        <li th:each="recipeIngredient:${recipe.recipeIngredients}">
+                            <span th:if="${recipeIngredient.quantity != 0}"
+                                  th:text="${#strings.capitalize(recipeIngredient.ingredient.name)} + ' - '">name</span>
+                            <span th:if="${recipeIngredient.quantity == 0}"
+                                  th:text="${#strings.capitalize(recipeIngredient.ingredient.name)}">name</span>
+                            <span th:text="${recipeIngredient.quantity != 0} ? ${recipeIngredient.quantity} + ' ' : ''">quantity</span>
+                            <!--                            <span th:text="${recipeIngredient.unitName != null} ? ${#strings.toLowerCase(recipeIngredient.unitName)} + ' ' : ''">unit</span>-->
+                            <span th:if="${recipeIngredient.unitName != null} AND ${recipeIngredient.unitName != 'PIECE'}"
+                                  th:text="${#strings.toLowerCase(recipeIngredient.unitName)}"></span>
                         </li>
                     </ul>
                 </div>
+
                 <div id="directions-content">
                     <ol>
                         <li th:each="instruction:${recipe.instructions}">

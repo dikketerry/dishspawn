@@ -21,6 +21,7 @@ public interface VisualService {
     Page<Visual> findPageVisuals(int currentPage);
     Visual findVisualById(Long id);
     List<Visual> findAllVisualsForChef(Chef chef);
+    List<Visual> findLast200VisualsForChef(Chef chef);
     Visual findLatestVisualForChef(Chef chef);
 
     Visual findLastVisualForRecipe(Recipe recipe);

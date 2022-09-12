@@ -29,18 +29,11 @@ public class SearchController {
     @GetMapping("/search")
     public String searchFunction(@RequestParam(value = "searchKey")String searchKey, Model model) {
 
-        List<Chef> chefs =
-                chefService.findAllChefByUserNameContaining(searchKey);
-        List<Recipe> recipes =
-                recipeService.findAllRecipeByNameContaining(searchKey);
+        List<Chef> chefs = chefService.findAllChefByUserNameContaining(searchKey);
+        List<Recipe> recipes = recipeService.findAllRecipeByNameContaining(searchKey);
 
         model.addAttribute("searchChefResult", chefs);
         model.addAttribute("searchRecipeResult", recipes);
-
-        // diagnostic print
-        for (Chef c : chefs) {
-            System.out.println(c);
-        }
 
         return "search-result";
     }

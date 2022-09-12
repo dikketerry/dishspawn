@@ -92,6 +92,11 @@ public class VisualServiceImpl implements VisualService {
     }
 
     @Override
+    public List<Visual> findLast200VisualsForChef(Chef chef) {
+        return visualRepository.findTop200ByChefOrderByTimestampCreatedDesc(chef);
+    }
+
+    @Override
     public Visual findLatestVisualForChef(Chef chef) {
         return visualRepository.findTop1ByChefOrderByTimestampCreatedDesc(chef);
     }

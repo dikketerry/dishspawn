@@ -52,6 +52,6 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> findAllRecipeByNameContaining(String searchKey) {
 
-        return recipeRepository.findAllByNameContainingOrderByNameAsc(searchKey);
+        return recipeRepository.findAllByNameContainingIgnoreCaseOrderByNameAsc(searchKey);
     }
 }

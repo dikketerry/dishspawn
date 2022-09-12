@@ -171,7 +171,6 @@
                         <div class="form-main-titles margin16">
                             <p>Recipes found</p>
                         </div>
-                        <!-- TODO: th if-else for 'no recipes found for ingredient selection' -->
                         <table class="uk-table uk-table-middle uk-table-divider table-result">
                             <thead>
                             <tr>
@@ -206,8 +205,9 @@
                                 <a th:href="@{/spawn/findrecipes(pageNr=${i})}">[[${i}]]</a></li>
                         </ul>
                     </div>
-                    <div class="spawn-message" th:if="${recipeList.isEmpty()}">
-                        <p id="spawn-recipe-message" th:text="${message}">message</p>
+                    <div th:if="${recipeList.isEmpty()}">
+                        <br>
+                        <p id="empty-list-message" th:text="${message}">message</p>
                     </div>
                     <!--                button to reset recipes and selected ingredients-->
                     <form th:action="@{/spawn/reset}" method="get">

@@ -18,7 +18,7 @@ public class VisualController {
     private VisualService visualService;
 
     private int totalFoundVisualPages;
-    private List<Visual> visualList;
+//    private List<Visual> visualList;
 
     @Autowired
     public VisualController(VisualService visualService) {
@@ -36,11 +36,11 @@ public class VisualController {
         // get paged list most recent 200 visuals minus most recent
         List<Visual> mostRecent200Visuals = visualService.findLast200Visuals();
         List<Visual> mostRecent200MinusFirst = last200MinusFirst(mostRecent200Visuals); // remove 1 visual
-        List<Visual> pagedVisuals = createPageVisuals(mostRecent200MinusFirst, searchPageNr); // page it!
+        List<Visual> pageVisuals = createPageVisuals(mostRecent200MinusFirst, searchPageNr); // page it!
 
         model.addAttribute("latestVisual", latestVisual);
         model.addAttribute("totalPages", totalFoundVisualPages);
-        model.addAttribute("pagedVisuals", pagedVisuals);
+        model.addAttribute("pagedVisuals", pageVisuals);
 
         return "home";
     }
@@ -61,9 +61,9 @@ public class VisualController {
         page.setPage(searchPageNr - 1);
 
         totalFoundVisualPages = page.getPageCount();
-        visualList = page.getPageList();
+        List<Visual> visualListPage = page.getPageList();
 
-        return visualList;
+        return visualListPage;
     }
 
     private List<Visual> last200MinusFirst(List<Visual> last200Visuals) {

@@ -222,11 +222,13 @@ body {
 }
 
 .chef-name {
-
 }
 
 .timestamp {
+}
 
+.pagination-home {
+    font-size: calc(0.7vw + 0.8vh + .3vmin);
 }
 
 .ingredients-directions-titles-wrapper {
@@ -274,7 +276,6 @@ body {
 }
 
 /*SPAWN*/
-
 .table-div {
     display: block;
     margin: 20px auto auto;
@@ -297,7 +298,7 @@ body {
     text-align: right;
 }
 
-#spawn-recipe-message {
+#empty-list-message {
     font-family: "Marker Felt", "Comic Sans MS", sans-serif;
     font-size: calc(1.2vw + 1.2vh + .2vmin);
     color: #f0506e;
@@ -305,6 +306,7 @@ body {
 
 }
 
+/*not used*/
 #canvas-holder {
     display: flex;
     justify-content: center;

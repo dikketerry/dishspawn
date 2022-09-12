@@ -34,4 +34,6 @@ public interface VisualRepository extends JpaRepository<Visual, Long> {
     Visual findTop1ByChefOrderByTimestampCreatedDesc(Chef chef);
 
     Visual findTop1ByRecipeOrderByTimestampCreatedDesc(Recipe recipe);
+
+    List<Visual> findTop200ByChefOrderByTimestampCreatedDesc(Chef chef);
 }

@@ -129,9 +129,9 @@ public class SpawnController {
         findRecipeIsUsed = true; // use of the find recipe function to 'true'
         int selectedIngredientListSize = ingredientSpawnList.size(); // size is needed in following if statements
 
-        if (selectedIngredientListSize == 0)
+        if (selectedIngredientListSize == 0 || selectedIngredientListSize > 3)
         {
-            message.append("please select ingredient(s) for spawn");
+            message.append("please select min 1, max 3 ingredient(s) for spawn");
         }
 
         else if (selectedIngredientListSize == 1) // 1 ingredient selected

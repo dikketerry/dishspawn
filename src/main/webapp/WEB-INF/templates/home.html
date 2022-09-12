@@ -5,22 +5,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- viewport tag for enabling responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SpawnDish</title>
 
-    <!-- UIKit css -->
     <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
-    <!-- own css -->
     <link rel="stylesheet" th:href="@{/css/master.css}">
 
-    <!-- UIKit js -->
     <script type="text/javascript" th:src="@{/js/master.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-<!--    <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
-<!--    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
 
 </head>
 <body>
@@ -194,12 +188,15 @@
 
                     </div>
 
-                    <ul class="uk-pagination uk-flex-center" uk-margin>
-                        <li th:each="i: ${#numbers.sequence(1, totalPages)}">
-                            <a th:href="@{/home(pageNr=${i})}">[[${i}]]</a></li>
-                    </ul>
-
                 </div>
+
+                <hr class="custom-hr">
+
+                <!--                pagination -->
+                <ul class="uk-pagination uk-flex-center pagination-home" uk-margin>
+                    <li th:each="i: ${#numbers.sequence(1, totalPages)}">
+                        <a th:href="@{/home(pageNr=${i})}">[[${i}]]</a></li>
+                </ul>
 
                 <hr class="custom-hr">
 
@@ -211,15 +208,15 @@
 
 </main>
 
-<script>
-    // below code waits for page to get loaded. gets element that needs to be active. gets its id (in plain text). uses this value as parameter
-    document.addEventListener('readystatechange', event => {
-        if (document.readyState === "complete") {
-            let filterToActivate = [[${activeFilter}]].id;
-            setActiveFilter(filterToActivate);
-        }
-    });
-</script>
+<!--<script>-->
+<!--    // below code waits for page to get loaded. gets element that needs to be active. gets its id (in plain text). uses this value as parameter-->
+<!--    document.addEventListener('readystatechange', event => {-->
+<!--        if (document.readyState === "complete") {-->
+<!--            let filterToActivate = [[${activeFilter}]].id;-->
+<!--            setActiveFilter(filterToActivate);-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 </html>
