@@ -9,6 +9,8 @@ import java.util.List;
 //@Component
 public class TheSketch extends PApplet {
 
+    private List<Circle> circles = new ArrayList<>();
+
     public static void main(String[] args) {
         PApplet.main("TheSketch");
     }
@@ -27,16 +29,22 @@ public class TheSketch extends PApplet {
     @Override
     public void settings() {
         size(800, 800);
+        circles.add(new Circle(this, 100, 200));
     }
 
     @Override
     public void draw() {
-        ellipse(width/2, height/2, second(), second());
-        // second() returns an int coming from clock (0 - 59)
+        ellipse(width/2, height/2, second(), second()); // second() returns an int coming from clock (0 - 59)
+        for (Circle c: circles)
+        {
+            c.step();
+            c.render();
+        }
     }
 
-//    @Override
-//    public void run() {
-//        System.out.println("running as runnable");
-//    }
+    public void mouseDragged()
+    {
+        circles.add(new Circle(this, mouseX, mouseY));
+    }
+
 }

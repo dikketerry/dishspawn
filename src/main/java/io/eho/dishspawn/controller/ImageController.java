@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import processing.core.PApplet;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/spawn")
@@ -54,7 +55,27 @@ public class ImageController {
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
+        for (RecipeIngredient ri : recipeIngredientList)
+        {
+            System.out.println(ri);
+        }
+
+//        for (RecipeIngredient ri : recipeIngredientList)
+//        {
+//            System.out.println(ri.isVisualImpact() + "\n");
+//        }
+
         // TODO translate recipe-ingredients to visual properties
+        // narrow down list to list with visual impact Y ri's
+
+//        List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
+//                .filter(recipeIngredient -> recipeIngredient.isVisualImpact() == true)
+//                .collect(Collectors.toList());
+//
+//        // diagnostic print
+//        for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
+//            System.out.println(ri);
+//        }
 
         // SKETCH
         System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow functions which make

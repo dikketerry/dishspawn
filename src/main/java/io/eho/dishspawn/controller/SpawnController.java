@@ -37,11 +37,13 @@ public class SpawnController {
     private long totalFoundRecipeIngredients;
 
     // boolean for show/hide search recipe result container
-    private boolean findRecipeIsUsed;
+    private boolean findRecipeMethodIsUsed;
 
     // StringBuilder vars for storing searchKey ingredient search and message for recipe search
     private StringBuilder searchKey = new StringBuilder();
-    private StringBuilder message = new StringBuilder();
+    private StringBuilder noRecipeMessage = new StringBuilder();
+    private StringBuilder noIngredientMessage = new StringBuilder();
+    private StringBuilder incorrectIngredientsAmountMessage = new StringBuilder();
 
     // dependency injection via constructor
     public SpawnController() { }
@@ -57,6 +59,8 @@ public class SpawnController {
     @GetMapping("")
     public String spawnGet(Model model) {
 
+        // todo: reset all? hmmm...
+
         // null check on searchKey to avoid NPE when launching spawn page without a searchKey
         if (searchKey != null) {
             model.addAttribute("searchKey", searchKey.toString());
@@ -69,8 +73,10 @@ public class SpawnController {
         model.addAttribute("totalFoundIngredients", totalFoundIngredients);
         model.addAttribute("totalFoundRecipeIngredientPages", totalFoundRecipeIngredientPages);
         model.addAttribute("totalFoundRecipeIngredients", totalFoundRecipeIngredients);
-        model.addAttribute("findRecipe", findRecipeIsUsed);
-        model.addAttribute("message", message.toString());
+        model.addAttribute("findRecipe", findRecipeMethodIsUsed);
+        model.addAttribute("noIngredientMessage", noIngredientMessage.toString());
+        model.addAttribute("noRecipeMessage", noRecipeMessage.toString());
+        model.addAttribute("incorrectIngredientsAmountMessage", incorrectIngredientsAmountMessage.toString());
 
         return "spawn-i";
     }
@@ -80,14 +86,17 @@ public class SpawnController {
             @RequestParam(value="searchKey", required=false, defaultValue = "")String searchKey,
             @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
+        // reset stuff
         this.searchKey.setLength(0); // clean up searchKey StringBuilder (a new search should start clean)
         this.searchKey.append(searchKey); // store provided searchKey in the fresh StringBuilder
+        this.noIngredientMessage.setLength(0);
 
         // paged search results ingredients
         Page ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
         ingredientListPage = ingredientPage.getContent();
         totalFoundIngredientPages = ingredientPage.getTotalPages();
         totalFoundIngredients = ingredientPage.getTotalElements();
+        noIngredientsFoundMessage(ingredientListPage);
 
         return "redirect:/spawn";
     }
@@ -122,16 +131,16 @@ public class SpawnController {
     public String findRecipes(
             @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr) {
 
-        // clear old recipe-list and ingredient-search
+        // clear old recipe-list, ingredient-search
         resetRecipeList();
         resetIngredientSearch();
 
-        findRecipeIsUsed = true; // use of the find recipe function to 'true'
+        findRecipeMethodIsUsed = true; // use of the find recipe function to 'true'
         int selectedIngredientListSize = ingredientSpawnList.size(); // size is needed in following if statements
 
-        if (selectedIngredientListSize == 0 || selectedIngredientListSize > 3)
+        if (selectedIngredientListSize <= 0 || selectedIngredientListSize > 3)
         {
-            message.append("please select min 1, max 3 ingredient(s) for spawn");
+            incorrectIngredientsAmountMessage.append("Please select min 1, max 3 ingredient(s) for spawn");
         }
 
         else if (selectedIngredientListSize == 1) // 1 ingredient selected
@@ -197,14 +206,20 @@ public class SpawnController {
         resetIngredientSearch();
         ingredientSpawnList.clear();
         resetRecipeList();
-        findRecipeIsUsed = false;
+        findRecipeMethodIsUsed = false;
         return "redirect:/spawn";
     }
 
     // private helpers below
     private void noRecipesFoundMessage(List<Recipe> recipeList) {
         if (recipeList.size() == 0) {
-            message.append("no recipes found for selection of ingredients");
+            noRecipeMessage.append("No recipes found for selection of ingredients. Try again.");
+        }
+    }
+
+    private void noIngredientsFoundMessage(List<Ingredient> ingredientList) {
+        if (ingredientList.size() == 0) {
+            noIngredientMessage.append("No ingredients found for search term. Try something else.");
         }
     }
 
@@ -242,16 +257,18 @@ public class SpawnController {
         return recipeList;
     }
 
+    // resets ingredient-list, search-key and no-ingredient-message
     private void resetIngredientSearch() {
-        // initiate new IngredientListPage
         ingredientListPage = new ArrayList<>();
-        // clean the StringBuilder 'searchKey'
         this.searchKey.setLength(0);
+        this.noIngredientMessage.setLength(0);
+        this.incorrectIngredientsAmountMessage.setLength(0);
     }
 
+    // resets recipe-list for spawning and no-recipe-message
     private void resetRecipeList() {
         recipeSpawnList.clear();
-        this.message.setLength(0);
+        this.noRecipeMessage.setLength(0);
     }
 
     private Ingredient checkIngredientIdExists(Long id) {
