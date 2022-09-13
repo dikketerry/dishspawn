@@ -1,6 +1,9 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.controller.util.Parser;
+import io.eho.dishspawn.graphics.processing.util.Colorizer;
+import io.eho.dishspawn.graphics.processing.util.Transformer;
+import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.model.Visual;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import processing.core.PApplet;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,40 +59,60 @@ public class ImageController {
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
-        for (RecipeIngredient ri : recipeIngredientList)
-        {
-            System.out.println(ri);
-        }
-
-//        for (RecipeIngredient ri : recipeIngredientList)
-//        {
-//            System.out.println(ri.isVisualImpact() + "\n");
-//        }
-
         // TODO translate recipe-ingredients to visual properties
         // narrow down list to list with visual impact Y ri's
+        List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
+                .filter(ri -> ri.isVisualImpact() == true)
+                .collect(Collectors.toList());
 
-//        List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
-//                .filter(recipeIngredient -> recipeIngredient.isVisualImpact() == true)
-//                .collect(Collectors.toList());
-//
-//        // diagnostic print
-//        for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
-//            System.out.println(ri);
-//        }
+        // get a total of mass and amount
+        int totalSize = recipeIngredientsWithVisualImpact.stream()
+                .filter(ri -> ri.getMassOrVolume() > 0)
+                .mapToInt(ri -> ri.getMassOrVolume())
+                .sum();
 
         // SKETCH
-        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow functions which make
-        // use of display / mouse / keyboard
-
-        // alternative to get an instance of the PApplet
+        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
         TheSketch theSketch = new TheSketch();
         String[] a = {"MAIN"};
         PApplet.runSketch(a, theSketch);
 
+        // transform each ri to a shape and place in list
+        List<Shape> shapeList = new ArrayList<>();
+        for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
+            Shape s = Transformer.setShape(theSketch, ri);
+//            Colorizer.setColor(theSketch, ri, s);
+            shapeList.add(s);
+            System.out.println(s);
+        }
+        // set the list of shapes in the sketch
+        theSketch.setShapes(shapeList);
+
+        // color
+//        int a = 127;
+//        int r = 244;
+//        int g = 241;
+//        int b = 134;
+//        int color = (a << 24) | (r << 16) | (g << 8) | b;
+
+        // sort list on unit / mass / volume
+        // 1. if unit == null && mass == 0 && volume == 0 -> set size to ~ 10%
+        // 2. if unit == PIECE -> set size to ~ 30%
+        // 3. if unit != null && unit != PIECE && mass != 0 (means volume == 0) -> sort on mass
+        // 4. if unit != null && unit != PIECE && volume != 0 (means mass == 0) -> sort on volume
+        // note that volume / mass will be treated equally (to avoid too much complexity)
+
+
+
+        // create a shape per recipe-ingredient
+
+
+
+
+
         // short intermezzo. lets the sketch run for time specified
         try {
-            Thread.sleep(5000);
+            Thread.sleep(7777);
         } catch (InterruptedException e) {
             System.out.println("diagnostic: interrupted during sleep");
             e.printStackTrace();
@@ -112,7 +136,7 @@ public class ImageController {
 
         // short intermezzo. testing if time is needed to get img shown in browser (not working yet)
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1111);
         } catch (InterruptedException e) {
             System.out.println("diagnostic: interrupted during sleep");
             e.printStackTrace();

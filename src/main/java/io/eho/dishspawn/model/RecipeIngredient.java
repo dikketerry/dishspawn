@@ -66,10 +66,23 @@ public class RecipeIngredient {
     @Column(name="color")
     private String color;
 
-    // defining a getter specifically does override the basic getter provided by Lombok (nice!)
+    // custom getters (overrides the Lombok standard ones)
     public double getQuantity() {
         // todo: format quantity for view (1.0 -> 1; 1.5 -> 1.5; 10.0 -> 10, ...)
         return quantity;
+    }
+
+    // help method for getting volume and mass summed
+    public int getMassOrVolume() {
+        if (this.mass > 0)
+        {
+            return (int) mass;
+        }
+        else if(this.volume > 0)
+        {
+            return (int) volume;
+        }
+        else return 0;
     }
 
     public void massOrVolumeSetter() {
@@ -136,6 +149,7 @@ public class RecipeIngredient {
             return sb.toString();
         }
 
+        sb.append("\n");
         sb.append("Form of ingredient: " + this.form);
         sb.append("\n");
         sb.append("texture: " + this.texture);

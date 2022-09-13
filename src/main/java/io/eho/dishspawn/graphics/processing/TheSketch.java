@@ -1,15 +1,16 @@
 package io.eho.dishspawn.graphics.processing;
 
-import org.springframework.stereotype.Component;
+import io.eho.dishspawn.graphics.processing.shapes.Circle;
+import io.eho.dishspawn.graphics.processing.shapes.Rectangle;
+import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Component
 public class TheSketch extends PApplet {
 
-    private List<Circle> circles = new ArrayList<>();
+    private List<Shape> shapes;
 
     public static void main(String[] args) {
         PApplet.main("TheSketch");
@@ -17,6 +18,7 @@ public class TheSketch extends PApplet {
 
     @Override
     public void setup() {
+//        frameRate(2);
 
         int red = (int) random(0, 255);
         int green = (int) random(0, 255);
@@ -29,22 +31,29 @@ public class TheSketch extends PApplet {
     @Override
     public void settings() {
         size(800, 800);
-        circles.add(new Circle(this, 100, 200));
     }
 
     @Override
     public void draw() {
-        ellipse(width/2, height/2, second(), second()); // second() returns an int coming from clock (0 - 59)
-        for (Circle c: circles)
+
+        if (keyPressed)
         {
-            c.step();
-            c.render();
+            shapes.add(new Circle(this, mouseX, mouseY));
+        }
+
+        for (Shape s: shapes)
+        {
+            s.step();
+            s.render();
         }
     }
 
     public void mouseDragged()
     {
-        circles.add(new Circle(this, mouseX, mouseY));
+        shapes.add(new Rectangle(this, mouseX, mouseY));
     }
 
+    public void setShapes(List<Shape> shapes) {
+        this.shapes = shapes;
+    }
 }
