@@ -36,10 +36,10 @@ public class TheSketch extends PApplet {
     @Override
     public void draw() {
 
-        if (keyPressed)
-        {
-            shapes.add(new Circle(this, mouseX, mouseY));
-        }
+//        if (keyPressed)
+//        {
+//            shapes.add(new Circle(this, mouseX, mouseY));
+//        }
 
         for (Shape s: shapes)
         {
