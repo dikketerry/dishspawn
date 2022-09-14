@@ -15,8 +15,8 @@ public class Rectangle extends Shape {
     public Rectangle(PApplet sketch, float x, float y)
     {
         super(sketch, x, y);
-        this.width = sketch.random(5, 50);
-        this.height = sketch.random(5, 50);
+        this.width = sketch.random(30, 50);
+        this.height = sketch.random(10, 70);
     }
 
     @Override

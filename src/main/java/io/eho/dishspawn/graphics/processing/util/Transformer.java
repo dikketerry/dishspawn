@@ -1,9 +1,6 @@
 package io.eho.dishspawn.graphics.processing.util;
 
-import io.eho.dishspawn.graphics.processing.shapes.Circle;
-import io.eho.dishspawn.graphics.processing.shapes.Rectangle;
-import io.eho.dishspawn.graphics.processing.shapes.Shape;
-import io.eho.dishspawn.graphics.processing.shapes.Triangle;
+import io.eho.dishspawn.graphics.processing.shapes.*;
 import io.eho.dishspawn.model.RecipeIngredient;
 import processing.core.PApplet;
 
@@ -24,36 +21,39 @@ public final class Transformer {
         Shape shape;
 
         switch (form) {
-            case "BEANS":
-//                ....
-            case "BLOBS":
-            case "CHOPPED":
-            case "CONFETTI":
-            case "CRUMBS":
-            case "CRUSHED":
-            case "CUBES":
-            case "CURLS":
-            case "DICED":
-            case "ECCENTRIC":
-            case "EGG_LIKE":
-            case "FLUID":
-            case "GRANULES":
-            case "LEAVES":
-            case "MASHED":
-            case "PANCAKE":
+            case "BEANS": // ellipse
+            case "CRUSHED": // ?? ellipse for now
+            case "EGG_LIKE": // ellipse
+            case "FLUID": // ?? ellipse for now
+            case "GRANULES": // ellipse
+            case "MASHED": // large ellipse
+            case "PIECE": // custom - later - ellipse for now
+            case "RINGS": // rings, yeah! todo
+                shape = new Ellipse(sketch);
+                break;
+            case "BLOBS": // sphere / circle
+            case "CONFETTI": // small circles
+            case "CRUMBS": // small circles
+            case "CURLS": // ?? circles for now
+            case "PANCAKE": // large circle
+            case "POWDER": // tiny circles / dots / dense
+            case "SPHERES": // circles
+                shape = new Circle(sketch);
+                break;
+            case "CHOPPED": // triangles
+            case "LEAVES": // custom - later - for now triangle
+            case "SHELLS": // custom - later - triangle for now
+            case "SLICED": // triangle
+            case "WEDGES": // triangle
+            case "STRINGS": // line! but line shape to be made - for now rings?
                 shape = new Triangle(sketch);
                 break;
-            case "PIECE":
-            case "POWDER":
-            case "RINGS":
-            case "SHEETS":
-            case "SHELLS":
-            case "SHREDDED":
-            case "SMASHED":
-            case "SLICED":
-            case "SPHERES":
-            case "STRINGS":
-            case "WEDGES":
+            case "CUBES": // rectangle
+            case "DICED": // rectangle
+            case "ECCENTRIC": // ??
+            case "SHEETS": // rectangle
+            case "SHREDDED": // pff. custom - later - rectangel for now
+            case "SMASHED": // rectangle
                 shape = new Rectangle(sketch);
                 break;
             default:
@@ -87,48 +87,8 @@ public final class Transformer {
         positioning: program some relation between the layers of shapes: if shapes A are located on xA and yA, positions
         of xB and yB should somehow relate to xA and yA.
         background color: relative to set color of biggest ingredient
-
          */
 
-
-
-    // get list of RecipeIngredients
-
-
-
-    // stream
-
-    // map RecipeIngredient.property to visual property
-
-    /*
-        BEANS("Beans"),
-    BLOBS("Blobs"),
-    CHOPPED("Chopped"),
-    CONFETTI("Confetti"),
-    CRUMBS("Crumbs"),
-    CRUSHED("Crushed"),
-    CUBES("Cubes"),
-    CURLS("Curls"),
-    DICED("Diced"),
-    ECCENTRIC("Eccentric"),
-    EGG_LIKE("Egg-like"),
-    FLUID("Fluid"),
-    GRANULES("Granules"),
-    LEAVES("Leaves"),
-    MASHED("Mashed"),
-    PANCAKE("Pancake"),
-    PIECE("Piece"),
-    POWDER("Powder"),
-    RINGS("Rings"),
-    SHEETS("Sheets"),
-    SHELLS("Shells"),
-    SHREDDED("Shredded"),
-    SMASHED("Smashed"),
-    SLICED("Sliced"),
-    SPHERES("Spheres"),
-    STRINGS("Strings"),
-    WEDGES("Wedges");
-     */
 
 
 }

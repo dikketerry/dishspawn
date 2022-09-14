@@ -11,25 +11,33 @@ import java.util.List;
 public class TheSketch extends PApplet {
 
     private List<Shape> shapes;
+    int red;
+    int green;
+    int blue;
+//    int alpha = 24;
+//    int alphaStep = 1;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         PApplet.main("TheSketch");
     }
 
     @Override
-    public void setup() {
-        frameRate(4);
+    public void setup()
+    {
+        frameRate(60);
 
-        int red = (int) random(0, 255);
-        int green = (int) random(0, 255);
-        int blue = (int) random(0, 255);
+        red = (int) random(0, 255);
+        green = (int) random(0, 255);
+        blue = (int) random(0, 255);
 
         background(red, green, blue);
 //        fill(255 - red, 255 - green, 255 - blue);
     }
 
     @Override
-    public void settings() {
+    public void settings()
+    {
         size(800, 800);
     }
 
@@ -40,10 +48,10 @@ public class TheSketch extends PApplet {
 //        {
 //            shapes.add(new Circle(this, mouseX, mouseY));
 //        }
+//        background(red, green, blue); // refresh background each frame
 
         for (Shape s: shapes)
         {
-//            fill(s.setColor("#AABBCC"));
             s.step();
             s.render();
         }
@@ -57,4 +65,5 @@ public class TheSketch extends PApplet {
     public void setShapes(List<Shape> shapes) {
         this.shapes = shapes;
     }
+
 }

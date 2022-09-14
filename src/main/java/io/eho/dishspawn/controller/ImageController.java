@@ -1,7 +1,6 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.controller.util.Parser;
-import io.eho.dishspawn.graphics.processing.util.Colorizer;
 import io.eho.dishspawn.graphics.processing.util.Transformer;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import io.eho.dishspawn.model.Recipe;
@@ -82,7 +81,6 @@ public class ImageController {
         for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
             Shape s = Transformer.setShape(theSketch, ri);
             s.setColor(ri.getColor());
-//            Colorizer.setColor(theSketch, ri, s);
             shapeList.add(s);
             System.out.println(s);
         }
