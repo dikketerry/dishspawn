@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PlaySketch extends PApplet {
 
-//    private List<BallOld> balls = new ArrayList<>();
+    private List<BallOld> balls = new ArrayList<>();
 
     @Override
     public void setup()
@@ -19,16 +19,17 @@ public class PlaySketch extends PApplet {
     @Override
     public void settings() {
         size(400, 400);
-//        balls.add(new BallOld(this, width/2, height/2));
+        balls.add(new BallOld(this, width/2, height/2));
     }
 
     @Override
     public void draw() {
-//        background(64);
-//        for (BallOld b : balls) {
-//            b.step();
-//            b.render();
-//        }
+        background(64);
+        for (BallOld b : balls) {
+            fill(b.setColor("#FF0000"));
+            b.step();
+            b.render();
+        }
     }
 
 //    @Override

@@ -13,7 +13,7 @@ public class BallOld {
     private float size;
     private float xSpeed;
     private float ySpeed;
-    private Color color;
+//    private Color color;
 
     public BallOld() {
         this(new PApplet());
@@ -81,13 +81,18 @@ public class BallOld {
         this.ySpeed = ySpeed;
     }
 
+    public int setColor(String s)
+    {
 
-    public Color getColor() {
-        return color;
-    }
+        StringBuilder sb = new StringBuilder();
+        sb.append(s);
+        sb.deleteCharAt(0);
+        String alpha = "88";
+        sb.insert(0, alpha);
+        System.out.println("hex code: " + sb.toString());
+        int colorValues = pApplet.unhex(sb.toString());
 
-    public void setColor(Color color) {
-        this.color = color;
+        return colorValues;
     }
 
     public void step() {

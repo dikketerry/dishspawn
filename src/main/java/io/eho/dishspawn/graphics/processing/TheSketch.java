@@ -18,14 +18,14 @@ public class TheSketch extends PApplet {
 
     @Override
     public void setup() {
-//        frameRate(2);
+        frameRate(4);
 
         int red = (int) random(0, 255);
         int green = (int) random(0, 255);
         int blue = (int) random(0, 255);
 
         background(red, green, blue);
-        fill(255 - red, 255 - green, 255 - blue);
+//        fill(255 - red, 255 - green, 255 - blue);
     }
 
     @Override
@@ -43,6 +43,7 @@ public class TheSketch extends PApplet {
 
         for (Shape s: shapes)
         {
+//            fill(s.setColor("#AABBCC"));
             s.step();
             s.render();
         }

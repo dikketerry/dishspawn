@@ -81,6 +81,7 @@ public class ImageController {
         List<Shape> shapeList = new ArrayList<>();
         for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
             Shape s = Transformer.setShape(theSketch, ri);
+            s.setColor(ri.getColor());
 //            Colorizer.setColor(theSketch, ri, s);
             shapeList.add(s);
             System.out.println(s);

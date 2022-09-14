@@ -1,6 +1,5 @@
 package io.eho.dishspawn.graphics.processing.shapes;
 
-import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import processing.core.PApplet;
 
 public class Rectangle extends Shape {
@@ -23,11 +22,12 @@ public class Rectangle extends Shape {
     @Override
     public void render()
     {
-        renderCircle();
+        renderRectangle();
     }
 
-    private void renderCircle()
+    private void renderRectangle()
     {
+        getSketch().fill(super.getColorValues());
         getSketch().rect(super.getX(), super.getY(), width, height);
     }
 

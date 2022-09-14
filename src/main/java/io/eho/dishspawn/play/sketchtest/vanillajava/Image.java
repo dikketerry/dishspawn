@@ -42,17 +42,4 @@ public class Image {
         this.img.setRGB(0, 0, color);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -7,18 +7,25 @@ import io.eho.dishspawn.graphics.processing.shapes.Triangle;
 import io.eho.dishspawn.model.RecipeIngredient;
 import processing.core.PApplet;
 
-// to transform properties from RecipeIngredients into visual properties
+// transform properties RecipeIngredients in visual properties
 public final class Transformer {
+
+    // GET RECIPE-INGREDIENT
+    // SEND TO TRANSFORMER
+    // IN TRANSFORMER, COLLECT PROPERTY X FOR RECIPE-INGREDIENT
+    // TRANSLATE INTO VISUAL PROPERTY (SHAPE-TYPE, COLOR, DRAW-TYPE, ETC.)
 
     private Transformer() {}
 
-    public static Shape setShape(PApplet sketch, RecipeIngredient recipeIngredient)
+    public static Shape setShape(PApplet sketch,
+                                 RecipeIngredient recipeIngredient)
     {
         String form = recipeIngredient.getForm().toString();
         Shape shape;
 
         switch (form) {
             case "BEANS":
+//                ....
             case "BLOBS":
             case "CHOPPED":
             case "CONFETTI":

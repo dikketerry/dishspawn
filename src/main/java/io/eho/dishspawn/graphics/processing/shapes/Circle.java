@@ -27,6 +27,7 @@ public class Circle extends Shape {
     private void renderCircle()
     {
 //        getSketch().color()
+        getSketch().fill(super.getColorValues());
         getSketch().circle(super.getX(), super.getY(), size);
     }
 
