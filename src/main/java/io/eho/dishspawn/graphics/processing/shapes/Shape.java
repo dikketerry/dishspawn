@@ -3,6 +3,8 @@ package io.eho.dishspawn.graphics.processing.shapes;
 import io.eho.dishspawn.graphics.processing.ColorizeIt;
 import processing.core.PApplet;
 
+import java.util.Random;
+
 public abstract class Shape implements ColorizeIt {
 
     private PApplet sketch;
@@ -18,8 +20,9 @@ public abstract class Shape implements ColorizeIt {
     private float ySpeed;
 
     private int colorValues;
+    private int minAlpha = 64;
+    private int maxAlpha = 224;
     private int alpha = 24;
-    private int alphaStep = 2;
 
     public Shape(PApplet sketch) {
         this(sketch, 400, 400);
@@ -29,8 +32,8 @@ public abstract class Shape implements ColorizeIt {
         this.sketch = sketch;
         this.x = x;
         this.y = y;
-        this.xSpeed = sketch.random(-10, 10);
-        this.ySpeed = sketch.random(-10, 10);
+        this.xSpeed = sketch.random(-10, 10); // only used in moveStraight algo
+        this.ySpeed = sketch.random(-10, 10); // only used in moveStraight algo
     }
 
     public void step()
@@ -51,24 +54,13 @@ public abstract class Shape implements ColorizeIt {
         sb.append(hex);
         sb.deleteCharAt(0);
 
-        alpha += alphaStep;
-
-        // in- and decrementing the opacity
-        if (alpha > 102) {
-            alphaStep *= -1;
-        }
-
-        if (alpha < 12) {
-            alphaStep *= -1;
-        }
-
-        String opacity = String.valueOf(alpha);
-        sb.insert(0, alpha);
+        alpha = getRandomNumberInRange(minAlpha, maxAlpha);
+        String opacity = Integer.toHexString(alpha);
+        sb.insert(0, opacity);
 
         System.out.println("hex value: " + sb.toString()); // diagnostic print
 
         this.colorValues = sketch.unhex(sb.toString());
-
     }
 
     public float getX() {
@@ -122,6 +114,17 @@ public abstract class Shape implements ColorizeIt {
 
         offset1 += 0.02;
         offset2 += 0.02;
+    }
+
+    private int getRandomNumberInRange(int min, int max)
+    {
+        if (min >= max)
+        {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
 }
