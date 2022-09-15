@@ -5,7 +5,6 @@ import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.RecipeService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +20,7 @@ public class RecipeController {
     // property lastRecipe - global, needed in multiple methods
     private Recipe lastRecipe;
 
-    public RecipeController() {
-
-    }
+    public RecipeController() {}
 
     @Autowired
     public RecipeController(RecipeService recipeService, VisualService visualService) {

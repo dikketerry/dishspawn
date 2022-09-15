@@ -1,6 +1,7 @@
 package io.eho.dishspawn.graphics.processing;
 
 import io.eho.dishspawn.graphics.processing.shapes.Circle;
+import io.eho.dishspawn.graphics.processing.shapes.Ellipse;
 import io.eho.dishspawn.graphics.processing.shapes.Rectangle;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import processing.core.PApplet;
@@ -10,12 +11,11 @@ import java.util.List;
 
 public class TheSketch extends PApplet {
 
-    private List<Shape> shapes;
+    // initializing shapes avoids an incidental NPE thrown on line 52(i think..)
+    private List<Shape> shapes = new ArrayList<>();
     int red;
     int green;
     int blue;
-//    int alpha = 24;
-//    int alphaStep = 1;
 
     public static void main(String[] args)
     {
@@ -25,7 +25,7 @@ public class TheSketch extends PApplet {
     @Override
     public void setup()
     {
-        frameRate(60);
+        frameRate(40);
 
         red = (int) random(0, 255);
         green = (int) random(0, 255);

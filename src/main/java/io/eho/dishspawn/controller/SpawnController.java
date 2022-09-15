@@ -39,13 +39,12 @@ public class SpawnController {
     // boolean for show/hide search recipe result container
     private boolean findRecipeMethodIsUsed;
 
-    // StringBuilder vars for storing searchKey ingredient search and message for recipe search
+    // StringBuilder vars for storing searchKey ingredient search and messages
     private StringBuilder searchKey = new StringBuilder();
     private StringBuilder noRecipeMessage = new StringBuilder();
     private StringBuilder noIngredientMessage = new StringBuilder();
     private StringBuilder incorrectIngredientsAmountMessage = new StringBuilder();
 
-    // dependency injection via constructor
     public SpawnController() { }
 
     @Autowired

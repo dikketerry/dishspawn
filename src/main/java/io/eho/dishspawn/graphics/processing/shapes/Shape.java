@@ -14,8 +14,8 @@ public abstract class Shape implements ColorizeIt {
     private float x;
     private float y;
 
-//    private float sizeImpact;
-
+//    private float sizeImpact; // todo
+ 
     private float xSpeed;
     private float ySpeed;
 
@@ -38,8 +38,8 @@ public abstract class Shape implements ColorizeIt {
 
     public void step()
     {
-//        moveStraightAndBounceAtBorder();
-        movePerlinNoiseWithinFrame();
+//        moveStraightAndBounceAtBorder(); // per step position shape algo 1
+        movePerlinNoiseWithinFrame(); // per step position shape algo 2
     }
 
     public abstract void render();
@@ -87,6 +87,7 @@ public abstract class Shape implements ColorizeIt {
         } else return false;
     }
 
+    // HELPERS
     // traditional speeding x and y coordinates and bounce at borders
     private void moveStraightAndBounceAtBorder()
     {

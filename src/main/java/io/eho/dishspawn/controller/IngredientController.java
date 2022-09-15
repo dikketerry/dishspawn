@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/ingredient")
 public class IngredientController {
 
-    // property IngredientService
     private IngredientService ingredientService;
 
     public IngredientController() { }

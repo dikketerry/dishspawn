@@ -93,10 +93,7 @@ public class ChefController {
     // private helpers below
     private void noSpawnsFoundCheck(List<Visual> visualsChef) {
         if (visualsChef.size() == 0) {
-            message.append(" has not created any spawns yet has not created any spawns yet has not created any spawns" +
-                                   " yet has not created any spawns yet has not created any spawns yet has not " +
-                                   "created any spawns yet has not created any spawns yet has not created any spawns " +
-                                   "yet has not created any spawns yet has not created any spawns yet :( ");
+            message.append(" has not created any spawns yet :( ");
         }
     }
 
