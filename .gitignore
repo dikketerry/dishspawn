@@ -2,6 +2,9 @@ HELP.md
 target/
 extra-resources/
 /src/main/resources/static/js/p5.js
+/src/main/resources/static/img/spawns/
+/src/main/resources/static/testspawn/
+.gitignore~
 
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
