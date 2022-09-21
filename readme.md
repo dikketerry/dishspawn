@@ -1,4 +1,4 @@
-#DishSpawn
+# DishSpawn
 DishSpawn is a small Java web application which I built as my 
 end-project of the 1-year Java EE Development course @Intec. 
 
@@ -35,7 +35,7 @@ app is still in progress. Open points:
   but very basic. Needs much more development (which is the real fun!)
 - Lots of little lay-out thingies to be improved.
 
-##Screenshots
+## Screenshots
 
 Home
 ![alt-text](src/main/resources/static/img/readme/home.jpg "DishSpawn home")
