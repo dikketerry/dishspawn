@@ -15,6 +15,8 @@
     <script type="text/javascript" th:src="@{/js/master.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/p5.js}"></script>
+    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>
 
 </head>
 <body>
@@ -106,10 +108,14 @@
                 <hr class="custom-hr">
             </div>
 
-            <div uk-lightbox> <!-- div main img -->
-                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                   th:attr="data-src=${visual.fileLocation}"
-                   th:href="${visual.fileLocation}" uk-img></a>
+<!--            <div uk-lightbox> &lt;!&ndash; div main img &ndash;&gt;-->
+<!--                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"-->
+<!--                   th:attr="data-src=${visual.fileLocation}"-->
+<!--                   th:href="${visual.fileLocation}" uk-img></a>-->
+<!--            </div>-->
+
+            <div id="canvas-holder">
+                <!--                for JS sketch-->
             </div>
 
             <hr class="custom-hr">
