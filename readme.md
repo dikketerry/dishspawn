@@ -53,4 +53,4 @@ visual view")
 
 Oh and yes, the action figure from the Swedish Chef you can find [here](https://www.amazon.com/DIAMOND-SELECT-TOYS-Muppets-Swedish/dp/B06XGHJQ6L).
 
-<3 Erik
+<3rik
