@@ -57,12 +57,6 @@ public class Chef {
     @Column(name = "avatar_path")
     private String avatarPath;
 
-    // I BELIEVE I DON'T NEED THIS RELATIONSHIP HERE..
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "chef", fetch=FetchType.LAZY) // no cascadetype, as
-//    // a chef and a recipe can exist independently.
-//    private Set<Recipe> recipes = new HashSet<>();
-
     // this boolean needs to ensure a chef can only generate a meal once a
     // day. It needs logic in the service coming from the timestamp for
     // his/her last generated dish

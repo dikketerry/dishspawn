@@ -1,6 +1,9 @@
 package io.eho.dishspawn.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,9 +46,7 @@ public class Recipe {
 //    @Size(max = 4000)
     private List<String> instructions;
 
-    // fetchtype to EAGER - this resolved a 'failed to lazily initiate ..'
-    // exception - another solution could be to look into @Transactional
-    // annotation in service methods
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipe", cascade =
             CascadeType.ALL)
     private Set<RecipeIngredient> recipeIngredients;
@@ -59,6 +60,9 @@ public class Recipe {
     private Chef chef;
 
     // property for the graphic - to be saved / collected as part of recipe
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     @OneToMany(mappedBy = "recipe", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Visual> visuals;

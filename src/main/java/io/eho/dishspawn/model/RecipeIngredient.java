@@ -1,5 +1,8 @@
 package io.eho.dishspawn.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientForm;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientCookingMethod;
 import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
@@ -26,10 +29,12 @@ public class RecipeIngredient {
     @Column(name="recipe_ingredient_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default 4 @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="ingredient_id")
     private Ingredient ingredient;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="recipe_id")
     private Recipe recipe;

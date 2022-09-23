@@ -12,7 +12,7 @@ import java.util.List;
 // by annotating with @RestController we'll enable this class to handle Http
 // requests
 @RestController
-@RequestMapping("/api/ingredients")
+@RequestMapping("/api/ingredient")
 public class IngredientRestController {
 
     @Autowired
@@ -22,8 +22,9 @@ public class IngredientRestController {
         this.ingredientService = ingredientService;
     }
 
-    @GetMapping("")
-    public List<Ingredient> findAllIngredients() {
+    @GetMapping("/all")
+    public List<Ingredient> findAllIngredients()
+    {
         return ingredientService.findAllIngredients();
     }
 

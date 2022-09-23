@@ -1,7 +1,10 @@
 package io.eho.dishspawn.model;
 
 // project imports
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.eho.dishspawn.model.util.visualproperties.IngredientCategory;
 
 // lombok imports
@@ -41,12 +44,8 @@ public class Ingredient {
     @Column(name="ingredient_category")
     private IngredientCategory category;
 
-    // TODO - THIS SHOULD IDEALLY NOT BE REQUIRED..
-        // SEARCH RECIPE BASED ON INGREDIENT:
-        // findAllRecipesWhereRecipeIngredient.Ingredient = 'ingredient-name'
-    @JsonIgnore
-    @OneToMany(mappedBy = "ingredient", fetch = FetchType.EAGER) // no cascade
-    // - RecipeIngredients are created with a recipe. not with an Ingredient
+    @JsonManagedReference
+    @OneToMany(mappedBy = "ingredient", fetch = FetchType.EAGER)
     private Set<RecipeIngredient> recipeIngredients;
 
     // constructor with args
@@ -56,7 +55,6 @@ public class Ingredient {
     }
 
     // convenience method recipe ingredient
-    // TODO COMMENTED OUT WITH REFACTOR - DEPENDENT ON OUTCOME, REMOVE, PUT BACK
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
         if (recipeIngredients == null) {
             recipeIngredients = new HashSet<>();

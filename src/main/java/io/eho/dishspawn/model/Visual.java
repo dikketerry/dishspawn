@@ -1,5 +1,7 @@
 package io.eho.dishspawn.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +17,6 @@ import java.sql.Timestamp;
 public class Visual {
     // the class Visual is there to represent the path to an image that will
     // be stored outside the src path (in the end..)
-
-    // TODO: add static counter, important for generating filename
 
     @CreationTimestamp
     @Column(name="timestamp_created")
@@ -35,7 +35,10 @@ public class Visual {
     @Column(name = "visual_location")
     private String fileLocation;
 
-    @ManyToOne(fetch = FetchType.EAGER) // EAGER is default, but hey..
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
@@ -44,9 +47,8 @@ public class Visual {
     private Chef chef;
 
     @Override
-    public String toString() {
-        // name
-        // belongs to
+    public String toString()
+    {
         StringBuilder sb = new StringBuilder();
 
         sb.append("File name of visual: " + this.fileName + " ");
