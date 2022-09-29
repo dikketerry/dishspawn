@@ -122,7 +122,6 @@ public class SpawnController {
         }
 
         ingredientSpawnList.add(ingredientDB);
-
         return "redirect:/spawn";
     }
 
