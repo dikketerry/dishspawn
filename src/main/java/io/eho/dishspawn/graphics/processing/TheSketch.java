@@ -11,8 +11,11 @@ import java.util.List;
 
 public class TheSketch extends PApplet {
 
-    // initializing shapes avoids an incidental NPE thrown on line 52(i think..)
+    // initializing shapes avoids an incidental NPE thrown on line 50(i think..)
     private List<Shape> shapes = new ArrayList<>();
+    private boolean generate;
+    private final int COLOR_CEILING = 255;
+
     int red;
     int green;
     int blue;
@@ -23,16 +26,16 @@ public class TheSketch extends PApplet {
     }
 
     @Override
-    public void setup()
-    {
+    public void setup() {
         frameRate(40);
 
-        red = (int) random(0, 255);
-        green = (int) random(0, 255);
-        blue = (int) random(0, 255);
+        red = (int) random(0, COLOR_CEILING);
+        green = (int) random(0, COLOR_CEILING);
+        blue = (int) random(0, COLOR_CEILING);
+
+        generate = false;
 
         background(red, green, blue);
-//        fill(255 - red, 255 - green, 255 - blue);
     }
 
     @Override
@@ -43,22 +46,15 @@ public class TheSketch extends PApplet {
 
     @Override
     public void draw() {
-
-//        if (keyPressed)
-//        {
-//            shapes.add(new Circle(this, mouseX, mouseY));
-//        }
-//        background(red, green, blue); // refresh background each frame
-
-        for (Shape s: shapes)
-        {
-            s.step();
-            s.render();
+        if (generate) {
+            for (Shape s: shapes) {
+                s.step();
+                s.render();
+            }
         }
     }
 
-    public void mouseDragged()
-    {
+    public void mouseDragged() {
         shapes.add(new Rectangle(this, mouseX, mouseY));
     }
 
@@ -66,4 +62,7 @@ public class TheSketch extends PApplet {
         this.shapes = shapes;
     }
 
+    public void setGenerate(boolean generate) {
+        this.generate = generate;
+    }
 }

@@ -25,10 +25,8 @@ website](https://www.alisoneroman.com/recipes).
 
 Although the app is considered finished as an end-project for the course, the 
 app is still in progress. Open points:
-- Issue - after generating the image, the Processing engine stops, which 
-  also stops the app - obviously the app needs to remain running -> needs a fix.
-- Issue - after generating the image, the newly spawned image is not shown 
-  in the browser - needs a fix (caching-issue?).
+- Issue - after running 1 sketch, a clean is required of the canvas - 
+  currently a 2nd sketch overwrites a 1st
 - Spring Security implementation
 - Multithreading
 - Algorithm to generate image is premature - yes, dependent on ingredients, 

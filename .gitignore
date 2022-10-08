@@ -4,6 +4,7 @@ extra-resources/
 /src/main/resources/static/js/p5.js
 /src/main/resources/static/img/spawns/
 /src/main/resources/static/testspawn/
+/src/main/webapp/spawns/
 .gitignore~
 
 !.mvn/wrapper/maven-wrapper.jar

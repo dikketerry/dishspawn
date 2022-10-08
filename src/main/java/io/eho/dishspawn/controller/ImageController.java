@@ -11,7 +11,6 @@ import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import io.eho.dishspawn.service.VisualService;
-import io.eho.dishspawn.service.implementation.ChefServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.eho.dishspawn.DishSpawnApplication.theSketch;
+
 @Controller
 @RequestMapping("/spawn")
 public class ImageController {
@@ -35,7 +36,7 @@ public class ImageController {
 
     @Autowired
     public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService,
-                           VisualService visualService, ChefServiceImpl chefService) {
+                           VisualService visualService, ChefService chefService) {
         this.recipeService = recipeService;
         this.recipeIngredientService = recipeIngredientService;
         this.visualService = visualService;
@@ -43,11 +44,12 @@ public class ImageController {
     }
 
     @PostMapping("/spawn/{id}")
-    public String spawnGo(@PathVariable String id, Model model) {
+    public String generateSpawn(@PathVariable String id, Model model) {
         // get recipe
         // help method to convert String to Long and catch non-numerical input
         Long idLong = Parser.convertStringIdToLong(id);
 
+        // todo - this does overlook the possibility 0 is provided per input
         if (idLong == 0l) {
             String noNumber = id + " is not a numeric format";
             model.addAttribute("error", noNumber);
@@ -70,11 +72,9 @@ public class ImageController {
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
-        // SKETCH
-        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
-        TheSketch theSketch = new TheSketch();
-        String[] a = {"MAIN"};
-        PApplet.runSketch(a, theSketch);
+        // SKETCH - todo refactor to static sketch
+//        TheSketch theSketch = getTheSketch();
+        theSketch.setGenerate(true);
 
         // transform each ri to a shape and place in list
         List<Shape> shapeList = new ArrayList<>();
@@ -96,28 +96,22 @@ public class ImageController {
         }
 
         theSketch.dispose(); // stops animation; does NOT close the window with the sketch
-        // todo: idea: make the sketch static, re-use it for each new spawn (clean it up, intialize, fill new)
 
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
         String fileName = "visual" + newId + ".png";
-        theSketch.save("src/main/resources/static/img/spawns/" + fileName); // save sketch as .png
+        theSketch.save("src/main/webapp/spawns/" + fileName); // save sketch as .png
         // todo: real save to move to saveImage method -> first 'save' to BufferedImage only (in memory)
 
-        // assign .png to new Visual
         Visual newVisual = new Visual();
         newVisual.setRecipe(recipe);
         newVisual.setChef(chefService.findChefById(17l)); // todo: with security, get chef from user
         newVisual.setFileName(fileName);
-        newVisual.setFileLocation("/img/spawns/" + fileName);
+        newVisual.setFileLocation("/spawns/" + fileName);
+
         visualService.saveVisual(newVisual);
 
-        // short intermezzo. testing if time is needed to get img shown in browser (not working yet)
-        try {
-            Thread.sleep(1111);
-        } catch (InterruptedException e) {
-            System.out.println("diagnostic: interrupted during sleep");
-            e.printStackTrace();
-        }
+        // re-initialize theSketch todo
+        theSketch.setup();
 
         // read saved image from file location - not needed I think?
         Visual visual = visualService.findVisualById(newId);
@@ -127,6 +121,14 @@ public class ImageController {
         model.addAttribute(recipe);
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
+    }
+
+    private TheSketch getTheSketch() {
+        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
+        TheSketch theSketch = new TheSketch();
+        String[] a = {"MAIN"};
+        PApplet.runSketch(a, theSketch);
+        return theSketch;
     }
 
 }

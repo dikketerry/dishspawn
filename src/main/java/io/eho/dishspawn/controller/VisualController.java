@@ -49,6 +49,8 @@ public class VisualController {
     public String showRecipe(@RequestParam Long visualId, Model model) {
 
         Visual visual = visualService.findVisualById(visualId);
+        System.out.println("file location: " + visual.getFileLocation());
+//        src/main/webapp/spawns/visual245.png
         model.addAttribute("visual", visual);
 
         return "visual";
