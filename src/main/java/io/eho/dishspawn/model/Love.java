@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 // todo: FIX
 @Getter @Setter
 @Entity
-@Table(name = "like")
-public class Like {
+@Table(name = "love")
+public class Love {
 
     @CreationTimestamp
     @Column(name="timestamp_created")
@@ -22,7 +22,7 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
-    @Column(name = "like_id")
+    @Column(name = "love_id")
     private Long id;
 
     @ManyToOne
@@ -39,7 +39,7 @@ public class Like {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Like id: " + this.id);
+        sb.append("Love id: " + this.id);
         sb.append(": ");
         sb.append("by " + this.chef.getUserName() + " ");
         sb.append("for visual " + this.visual.getFileLocation());

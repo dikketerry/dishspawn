@@ -1,7 +1,7 @@
 package io.eho.dishspawn.repository;
 
 import io.eho.dishspawn.model.Chef;
-import io.eho.dishspawn.model.Like;
+import io.eho.dishspawn.model.Love;
 import io.eho.dishspawn.model.Visual;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LikeRepository extends JpaRepository<Like, Long> {
+public interface LoveRepository extends JpaRepository<Love, Long> {
 
-//    Like save(Like like);
-    Like findLikeByVisualAndChef(Visual visual, Chef chef);
-    List<Like> findAllByVisual(Visual visual);
+//    Love save(Love like);
+    Love findLoveByVisualAndChef(Visual visual, Chef chef);
+    List<Love> findAllByVisual(Visual visual);
 
 }
