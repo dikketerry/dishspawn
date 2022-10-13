@@ -72,8 +72,6 @@ public class ImageController {
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
-        // SKETCH - todo refactor to static sketch
-//        TheSketch theSketch = getTheSketch();
         theSketch.setGenerate(true);
 
         // transform each ri to a shape and place in list
@@ -121,14 +119,6 @@ public class ImageController {
         model.addAttribute(recipe);
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
-    }
-
-    private TheSketch getTheSketch() {
-        System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
-        TheSketch theSketch = new TheSketch();
-        String[] a = {"MAIN"};
-        PApplet.runSketch(a, theSketch);
-        return theSketch;
     }
 
 }

@@ -1,6 +1,7 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.service.LoveService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -16,13 +17,14 @@ import java.util.stream.Collectors;
 public class VisualController {
 
     private VisualService visualService;
+    private LoveService loveService;
 
     private int totalFoundVisualPages;
-//    private List<Visual> visualList;
 
     @Autowired
-    public VisualController(VisualService visualService) {
+    public VisualController(VisualService visualService, LoveService loveService) {
         this.visualService = visualService;
+        this.loveService = loveService;
     }
 
     @GetMapping("/home")
@@ -32,6 +34,8 @@ public class VisualController {
 
         // get most recent visual
         Visual latestVisual = visualService.findLatestVisual();
+
+        // TODO CONTINUE HERE 1410
 
         // get paged list most recent 200 visuals minus most recent
         List<Visual> mostRecent200Visuals = visualService.findLast200Visuals();
