@@ -46,6 +46,9 @@ public class Visual {
     @JoinColumn(name = "chef_id")
     private Chef chef;
 
+    @Column(name = "love_count")
+    private int loveCount;
+
     @Override
     public String toString()
     {
