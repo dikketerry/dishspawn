@@ -24,8 +24,6 @@ public interface VisualRepository extends JpaRepository<Visual, Long> {
 
     Visual findFirstByOrderByTimestampCreatedDesc();
 
-//    List<Visual> findAllVisualsByChefSortByTimestampCreated(Long chefId);
-
     List<Visual> findByChefOrderByTimestampCreatedDesc(Chef chef);
 
     // TODO - custom query for pagination

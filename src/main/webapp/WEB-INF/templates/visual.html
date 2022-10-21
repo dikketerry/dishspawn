@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>SpawnDish</title>
+    <title>Spawn</title>
+    <link rel="icon" type="image/png" href="img/spagh-favicon.png">
 
     <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
     <link rel="stylesheet" th:href="@{/css/master.css}">
@@ -15,7 +16,7 @@
     <script type="text/javascript" th:src="@{/js/master.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-<!--    COMMENT OUT p5 and script reference when running old implementation-->
+<!--    COMMENT OUT p5 and script reference when running Processing implementation-->
 <!--    <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
 <!--    <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
 
@@ -108,7 +109,7 @@
                 <hr class="custom-hr">
             </div>
 
-            <!-- div main img UNCOMMENT BELOW DIV FOR SWITCH TO OLD-->
+            <!-- div main img UNCOMMENT BELOW DIV FOR PROCESSING IMPLEMENTATION -->
             <div uk-lightbox>
                 <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
                    th:attr="data-src=${visual.fileLocation}"

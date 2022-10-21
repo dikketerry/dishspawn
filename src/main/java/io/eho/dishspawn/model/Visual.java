@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter @Setter
 @Entity
@@ -45,6 +46,12 @@ public class Visual {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chef_id")
     private Chef chef;
+
+    @Column(name = "love_count")
+    private int loveCount;
+
+//    @Column(name = "chef_ids_that_loved_visual")
+//    private List<Long> chefIdsThatLovedVisual;
 
     @Override
     public String toString()

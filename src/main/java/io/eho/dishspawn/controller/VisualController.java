@@ -1,6 +1,9 @@
 package io.eho.dishspawn.controller;
 
+import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.service.ChefService;
+import io.eho.dishspawn.service.LoveService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
@@ -16,13 +19,17 @@ import java.util.stream.Collectors;
 public class VisualController {
 
     private VisualService visualService;
+    private LoveService loveService;
+    private ChefService chefService;
 
     private int totalFoundVisualPages;
-//    private List<Visual> visualList;
 
     @Autowired
-    public VisualController(VisualService visualService) {
+    public VisualController(VisualService visualService,
+                            LoveService loveService, ChefService chefService) {
         this.visualService = visualService;
+        this.loveService = loveService;
+        this.chefService = chefService;
     }
 
     @GetMapping("/home")
@@ -32,6 +39,12 @@ public class VisualController {
 
         // get most recent visual
         Visual latestVisual = visualService.findLatestVisual();
+        Chef chef = chefService.findChefById(17l); // todo security
+//        int loveCount = loveService.getCountOfLovesForVisual(latestVisual);
+        int loveCount = latestVisual.getLoveCount();
+        // diagnostic print
+        System.out.println("love count = " + loveCount);
+        Boolean chefLovedPost = loveService.chefLovedVisual(latestVisual, chef);
 
         // get paged list most recent 200 visuals minus most recent
         List<Visual> mostRecent200Visuals = visualService.findLast200Visuals();
@@ -41,6 +54,9 @@ public class VisualController {
         model.addAttribute("latestVisual", latestVisual);
         model.addAttribute("totalPages", totalFoundVisualPages);
         model.addAttribute("pagedVisuals", pageVisuals);
+        model.addAttribute("chef", chef);
+//        model.addAttribute("loveCount", loveCount);
+        model.addAttribute("chefLovedPost", chefLovedPost);
 
         return "home";
     }
@@ -50,7 +66,6 @@ public class VisualController {
 
         Visual visual = visualService.findVisualById(visualId);
         System.out.println("file location: " + visual.getFileLocation());
-//        src/main/webapp/spawns/visual245.png
         model.addAttribute("visual", visual);
 
         return "visual";

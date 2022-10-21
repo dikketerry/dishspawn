@@ -227,6 +227,12 @@ body {
 .timestamp {
 }
 
+.love-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .pagination-home {
     font-size: calc(0.7vw + 0.8vh + .3vmin);
 }
