@@ -4,6 +4,7 @@ import io.eho.dishspawn.graphics.processing.ColorizeIt;
 import processing.core.PApplet;
 
 import java.util.Random;
+import java.lang.*;
 
 public abstract class Shape implements ColorizeIt {
 

@@ -40,7 +40,10 @@ public class VisualController {
         // get most recent visual
         Visual latestVisual = visualService.findLatestVisual();
         Chef chef = chefService.findChefById(17l); // todo security
-        int loveCount = loveService.getCountOfLovesForVisual(latestVisual);
+//        int loveCount = loveService.getCountOfLovesForVisual(latestVisual);
+        int loveCount = latestVisual.getLoveCount();
+        // diagnostic print
+        System.out.println("love count = " + loveCount);
         Boolean chefLovedPost = loveService.chefLovedVisual(latestVisual, chef);
 
         // get paged list most recent 200 visuals minus most recent
@@ -52,7 +55,7 @@ public class VisualController {
         model.addAttribute("totalPages", totalFoundVisualPages);
         model.addAttribute("pagedVisuals", pageVisuals);
         model.addAttribute("chef", chef);
-        model.addAttribute("loveCount", loveCount);
+//        model.addAttribute("loveCount", loveCount);
         model.addAttribute("chefLovedPost", chefLovedPost);
 
         return "home";

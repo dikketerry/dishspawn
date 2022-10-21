@@ -40,6 +40,7 @@ public class LoveServiceImpl implements LoveService {
         visualRepository.save(visual);
     }
 
+    // todo: not used - love count obtained via int loveCount in visual entity
     @Override
     public int getCountOfLovesForVisual(Visual visual) {
         List<Love> lovesForVisual =

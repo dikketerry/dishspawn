@@ -141,7 +141,7 @@
                         <a th:if="${chefLovedPost}" th:href="@{/loveVisual(visualId=${latestVisual.id})}" uk-icon="heart" style="color: red"></a>
                         <a th:unless="${chefLovedPost}" th:href="@{/loveVisual(visualId=${latestVisual.id})}" uk-icon="heart"></a>
                         <span>&nbsp&nbsp</span>
-                        <span th:text="${loveCount}"></span>
+                        <span th:text="${latestVisual.loveCount}"></span>
                     </div>
                 </div>
                 <!--            hr-->
@@ -177,7 +177,7 @@
                             <a th:unless="${chefLovedPost}" th:href="@{/loveVisual(visualId=${visual.id})}"
                                uk-icon="heart"></a>
                             <span>&nbsp&nbsp</span>
-                            <span th:text="${loveCount}"></span>
+                            <span th:text="${visual.loveCount}"></span>
                         </div>
 
                         <div uk-lightbox>
