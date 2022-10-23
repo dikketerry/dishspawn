@@ -2,23 +2,30 @@ package io.eho.dishspawn.service.implementation;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.repository.ChefRepository;
+import io.eho.dishspawn.security.SecurityChef;
 import io.eho.dishspawn.service.ChefService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ChefServiceImpl implements ChefService {
+@AllArgsConstructor
+public class ChefServiceImpl implements ChefService, UserDetailsService {
 
-    private ChefRepository chefRepository;
+    private final ChefRepository chefRepository;
 
-    public ChefServiceImpl() {}
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<Chef> optionalChef =
+                chefRepository.findChefByUserName(userName);
 
-    @Autowired
-    public ChefServiceImpl(ChefRepository chefRepository) {
-        this.chefRepository = chefRepository;
+        return optionalChef.map(c -> new SecurityChef(c))
+                .orElseThrow(() -> new UsernameNotFoundException("userName: " + userName + " not found."));
     }
 
     @Override

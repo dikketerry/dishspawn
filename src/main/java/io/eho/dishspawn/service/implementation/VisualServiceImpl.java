@@ -5,6 +5,7 @@ import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.VisualService;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class VisualServiceImpl implements VisualService {
 
-    private VisualRepository visualRepository;
-
-    public VisualServiceImpl(VisualRepository visualRepository) {
-        this.visualRepository = visualRepository;
-    }
+    private final VisualRepository visualRepository;
 
     @Override
     public Long findNextIdValue() {
@@ -105,10 +103,4 @@ public class VisualServiceImpl implements VisualService {
     public Visual findLastVisualForRecipe(Recipe recipe) {
         return visualRepository.findTop1ByRecipeOrderByTimestampCreatedDesc(recipe);
     }
-
-//    @Override
-//    public Page<Visual> findPageVisualsForChef(Chef chef, int pageNr) {
-//        Pageable pageable = PageRequest.of(pageNr - 1, 3, Sort.by(Sort.Direction.DESC, "timestampCreated"));
-//        return visualRepository.findByChefOrderByTimestampCreatedDesc(chef);
-//    }
 }

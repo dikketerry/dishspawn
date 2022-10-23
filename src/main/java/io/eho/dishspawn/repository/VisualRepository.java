@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Repository
 public interface VisualRepository extends JpaRepository<Visual, Long> {
 
     @Query(value = "SELECT next_val FROM dishspawn_db.hibernate_sequence", nativeQuery = true)
