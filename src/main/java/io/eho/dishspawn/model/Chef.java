@@ -63,6 +63,13 @@ public class Chef {
     @Column(name = "daily_slot")
     private boolean dailySlot = true;                           // default value
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "chef_role",
+            joinColumns = @JoinColumn(name = "chef_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
     // toString
     @Override
     public String toString() {

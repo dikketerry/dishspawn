@@ -6,8 +6,7 @@ public class PlayRecipe {
 
     public static void main(String[] args) {
 
-        // to fill DB with testing data - assumes no DB!
-        // spring.jpa.hibernate.ddl-auto=create
+        // to fill DB with testing data
 
         // create recipe
 
