@@ -1,6 +1,7 @@
 package io.eho.dishspawn.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,6 +64,7 @@ public class Chef {
     @Column(name = "daily_slot")
     private boolean dailySlot = true;                           // default value
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "chef_role",
             joinColumns = @JoinColumn(name = "chef_id"),

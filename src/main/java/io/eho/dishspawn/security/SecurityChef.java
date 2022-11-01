@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class SecurityChef implements UserDetails {
@@ -25,7 +26,11 @@ public class SecurityChef implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> "chef");
+//        return List.of(() -> "chef");
+        return chef.getRoles()
+                .stream()
+                .map(role -> new SecurityRole(role))
+                .collect(Collectors.toList());
     }
 
     @Override
