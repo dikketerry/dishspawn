@@ -2,15 +2,20 @@ package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
+import io.eho.dishspawn.model.util.web.FormCreateChef;
+import io.eho.dishspawn.model.util.web.FormLoginChef;
 import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -30,6 +35,49 @@ public class ChefController {
         this.chefService = chefService;
         this.visualService = visualService;
     }
+
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("formLoginData", new FormLoginChef());
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String loginChef(@Valid @ModelAttribute("formLoginData") FormLoginChef formLoginChef,
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("errors in login");
+            return "login";
+        }
+
+        Optional<Chef> chefDB = chefService.findChefByUserName(formLoginChef.getUserName());
+        if (chefDB.get().getPassword().equals(formLoginChef.getPassword())) {
+            return "login-success";
+        } else {
+            return "error";
+        }
+    }
+
+    // register a new chef todo refactor to create
+    @GetMapping("/create")
+    public String registerChef(Model model) {
+        model.addAttribute("formNewChefData", new FormCreateChef());
+        return "add-chef";
+    }
+
+    // post - save new chef todo refactor to create
+    @PostMapping("/create")
+    public String saveChef(@Valid @ModelAttribute("formNewChefData") FormCreateChef formData,
+                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("errors in save");
+            return "add-chef";
+        }
+
+        chefService.saveChef(formData.toChef());
+        return "redirect:all";
+    }
+
 
     @GetMapping("/all")
     public String getAllChefs(Model model) {
@@ -72,22 +120,6 @@ public class ChefController {
         return top200VisualsChef.stream()
                 .skip(1)
                 .collect(Collectors.toList());
-    }
-
-    // register a new chef
-    @GetMapping("/add")
-    public String registerChef(Model model) {
-
-        model.addAttribute("chef", new Chef());
-        return "add-chef";
-    }
-
-    // post - save new chef
-    @PostMapping("save")
-    public String saveChef(@ModelAttribute("chef") Chef chef) {
-//        TODO: error handling + page redirection
-        chefService.saveChef(chef);
-        return "redirect:all";
     }
 
     // private helpers below

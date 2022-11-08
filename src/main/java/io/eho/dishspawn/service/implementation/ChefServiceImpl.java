@@ -67,4 +67,9 @@ public class ChefServiceImpl implements ChefService, UserDetailsService {
     public void deleteChef(Chef chef) {
         chefRepository.delete(chef);
     }
+
+    @Override
+    public Optional<Chef> findChefByUserName(String inputUserName) {
+        return chefRepository.findChefByUserName(inputUserName);
+    }
 }

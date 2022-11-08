@@ -60,7 +60,7 @@
                     <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
                     <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
                     <li><a class="uk-link-text" href="/chef/login">Login</a></li>
-                    <li><a class="uk-link-text" href="/chef/add">Register</a></li>
+                    <li><a class="uk-link-text" href="/chef/create">Register</a></li>
                 </ul>
             </div>
 
@@ -102,12 +102,9 @@
             sizing and positioning -->
 
                 <form class="uk-form-horizontal uk-margin-small"
-                        th:action="@{save}" th:object="${chef}" method="post">
-
+                        th:action="@{/chef/create}" th:object="${formNewChefData}" method="post">
                     <h3>Register</h3>
                     <br>
-
-                    <!-- TODO: add error handling for field input errors -->
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
@@ -116,6 +113,10 @@
                             <input class="uk-input" id="username-field"
                                    type="text" th:field="*{userName}"
                                    placeholder="enter username" required autofocus>
+                            <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+<!--                            <p th:if="${#fields.hasErrors('userName')}"-->
+<!--                               th:text="${#strings.listJoin(#fields.errors('userName'), ', ')}"-->
+<!--                               th:errors="*{userName}" class="text-danger"></p>-->
                         </div>
                     </div>
 
@@ -126,6 +127,7 @@
                             <input class="uk-input" id="email-field"
                                    type="text" th:field="*{email}"
                                    placeholder="enter email" required>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                         </div>
                     </div>
 
@@ -134,21 +136,22 @@
                                for="password-field">Password*</label>
                         <div class="uk-form-controls">
                             <input class="uk-input" id="password-field"
-                                   type="text" th:field="*{password}"
+                                   type="password" th:field="*{password}"
                                    placeholder="enter password" required>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                         </div>
                     </div>
 
-<!--                    TODO: retype password field + validation-->
-<!--                    <div class="uk-margin">-->
-<!--                        <label class="uk-form-label form-label"-->
-<!--                               for="retype-password-field">Password*</label>-->
-<!--                        <div class="uk-form-controls">-->
-<!--                            <input class="uk-input" id="retype-password-field"-->
-<!--                                   type="text" th:field="*{password}"-->
-<!--                                   placeholder="enter password" required>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="retype-password-field">Retype Password*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="retype-password-field"
+                                   type="password" th:field="*{retypePassword}"
+                                   placeholder="retype password" required>
+                            <span th:if="${#fields.hasErrors('passwordsEqual')}" th:errors="*{passwordsEqual}"></span>
+                        </div>
+                    </div>
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
@@ -156,7 +159,8 @@
                         <div class="uk-form-controls">
                             <input class="uk-input" id="first-name-field"
                                    type="text" th:field="*{firstName}"
-                                   placeholder="enter first name" required>
+                                   placeholder="enter first name">
+                            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
                         </div>
                     </div>
 
@@ -166,7 +170,8 @@
                         <div class="uk-form-controls">
                             <input class="uk-input" id="last-name-field"
                                    type="text" th:field="*{lastName}"
-                                   placeholder="enter last name" required>
+                                   placeholder="enter last name">
+                            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                         </div>
                     </div>
 
