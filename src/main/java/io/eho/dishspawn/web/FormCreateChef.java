@@ -1,4 +1,4 @@
-package io.eho.dishspawn.model.util.web;
+package io.eho.dishspawn.web;
 
 import io.eho.dishspawn.model.Chef;
 import lombok.Getter;

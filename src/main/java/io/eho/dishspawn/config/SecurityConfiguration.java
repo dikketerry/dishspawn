@@ -11,16 +11,33 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.httpBasic()
-                .and()
-                .authorizeRequests()
-                .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn**", "/visual**").permitAll()
-                .mvcMatchers("/recipe/add", "/loveVisual").hasAnyRole("chef", "superchef", "admin")
-                .mvcMatchers("/ingredient/add").hasAnyRole("superchef", "admin")
+        http.csrf()
+                .and().authorizeRequests()
                 .mvcMatchers("/api/**", "/ingredient/all", "/chef/all", "/recipe/all").hasRole("admin")
-//                .and().formLogin().loginPage("/sign-in").permitAll()
-//                .and().logout().logoutUrl("/sign-out").permitAll()
-                .and().build();
+                .mvcMatchers("/ingredient/add").hasAnyRole("superchef", "admin")
+                .mvcMatchers("/recipe/add", "/loveVisual").hasAnyRole("chef", "superchef", "admin")
+                .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn**", "/visual**").permitAll()
+                .and().formLogin()
+                .loginPage("/chef/login.html")
+                .loginProcessingUrl("/chef/login")
+                .defaultSuccessUrl("/home")
+                .failureUrl("/chef/login?error=true")
+                .and().logout()
+                .logoutUrl("/chef/logout")
+                .deleteCookies("JSESSIONID");
+        return http.build();
+
+
+//        return http.httpBasic()
+//                .and()
+//                .authorizeRequests()
+//                .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn**", "/visual**").permitAll()
+//                .mvcMatchers("/recipe/add", "/loveVisual").hasAnyRole("chef", "superchef", "admin")
+//                .mvcMatchers("/ingredient/add").hasAnyRole("superchef", "admin")
+//                .mvcMatchers("/api/**", "/ingredient/all", "/chef/all", "/recipe/all").hasRole("admin")
+////                .and().formLogin().loginPage("/sign-in").permitAll()
+////                .and().logout().logoutUrl("/sign-out").permitAll()
+//                .and().build();
     }
 
     @Bean

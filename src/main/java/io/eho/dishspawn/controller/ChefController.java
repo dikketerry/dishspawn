@@ -2,8 +2,9 @@ package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
-import io.eho.dishspawn.model.util.web.FormCreateChef;
-import io.eho.dishspawn.model.util.web.FormLoginChef;
+import io.eho.dishspawn.security.SecurityChef;
+import io.eho.dishspawn.web.FormCreateChef;
+import io.eho.dishspawn.web.FormLoginChef;
 import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+// todo review redirects
 @Controller
 @RequestMapping("/chef")
 public class ChefController {
@@ -42,30 +44,12 @@ public class ChefController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String loginChef(@Valid @ModelAttribute("formLoginData") FormLoginChef formLoginChef,
-                            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            System.out.println("errors in login");
-            return "login";
-        }
-
-        Optional<Chef> chefDB = chefService.findChefByUserName(formLoginChef.getUserName());
-        if (chefDB.get().getPassword().equals(formLoginChef.getPassword())) {
-            return "login-success";
-        } else {
-            return "error";
-        }
-    }
-
-    // register a new chef todo refactor to create
     @GetMapping("/create")
     public String registerChef(Model model) {
         model.addAttribute("formNewChefData", new FormCreateChef());
         return "add-chef";
     }
 
-    // post - save new chef todo refactor to create
     @PostMapping("/create")
     public String saveChef(@Valid @ModelAttribute("formNewChefData") FormCreateChef formData,
                            BindingResult bindingResult) {
@@ -77,7 +61,6 @@ public class ChefController {
         chefService.saveChef(formData.toChef());
         return "redirect:all";
     }
-
 
     @GetMapping("/all")
     public String getAllChefs(Model model) {

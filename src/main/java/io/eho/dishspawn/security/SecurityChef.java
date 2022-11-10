@@ -1,6 +1,7 @@
 package io.eho.dishspawn.security;
 
 import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,8 @@ public class SecurityChef implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(() -> "chef");
+//        return List.of(() -> chef.getRole());
+
         return chef.getRoles()
                 .stream()
                 .map(role -> new SecurityRole(role))

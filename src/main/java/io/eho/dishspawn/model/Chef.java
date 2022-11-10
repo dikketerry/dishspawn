@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter @Setter
@@ -52,7 +53,7 @@ public class Chef {
     private String avatarPath;
 
     @Column(name = "daily_slot")
-    private boolean dailySlot = true;                           // default value
+    private boolean dailySlot;
 
     @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER)
@@ -61,6 +62,10 @@ public class Chef {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "role_id")
+//    private Role role;
 
     protected Chef() {
     }
@@ -76,7 +81,8 @@ public class Chef {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.avatarPath = avatarPath;
+        this.avatarPath = (avatarPath == null) ? "/img/default-avatar.png" : avatarPath;
+        this.dailySlot = true;
     }
 
     // toString
@@ -89,10 +95,9 @@ public class Chef {
         sb.append("\n");
         sb.append("Avatar path: " + this.avatarPath);
         sb.append("\n");
-        sb.append("Has used daily slot: " + this.dailySlot);
+        sb.append("Has daily slot: " + this.dailySlot);
 
         return sb.toString();
-
     }
     // equals / hash
 }
