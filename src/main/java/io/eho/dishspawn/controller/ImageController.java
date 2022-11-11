@@ -1,9 +1,11 @@
 package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.controller.util.Parser;
+import io.eho.dishspawn.exception.SaveImageNotPossible;
 import io.eho.dishspawn.graphics.processing.util.Transformer;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import io.eho.dishspawn.graphics.processing.TheSketch;
+import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.model.Visual;
@@ -12,6 +14,7 @@ import io.eho.dishspawn.service.RecipeIngredientService;
 import io.eho.dishspawn.service.RecipeService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static io.eho.dishspawn.DishSpawnApplication.theSketch;
@@ -60,7 +64,7 @@ public class ImageController {
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
-        // TODO translate recipe-ingredients to visual properties
+        // todo translate recipe-ingredients to visual properties
         // narrow down list to list with visual impact Y ri's
         List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
                 .filter(ri -> ri.isVisualImpact() == true)
@@ -72,6 +76,7 @@ public class ImageController {
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
+        // todo explain
         theSketch.setGenerate(true);
 
         // transform each ri to a shape and place in list
@@ -100,12 +105,24 @@ public class ImageController {
         theSketch.save("src/main/webapp/spawns/" + fileName); // save sketch as .png
         // todo: real save to move to saveImage method -> first 'save' to BufferedImage only (in memory)
 
+        // save image as visual with its attributes (chef, recipe, filename and location)
         Visual newVisual = new Visual();
+        String chefUserName = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        Optional<Chef> optChef = chefService.findChefByUserName(chefUserName);
+        if (optChef.isPresent()) {
+            Chef chef = optChef.get();
+            newVisual.setChef(chef);
+        } else {
+//            todo - belongs to todo to implement BufferedImage
+//            throw new SaveImageNotPossible("save image not possible when not logged in");
+            newVisual.setChef(chefService.findChefById(1l));
+        }
+
         newVisual.setRecipe(recipe);
-        newVisual.setChef(chefService.findChefById(17l)); // todo: with security, get chef from user
         newVisual.setFileName(fileName);
         newVisual.setFileLocation("/spawns/" + fileName);
-
         visualService.saveVisual(newVisual);
 
         // re-initialize theSketch todo
@@ -120,5 +137,4 @@ public class ImageController {
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
     }
-
 }

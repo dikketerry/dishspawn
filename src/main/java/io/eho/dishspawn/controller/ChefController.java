@@ -42,6 +42,19 @@ public class ChefController {
     public String loginForm(Model model) {
         model.addAttribute("formLoginData", new FormLoginChef());
         return "login";
+        /*
+                if (securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
+
+        if (error != null)
+            model.addAttribute("error", "Your username and password is invalid.");
+
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+
+        return "login";
+         */
     }
 
     @GetMapping("/create")

@@ -55,13 +55,30 @@
                     </div>
                 </div>
 
-                <!--            chefs / recipes / login / register-->
+                <!--            chefs / recipes / login / register / logout -->
                 <div class="uk-navbar-right">
                     <ul class="uk-navbar-nav">
-                        <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
-                        <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
-                        <li><a class="uk-link-text" href="/chef/login">Login</a></li>
-                        <li><a class="uk-link-text" href="/chef/create">Register</a></li>
+
+<!--                        admin access for chef and recipe lists-->
+                        <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                            <a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                        <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                            <a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+
+<!--                        login / register for anonymous user-->
+                        <li sec:authorize="isAnonymous()">
+                            <a class="uk-link-text" href="/chef/login">Login</a></li>
+                        <li sec:authorize="isAnonymous()">
+                            <a class="uk-link-text" href="/chef/create">Register</a></li>
+
+<!--                        logout for authenticated user-->
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            </form>
+                            <a class="uk-link-text" onclick="document.forms['logoutForm'].submit()">Logout</a>
+                        </li>
+
                     </ul>
                 </div>
             </nav>

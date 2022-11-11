@@ -131,17 +131,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="r : ${recipeList}" th:field="${r}">
+                            <tr th:each="recipe : ${recipeList}" th:field="${recipe}">
                                 <td class="content-td">
-                                    <a th:href="@{/recipe(recipeId=${r.id})}"
-                                       th:text="${r.name}"
+                                    <a th:href="@{/recipe(recipeId=${recipe.id})}"
+                                       th:text="${recipe.name}"
                                        class="uk-link-text">recipename</a>
-<!--                                    <a th:href="@{/recipe/}" th:text="${r.name}">-->
-<!--                                        <a th:href="@{/spawn/findrecipes(pageNr=${i})}">[[${i}]]</a>-->
                                 </td>
-                                <td class="content-td" th:text="${r.chef.userName}"></td>
+                                <td class="content-td" th:text="${recipe.chef.userName}"></td>
                                 <td class="action-td">
-                                    <form th:action="@{/spawn/spawn/{id}(id=${r.id})}" th:object="${r}" method="post">
+                                    <form th:action="@{/spawn/spawn/{id}(id=${recipe.id})}" th:object="${recipe}"
+                                          method="post">
                                         <button class="uk-button uk-button-small uk-button-danger uk-border-pill" type="submit">
                                             Spawn!
                                         </button>
