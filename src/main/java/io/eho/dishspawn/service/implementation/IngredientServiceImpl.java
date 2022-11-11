@@ -3,6 +3,7 @@ package io.eho.dishspawn.service.implementation;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.repository.IngredientRepository;
 import io.eho.dishspawn.service.IngredientService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,17 +16,9 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
-    private IngredientRepository ingredientRepository;
-
-    public IngredientServiceImpl() {
-
-    }
-
-    @Autowired
-    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
-    }
+    private final IngredientRepository ingredientRepository;
 
     @Override
     public void saveIngredient(Ingredient ingredient) {

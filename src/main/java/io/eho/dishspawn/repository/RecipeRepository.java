@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-// because JpaRepository is extended, there is no need to annotate this repo
-// with @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     public List<Recipe> findAllByOrderByTimestampCreatedDesc();

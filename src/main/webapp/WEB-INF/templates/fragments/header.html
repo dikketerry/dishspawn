@@ -1,0 +1,89 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <div th:fragment="header-head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/png" href="img/spagh-favicon.png">
+
+        <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
+        <link rel="stylesheet" th:href="@{/css/master.css}">
+
+        <script type="text/javascript" th:src="@{/js/master.js}"></script>
+        <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
+<!--        only for visual.html note below:-->
+<!--        COMMENT OUT p5 and script reference when running Processing implementation-->
+<!--        <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
+<!--        <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
+
+    </div>
+</head>
+
+<body>
+<div th:fragment="header">
+    <div class="hdr-wrapper"> <!-- div without width spanning browser width -->
+
+        <div class="uk-container"> <!-- UIKit class to center + set max width -->
+            <!-- now set-up row/column structure -->
+
+            <nav class="uk-navbar">
+                <!--            logo part (includes the text (name and tagline)-->
+                <div class="uk-navbar-left">
+                    <a class="uk-navbar-item uk-logo" href="/"> <img class="uk-margin-small-right food-icon"
+                                                                     src="/img/logo/icons8-rice-bowl-100.png">
+                        <div class="tagline">
+                            <div class="tagline-cell">
+                                <p id="tagline-main">Dish Spawn</p>
+                                <p id="tagline-sub">Virtual Cook Apprentice</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!--            search-->
+                <div class="uk-navbar-center">
+                    <div id="nav-search">
+                        <a class="uk-navbar-toggle" uk-search-icon></a>
+                        <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: -50">
+                            <form class="uk-search uk-search-navbar uk-width-expand" action="javascript:executeSearch()">
+                                <input id="searchKey" class="uk-search-input" type="search" placeholder="Search" autofocus>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!--            chefs / recipes / login / register / logout -->
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+
+<!--                        admin access for chef and recipe lists-->
+                        <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                            <a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                        <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                            <a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+
+<!--                        login / register for anonymous user-->
+                        <li sec:authorize="isAnonymous()">
+                            <a class="uk-link-text" href="/chef/login">Login</a></li>
+                        <li sec:authorize="isAnonymous()">
+                            <a class="uk-link-text" href="/chef/create">Register</a></li>
+
+<!--                        logout for authenticated user-->
+                        <li sec:authorize="isAuthenticated()">
+                            <form id="logoutForm" method="POST" th:action="@{/logout}">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            </form>
+                            <a class="uk-link-text" onclick="document.forms['logoutForm'].submit()">Logout</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package io.eho.dishspawn.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,10 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
-@NoArgsConstructor @Getter @Setter
+@Getter @Setter
 @Entity
 @Table(name = "chef")
 public class Chef {
@@ -33,35 +35,55 @@ public class Chef {
     private Long id;
 
     @Column(name = "first_name")
-    @Size(max = 27, message = "first name cannot contain more than 27 characters")
     private String firstName;
 
     @Column(name = "last_name")
-    @Size(max = 27, message = "first name cannot contain more than 27 characters")
     private String lastName;
 
-    @Column(name = "username", unique = true) // TODO: exception handling
-    @NotBlank(message = "Username is a required field")
-    @Size(min = 2, max = 27, message = "first name cannot contain more than 27 characters")
+    @Column(name = "username", unique = true)
     private String userName;
 
     @Column(name = "email")
-    @NotBlank(message = "Email is a required field")
-    @Pattern(regexp = "^(.+)@(\\S+)$", message="Invalid email format")
     private String email;
 
     @Column(name = "password")
-    @NotBlank(message = "Password is a required field")
     private String password;
 
     @Column(name = "avatar_path")
     private String avatarPath;
 
-    // this boolean needs to ensure a chef can only generate a meal once a
-    // day. It needs logic in the service coming from the timestamp for
-    // his/her last generated dish
     @Column(name = "daily_slot")
-    private boolean dailySlot = true;                           // default value
+    private boolean dailySlot;
+
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "chef_role",
+            joinColumns = @JoinColumn(name = "chef_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "role_id")
+//    private Role role;
+
+    protected Chef() {
+    }
+
+    public Chef(String firstName,
+                String lastName,
+                String userName,
+                String email,
+                String password,
+                String avatarPath) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.avatarPath = (avatarPath == null) ? "/img/default-avatar.png" : avatarPath;
+        this.dailySlot = true;
+    }
 
     // toString
     @Override
@@ -73,10 +95,9 @@ public class Chef {
         sb.append("\n");
         sb.append("Avatar path: " + this.avatarPath);
         sb.append("\n");
-        sb.append("Has used daily slot: " + this.dailySlot);
+        sb.append("Has daily slot: " + this.dailySlot);
 
         return sb.toString();
-
     }
     // equals / hash
 }

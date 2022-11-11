@@ -1,28 +1,50 @@
 package io.eho.dishspawn.service.implementation;
 
 import io.eho.dishspawn.model.Chef;
+import io.eho.dishspawn.model.Role;
 import io.eho.dishspawn.repository.ChefRepository;
+import io.eho.dishspawn.repository.RoleRepository;
+import io.eho.dishspawn.security.SecurityChef;
 import io.eho.dishspawn.service.ChefService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
-public class ChefServiceImpl implements ChefService {
+@AllArgsConstructor
+public class ChefServiceImpl implements ChefService, UserDetailsService {
 
-    private ChefRepository chefRepository;
-
-    public ChefServiceImpl() {}
-
-    @Autowired
-    public ChefServiceImpl(ChefRepository chefRepository) {
-        this.chefRepository = chefRepository;
-    }
+    private final ChefRepository chefRepository;
+    private final RoleRepository roleRepository;
 
     @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<Chef> optionalChef =
+                chefRepository.findChefByUserName(userName);
+
+        return optionalChef.map(c -> new SecurityChef(c))
+                .orElseThrow(() -> new UsernameNotFoundException("userName: " + userName + " not found."));
+    }
+
+    // todo refactor to return Chef
+    @Override
     public void saveChef(Chef chef) {
+        long roleId = 276;      // ROLE_chef id
+        Optional<Role> optionalRole = roleRepository.findById(roleId);
+
+        if (optionalRole.isPresent()) {
+            chef.setRoles(Collections.singleton(optionalRole.get()));
+        } else {
+            throw new RuntimeException("default role with " + roleId + " not found");
+        }
+
         chefRepository.save(chef);
     }
 
@@ -33,17 +55,11 @@ public class ChefServiceImpl implements ChefService {
 
     @Override
     public Chef findChefById(Long id) {
-        Optional<Chef> optionalChef = chefRepository.findById(id);
-
-        Chef chef = null;
-        if(optionalChef.isPresent()) {
-            chef = optionalChef.get();
-        } else {
-            // chef not found
+        if (chefRepository.findById(id).isPresent()) {
+            return chefRepository.findById(id).get();
+        } else {        // chef not found
             throw new RuntimeException("chef with id " + id + "not found");
         }
-
-        return chef;
     }
 
     @Override
@@ -59,5 +75,10 @@ public class ChefServiceImpl implements ChefService {
     @Override
     public void deleteChef(Chef chef) {
         chefRepository.delete(chef);
+    }
+
+    @Override
+    public Optional<Chef> findChefByUserName(String inputUserName) {
+        return chefRepository.findChefByUserName(inputUserName);
     }
 }

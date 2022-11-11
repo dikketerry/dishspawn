@@ -6,21 +6,17 @@ import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.repository.LoveRepository;
 import io.eho.dishspawn.repository.VisualRepository;
 import io.eho.dishspawn.service.LoveService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class LoveServiceImpl implements LoveService {
 
-    private LoveRepository loveRepository;
-    private VisualRepository visualRepository;
-
-    public LoveServiceImpl(LoveRepository loveRepository,
-                           VisualRepository visualRepository) {
-        this.loveRepository = loveRepository;
-        this.visualRepository = visualRepository;
-    }
+    private final LoveRepository loveRepository;
+    private final VisualRepository visualRepository;
 
     @Override
     public void saveLove(Visual visual, Chef chef) {

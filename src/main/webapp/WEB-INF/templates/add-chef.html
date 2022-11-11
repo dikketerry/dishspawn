@@ -2,93 +2,31 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <!-- viewport tag for enabling responsiveness -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>New Chef</title>
-    <link rel="icon" type="image/png" href="img/spagh-favicon.png">
-
-    <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
-    <link rel="stylesheet" th:href="@{/css/master.css}">
-
-    <script type="text/javascript" th:src="@{/js/master.js}"></script>
-    <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-
+    <div th:replace="fragments/header :: header-head"/>
 </head>
 <body>
 
 <!--HEADER-->
-<div class="hdr-wrapper"> <!-- div without width spanning browser width -->
-
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
-        <!-- now set-up row/column structure -->
-
-        <nav class="uk-navbar">
-<!--            logo part (includes the text (name and tagline)-->
-            <div class="uk-navbar-left">
-                <a class="uk-navbar-item uk-logo" href="/">
-                    <img class="uk-margin-small-right food-icon"
-                         src="/img/logo/icons8-french-fries-100.png">
-                    <div class="tagline">
-                        <div class="tagline-cell">
-                            <p id="tagline-main">Dish Spawn</p>
-                            <p id="tagline-sub">Virtual Cook Apprentice</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
-            <!--            search-->
-            <div class="uk-navbar-center">
-                <div id="nav-search">
-                    <a class="uk-navbar-toggle" uk-search-icon></a>
-                    <div class="uk-drop" uk-drop="mode: click; pos: left-center; offset: -50">
-                        <form class="uk-search uk-search-navbar uk-width-expand" action="javascript:executeSearch()">
-                            <input id="searchKey" class="uk-search-input" type="search" placeholder="Search" autofocus>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-<!--            chefs / recipes / login / register-->
-            <div class="uk-navbar-right">
-                <ul class="uk-navbar-nav">
-                    <li><a class="uk-link-text" href="/chef/all">Chefs</a></li>
-                    <li><a class="uk-link-text" href="/recipe/all">Recipes</a></li>
-                    <li><a class="uk-link-text" href="/chef/login">Login</a></li>
-                    <li><a class="uk-link-text" href="/chef/add">Register</a></li>
-                </ul>
-            </div>
-
-        </nav>
-
-    </div>
-
-</div>
-
-<!--<hr>-->
+<div th:replace="fragments/header :: header"/>
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
 
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
-<!--        now set row with 2 elements: title of form + image-->
+    <div class="uk-container">
 
         <div class="uk-grid">
+
             <div class="uk-width-1-2 rotate-div">
                 <p class="rotate">Make me chef!</p>
             </div>
+
             <div class="uk-width-expand">
                 <img id="swedish-chef" src="/img/swedish-chef.png"
                      alt="swedish-chef-image">
             </div>
         </div>
-
     </div> <!-- container -->
-
 </div> <!-- subhdr-wrapper -->
 
 <hr>
@@ -102,12 +40,9 @@
             sizing and positioning -->
 
                 <form class="uk-form-horizontal uk-margin-small"
-                        th:action="@{save}" th:object="${chef}" method="post">
-
+                        th:action="@{/chef/create}" th:object="${formNewChefData}" method="post">
                     <h3>Register</h3>
                     <br>
-
-                    <!-- TODO: add error handling for field input errors -->
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
@@ -116,6 +51,10 @@
                             <input class="uk-input" id="username-field"
                                    type="text" th:field="*{userName}"
                                    placeholder="enter username" required autofocus>
+                            <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+<!--                            <p th:if="${#fields.hasErrors('userName')}"-->
+<!--                               th:text="${#strings.listJoin(#fields.errors('userName'), ', ')}"-->
+<!--                               th:errors="*{userName}" class="text-danger"></p>-->
                         </div>
                     </div>
 
@@ -126,6 +65,7 @@
                             <input class="uk-input" id="email-field"
                                    type="text" th:field="*{email}"
                                    placeholder="enter email" required>
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                         </div>
                     </div>
 
@@ -134,21 +74,22 @@
                                for="password-field">Password*</label>
                         <div class="uk-form-controls">
                             <input class="uk-input" id="password-field"
-                                   type="text" th:field="*{password}"
+                                   type="password" th:field="*{password}"
                                    placeholder="enter password" required>
+                            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                         </div>
                     </div>
 
-<!--                    TODO: retype password field + validation-->
-<!--                    <div class="uk-margin">-->
-<!--                        <label class="uk-form-label form-label"-->
-<!--                               for="retype-password-field">Password*</label>-->
-<!--                        <div class="uk-form-controls">-->
-<!--                            <input class="uk-input" id="retype-password-field"-->
-<!--                                   type="text" th:field="*{password}"-->
-<!--                                   placeholder="enter password" required>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="uk-margin">
+                        <label class="uk-form-label form-label"
+                               for="retype-password-field">Retype Password*</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input" id="retype-password-field"
+                                   type="password" th:field="*{retypePassword}"
+                                   placeholder="retype password" required>
+                            <span th:if="${#fields.hasErrors('passwordsEqual')}" th:errors="*{passwordsEqual}"></span>
+                        </div>
+                    </div>
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
@@ -156,7 +97,8 @@
                         <div class="uk-form-controls">
                             <input class="uk-input" id="first-name-field"
                                    type="text" th:field="*{firstName}"
-                                   placeholder="enter first name" required>
+                                   placeholder="enter first name">
+                            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
                         </div>
                     </div>
 
@@ -166,23 +108,16 @@
                         <div class="uk-form-controls">
                             <input class="uk-input" id="last-name-field"
                                    type="text" th:field="*{lastName}"
-                                   placeholder="enter last name" required>
+                                   placeholder="enter last name">
+                            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                         </div>
                     </div>
 
                     <button type="submit" class="buttons">Register me</button>
-
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
-
-
 </main>
-
 </body>
 </html>

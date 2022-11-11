@@ -1,12 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="UTF-8">
     <title>All Ingredients</title>
-    <link rel="icon" type="image/png" href="img/spagh-favicon.png">
-
+    <div th:replace="fragments/header :: header-head"/>
 </head>
+
 <body>
+<!--HEADER-->
+<div th:replace="fragments/header :: header"/>
+
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper">
+
+    <div class="uk-container">
+
+        <div class="uk-grid">
+            <div class="uk-width-1-2 rotate-div">
+                <p class="rotate">All Ingredients!</p>
+            </div>
+            <div class="uk-width-expand">
+                <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
+            </div>
+        </div>
+    </div> <!-- container -->
+</div> <!-- subhdr-wrapper -->
+<hr>
+<main>
 
     <div th:each="ingredient:${ingredients}">
         <p style="display: inline-block">Ingredient name: </p>
@@ -16,8 +37,8 @@
         <p style="display: inline-block" th:text="${ingredient.category}"></p>
         <br>
         <hr>
-
     </div>
 
+</main>
 </body>
 </html>
