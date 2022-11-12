@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static io.eho.dishspawn.DishSpawnApplication.theSketch;
-
 @Controller
 @RequestMapping("/spawn")
 public class ImageController {
@@ -37,6 +35,8 @@ public class ImageController {
     private RecipeIngredientService recipeIngredientService;
     private VisualService visualService;
     private ChefService chefService;
+
+    private TheSketch theSketch;
 
     @Autowired
     public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService,
@@ -76,8 +76,8 @@ public class ImageController {
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
-        // todo explain
-        theSketch.setGenerate(true);
+        // initiate the sketch
+        theSketch = getTheSketch();
 
         // transform each ri to a shape and place in list
         List<Shape> shapeList = new ArrayList<>();
@@ -104,6 +104,7 @@ public class ImageController {
         String fileName = "visual" + newId + ".png";
         theSketch.save("src/main/webapp/spawns/" + fileName); // save sketch as .png
         // todo: real save to move to saveImage method -> first 'save' to BufferedImage only (in memory)
+        theSketch.exitActual();
 
         // save image as visual with its attributes (chef, recipe, filename and location)
         Visual newVisual = new Visual();
@@ -126,7 +127,6 @@ public class ImageController {
         visualService.saveVisual(newVisual);
 
         // re-initialize theSketch todo
-        theSketch.init();
 
         // read saved image from file location - not needed I think?
         Visual visual = visualService.findVisualById(newId);
@@ -137,4 +137,12 @@ public class ImageController {
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
     }
+
+    private TheSketch getTheSketch() {
+		System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
+		TheSketch theSketch = new TheSketch();
+		String[] a = {"MAIN"};
+		PApplet.runSketch(a, theSketch);
+		return theSketch;
+	}
 }

@@ -11,19 +11,13 @@ import java.util.List;
 
 public class TheSketch extends PApplet {
 
-    // initializing shapes avoids an incidental NPE thrown on line 50(i think..)
     private List<Shape> shapes = new ArrayList<>();
-    private boolean generate;
+//    private boolean generate;
     private final int COLOR_CEILING = 255;
 
     int red;
     int green;
     int blue;
-
-    public static void main(String[] args)
-    {
-        PApplet.main("TheSketch");
-    }
 
     @Override
     public void setup() {
@@ -33,37 +27,27 @@ public class TheSketch extends PApplet {
         green = (int) random(0, COLOR_CEILING);
         blue = (int) random(0, COLOR_CEILING);
 
-        generate = false;
-
         background(red, green, blue);
     }
 
     @Override
-    public void settings()
-    {
+    public void settings() {
         size(800, 800);
     }
 
     @Override
     public void draw() {
-        if (generate) {
+//        if (generate) {
             for (Shape s: shapes) {
                 s.step();
                 s.render();
             }
-        }
+//        }
     }
 
-    public void init() {
-        frameRate(40);
-
-        red = (int) random(0, COLOR_CEILING);
-        green = (int) random(0, COLOR_CEILING);
-        blue = (int) random(0, COLOR_CEILING);
-
-        generate = false;
-
-        background(red, green, blue);
+    @Override
+    public void exitActual() {
+        this.getSurface().setVisible(false);
     }
 
     public void mouseDragged() {
@@ -74,7 +58,4 @@ public class TheSketch extends PApplet {
         this.shapes = shapes;
     }
 
-    public void setGenerate(boolean generate) {
-        this.generate = generate;
-    }
 }
