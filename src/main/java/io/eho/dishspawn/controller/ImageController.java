@@ -126,7 +126,7 @@ public class ImageController {
         visualService.saveVisual(newVisual);
 
         // re-initialize theSketch todo
-        theSketch.setup();
+        theSketch.init();
 
         // read saved image from file location - not needed I think?
         Visual visual = visualService.findVisualById(newId);

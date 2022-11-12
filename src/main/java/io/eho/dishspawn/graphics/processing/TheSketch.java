@@ -54,6 +54,18 @@ public class TheSketch extends PApplet {
         }
     }
 
+    public void init() {
+        frameRate(40);
+
+        red = (int) random(0, COLOR_CEILING);
+        green = (int) random(0, COLOR_CEILING);
+        blue = (int) random(0, COLOR_CEILING);
+
+        generate = false;
+
+        background(red, green, blue);
+    }
+
     public void mouseDragged() {
         shapes.add(new Rectangle(this, mouseX, mouseY));
     }
