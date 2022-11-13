@@ -45,7 +45,9 @@ public class SpawnController {
     private StringBuilder noIngredientMessage = new StringBuilder();
     private StringBuilder incorrectIngredientsAmountMessage = new StringBuilder();
 
-    public SpawnController() { }
+    public SpawnController() {
+//        reset();
+    }
 
     @Autowired
     public SpawnController(IngredientService ingredientService, RecipeService recipeService,
@@ -59,6 +61,7 @@ public class SpawnController {
     public String spawnGet(Model model) {
 
         // todo: reset all? hmmm...
+//        reset();
 
         // null check on searchKey to avoid NPE when launching spawn page without a searchKey
         if (searchKey != null) {
