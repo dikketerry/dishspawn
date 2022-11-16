@@ -21,13 +21,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import processing.core.PApplet;
+import processing.core.PImage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static io.eho.dishspawn.DishSpawnApplication.theSketch;
 
 @Controller
 @RequestMapping("/spawn")
@@ -37,6 +43,10 @@ public class ImageController {
     private RecipeIngredientService recipeIngredientService;
     private VisualService visualService;
     private ChefService chefService;
+
+    private TheSketch theSketch;
+    private PImage pImg;
+    private Recipe recipe;
 
     @Autowired
     public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService,
@@ -52,6 +62,7 @@ public class ImageController {
         // get recipe
         // help method to convert String to Long and catch non-numerical input
         Long idLong = Parser.convertStringIdToLong(id);
+        this.pImg = null;
 
         // todo - this does overlook the possibility 0 is provided per input
         if (idLong == 0l) {
@@ -60,6 +71,7 @@ public class ImageController {
             return "error-page";
         }
         Recipe recipe = recipeService.findRecipeById(idLong);
+        this.recipe = recipe;
 
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
@@ -76,8 +88,8 @@ public class ImageController {
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
-        // todo explain
-        theSketch.setGenerate(true);
+        // initiate the sketch
+        theSketch = getTheSketch();
 
         // transform each ri to a shape and place in list
         List<Shape> shapeList = new ArrayList<>();
@@ -87,6 +99,7 @@ public class ImageController {
             shapeList.add(s);
             System.out.println(s);
         }
+
         // set the list of shapes in the sketch
         theSketch.setShapes(shapeList);
 
@@ -99,13 +112,23 @@ public class ImageController {
         }
 
         theSketch.dispose(); // stops animation; does NOT close the window with the sketch
+        this.pImg = theSketch.get();
+        theSketch.exitActual();
+        String imageString = imgToBase64String((BufferedImage) pImg.getNative(), "PNG");
 
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("imageString", imageString);
+
+        return "tempvisual";
+    }
+
+    @PostMapping("/spawn/{id}/save")
+    public String saveVisual(Model model) {
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
         String fileName = "visual" + newId + ".png";
-        theSketch.save("src/main/webapp/spawns/" + fileName); // save sketch as .png
-        // todo: real save to move to saveImage method -> first 'save' to BufferedImage only (in memory)
 
-        // save image as visual with its attributes (chef, recipe, filename and location)
+        this.pImg.save("src/main/webapp/spawns/" + fileName);
+
         Visual newVisual = new Visual();
         String chefUserName = SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -115,20 +138,16 @@ public class ImageController {
             Chef chef = optChef.get();
             newVisual.setChef(chef);
         } else {
-//            todo - belongs to todo to implement BufferedImage
-//            throw new SaveImageNotPossible("save image not possible when not logged in");
-            newVisual.setChef(chefService.findChefById(1l));
+            throw new SaveImageNotPossible("save image not possible when not logged in");
         }
 
-        newVisual.setRecipe(recipe);
+        newVisual.setRecipe(this.recipe);
         newVisual.setFileName(fileName);
         newVisual.setFileLocation("/spawns/" + fileName);
         visualService.saveVisual(newVisual);
 
         // re-initialize theSketch todo
-        theSketch.setup();
 
-        // read saved image from file location - not needed I think?
         Visual visual = visualService.findVisualById(newId);
         System.out.println(visual);
 
@@ -137,4 +156,24 @@ public class ImageController {
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
     }
+
+    public String imgToBase64String(final RenderedImage img, final String formatName) {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        try {
+            ImageIO.write(img, formatName, os);
+            return Base64.getEncoder().encodeToString(os.toByteArray());
+        }
+        catch (final IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
+    }
+
+    private TheSketch getTheSketch() {
+		System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
+		TheSketch theSketch = new TheSketch();
+		String[] a = {"MAIN"};
+		PApplet.runSketch(a, theSketch);
+		return theSketch;
+	}
 }
