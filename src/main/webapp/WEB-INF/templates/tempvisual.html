@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spawn In!</title>
+    <div th:replace="fragments/header :: header-head"/>
+</head>
+
+<body>
+<!--HEADER-->
+<div th:replace="fragments/header :: header"/>
+
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+    <div class="uk-container"> <!--div to center + set max width -->
+
+        <div class="uk-grid"> <!-- div to align content horizontally -->
+            <div class="uk-width-1-2 rotate-div">
+                <p class="rotate" id="recipe-title"
+                   th:text="${recipe.name}">recipe-name</p>
+            </div>
+
+            <div class="uk-width-expand">
+                <img id="swedish-chef" src="/img/swedish-chef.png"
+                     alt="swedish-chef-image">
+            </div>
+        </div>
+
+        <hr class="custom-hr">
+
+    </div> <!-- container -->
+</div> <!-- subhdr-wrapper -->
+
+<main>
+    <div class="content-wrapper"> <!-- div without width spanning browser width -->
+        <div class="uk-container"> <!-- div to center + set max width -->
+
+            <div class="main-headers">
+                <div sec:authorize="isAuthenticated()" class="main-titles margin16 love-box"> <!-- div title header -->
+                    <p th:text="${#authentication.getName() + ', save this spawn?'}"></p>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="timestamp margin16 love-box">
+                    <div class="love-box">
+                        <form th:action="@{/spawn/spawn/{id}(id=${recipe.id})/save}" th:object="${recipe}"
+                              method="post">
+                            <button class="uk-button uk-button-small uk-button-danger uk-border-pill" type="submit">
+                                Save!
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div sec:authorize="isAnonymous()" class="main-titles margin16 love-box">
+                    <p>Anonymous spawn</p>
+                </div>
+
+                <hr class="custom-hr">
+            </div>
+
+            <div>
+
+            </div>
+
+            <!-- 1 = processing / 2 = JS / P5 implementation -->
+<!--            1    -->
+            <div uk-lightbox>
+                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+                   data-type="image" th:attr="data-src=@{'data:image/png;base64, ' + ${imageString}}"
+                   th:href="@{'data:image/png;base64, ' + ${imageString}}" uk-img>
+                </a>
+            </div>
+
+<!--            2    -->
+<!--            <div id="canvas-holder">-->
+<!--                &lt;!&ndash;                for JS sketch&ndash;&gt;-->
+<!--            </div>-->
+
+            <hr class="custom-hr">
+
+            <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
+                <div id="ingredients-title" class="margin16">
+                    <span>Ingredients</span>
+                </div>
+                <div id="directions-title">
+                    <span>Directions</span>
+                </div>
+            </div>
+
+            <hr class="custom-hr">
+
+            <div class="ingredients-directions-content-wrapper">
+                <div id="ingredients-content" class="margin16">
+    <!-- TODO: find way to access labels of enums... refactor MassConverter and VolumeConverter into Converter? -->
+                    <ul>
+                        <li th:each="recipeIngredient:${recipe.recipeIngredients}">
+                            <span th:if="${recipeIngredient.quantity != 0}"
+                                    th:text="${#strings.capitalize(recipeIngredient.ingredient.name)} + ' - '">name</span>
+                            <span th:if="${recipeIngredient.quantity == 0}"
+                                  th:text="${#strings.capitalize(recipeIngredient.ingredient.name)}">name</span>
+                            <span th:text="${recipeIngredient.quantity != 0} ? ${recipeIngredient.quantity} + ' ' : ''">quantity</span>
+                            <span th:if="${recipeIngredient.unitName != null} AND ${recipeIngredient.unitName != 'PIECE'}"
+                                  th:text="${#strings.toLowerCase(recipeIngredient.unitName)}"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="directions-content">
+                    <ol>
+                        <li th:each="instruction:${recipe.instructions}">
+                            <span th:text="${instruction}"></span>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>
