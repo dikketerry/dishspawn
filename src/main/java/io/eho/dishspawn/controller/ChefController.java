@@ -42,6 +42,7 @@ public class ChefController {
     public String loginForm(Model model) {
         model.addAttribute("formLoginData", new FormLoginChef());
         return "login";
+        // todo
         /*
                 if (securityService.isAuthenticated()) {
             return "redirect:/";
