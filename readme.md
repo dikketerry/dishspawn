@@ -25,13 +25,10 @@ website](https://www.alisoneroman.com/recipes).
 
 Although the app is considered finished as an end-project for the course, the 
 app is still in progress. Open points:
-- Issue - after running 1 sketch, a clean is required of the canvas - 
-  currently a 2nd sketch overwrites a 1st
-- Spring Security implementation
 - Multithreading
+- Lots of little lay-out thingies to be improved.
 - Algorithm to generate image is premature - yes, dependent on ingredients, 
   but very basic. Needs much more development (which is the real fun!)
-- Lots of little lay-out thingies to be improved.
 
 ## Screenshots
 

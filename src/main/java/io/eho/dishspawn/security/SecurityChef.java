@@ -14,8 +14,6 @@ public class SecurityChef implements UserDetails {
 
     private final Chef chef;
 
-
-
     @Override
     public String getUsername() {
         return chef.getUserName();
@@ -27,10 +25,7 @@ public class SecurityChef implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(() -> "chef");
-//        return List.of(() -> chef.getRole());
-
+    public Collection<GrantedAuthority> getAuthorities() {
         return chef.getRoles()
                 .stream()
                 .map(role -> new SecurityRole(role))
