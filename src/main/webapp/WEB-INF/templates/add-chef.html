@@ -52,9 +52,6 @@
                                    type="text" th:field="*{userName}"
                                    placeholder="enter username" required autofocus>
                             <span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
-<!--                            <p th:if="${#fields.hasErrors('userName')}"-->
-<!--                               th:text="${#strings.listJoin(#fields.errors('userName'), ', ')}"-->
-<!--                               th:errors="*{userName}" class="text-danger"></p>-->
                         </div>
                     </div>
 
@@ -113,7 +110,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="buttons">Register me</button>
+                    <button class="uk-button uk-button-small uk-button-primary uk-border-pill"
+                            type="submit">Register me</button>
                 </form>
             </div>
         </div>

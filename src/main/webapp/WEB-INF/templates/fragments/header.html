@@ -25,15 +25,14 @@
 <body>
 <div th:fragment="header">
     <div class="hdr-wrapper"> <!-- div without width spanning browser width -->
-
         <div class="uk-container"> <!-- UIKit class to center + set max width -->
-            <!-- now set-up row/column structure -->
-
             <nav class="uk-navbar">
                 <!--            logo part (includes the text (name and tagline)-->
+
                 <div class="uk-navbar-left">
-                    <a class="uk-navbar-item uk-logo" href="/"> <img class="uk-margin-small-right food-icon"
-                                                                     src="/img/logo/icons8-rice-bowl-100.png">
+                    <a class="uk-navbar-item uk-logo" href="/">
+                        <img class="uk-margin-small-right food-icon"
+                             src="/img/logo/icons8-rice-bowl-100.png">
                         <div class="tagline">
                             <div class="tagline-cell">
                                 <p id="tagline-main">Dish Spawn</p>
@@ -61,17 +60,34 @@
 
 <!--                        admin access for chef and recipe lists-->
                         <li th:if="${#authorization.expression('hasRole(''admin'')')}">
-                            <a class="uk-link-text" href="/chef/all">Chefs</a></li>
+                            <a class="uk-link-text" href="/chef/all">Chefs</a>
+                        </li>
                         <li th:if="${#authorization.expression('hasRole(''admin'')')}">
-                            <a class="uk-link-text" href="/recipe/all">Recipes</a></li>
+                            <a class="uk-link-text" href="/recipe/all">Recipes</a>
+                        </li>
 
 <!--                        login / register for anonymous user-->
                         <li sec:authorize="isAnonymous()">
-                            <a class="uk-link-text" href="/chef/login">Login</a></li>
+                            <a class="uk-link-text" href="/chef/login">Login</a>
+                        </li>
                         <li sec:authorize="isAnonymous()">
-                            <a class="uk-link-text" href="/chef/create">Register</a></li>
+                            <a class="uk-link-text" href="/chef/create">Register</a>
+                        </li>
 
-<!--                        logout for authenticated user-->
+<!--                        login details + logout for authenticated user-->
+
+                        <div class="chef-name">
+                            <a th:href="@{/chef/{chefId}(chefId=${latestVisual.chef.id})}"
+                               th:text="${latestVisual.chef.userName}" class="uk-link-text">chefname</a>
+                        </div>
+
+                        <div class="uk-navbar-item">
+                            <a th:href="@{/chef/{id}(id=${#authentication.get})">Link</a></div>
+                        </div>
+
+                        <li sec:authorize="isAuthenticated()">
+                            <p class="uk-text-middle">logged in as <span th:text="${#authentication.getName()}"/></p>
+                        </li>
                         <li sec:authorize="isAuthenticated()">
                             <form id="logoutForm" method="POST" th:action="@{/logout}">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

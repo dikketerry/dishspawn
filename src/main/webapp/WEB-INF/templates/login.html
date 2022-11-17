@@ -9,9 +9,24 @@
 
 <div th:replace="fragments/header :: header"/>
 
-<div class="placeholder" style="height: 200px;">
-    <h2>SUBHEADER - SIGN ME IN</h2>
-</div>
+<!--SUB-HEADER AREA-->
+<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+    <div class="uk-container">
+        <div class="uk-grid">
+
+            <div class="uk-width-1-2 rotate-div">
+                <p class="rotate">Login</p>
+            </div>
+
+            <div class="uk-width-expand">
+                <img id="swedish-chef" src="/img/swedish-chef.png"
+                     alt="swedish-chef-image">
+            </div>
+
+        </div>
+    </div> <!-- container -->
+</div> <!-- subhdr-wrapper -->
+
 <main>
 
     <div th:if="${param.error}">
@@ -19,16 +34,36 @@
     <div th:if="${param.logout}">
         You have been logged out.</div>
 
-    <div class="container">
-        <form th:action="@{/chef/login}" method="post">
-            <div>
-                <input type="text" name="username" placeholder="Username"/>
+    <div class="content-wrapper"> <!-- div without width spanning browser width -->
+        <div class="uk-container"> <!-- UIKit ('UK-..') class to center + set max width -->
+            <div class="container-form"> <!-- form div -->
+
+                <form class="uk-form-horizontal uk-margin-small"
+                      th:action="@{/chef/login}" method="post">
+                    <br>
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: user"></span>
+                            <input class="uk-input uk-form-width-medium" type="text" name="username"
+                                   placeholder="Username"
+                                   required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="uk-margin">
+                        <div class="uk-inline">
+                            <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                            <input class="uk-input uk-form-width-medium" type="password" name="password"
+                                   placeholder="Password"
+                                   required>
+                        </div>
+                    </div>
+
+                    <button class="uk-button uk-button-small uk-button-primary uk-border-pill"
+                            type="submit">Login</button>
+                </form>
             </div>
-            <div>
-                <input type="password" name="password" placeholder="Password"/>
-            </div>
-            <input type="submit" value="Log in"/>
-        </form>
+        </div>
     </div>
 
 </main>
