@@ -9,6 +9,9 @@ import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,26 +41,6 @@ public class ChefController {
         this.visualService = visualService;
     }
 
-    @GetMapping("/login")
-    public String loginForm(Model model) {
-        model.addAttribute("formLoginData", new FormLoginChef());
-        return "login";
-        // todo
-        /*
-                if (securityService.isAuthenticated()) {
-            return "redirect:/";
-        }
-
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
-         */
-    }
-
     @GetMapping("/create")
     public String registerChef(Model model) {
         model.addAttribute("formNewChefData", new FormCreateChef());
@@ -68,7 +51,6 @@ public class ChefController {
     public String saveChef(@Valid @ModelAttribute("formNewChefData") FormCreateChef formData,
                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("errors in save");
             return "add-chef";
         }
 
@@ -82,7 +64,7 @@ public class ChefController {
 
         if (chefsFromDB == null) {
             model.addAttribute("error", "no chefs found");
-            return "error-page";
+            return "error";
         }
 
         model.addAttribute("chefs", chefsFromDB);

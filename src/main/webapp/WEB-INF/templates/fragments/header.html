@@ -16,7 +16,9 @@
         <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
 <!--        only for visual.html note below:-->
 <!--        COMMENT OUT p5 and script reference when running Processing implementation-->
-<!--        <script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
+<!--        <
+
+script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
 <!--        <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
 
     </div>
@@ -70,7 +72,7 @@
 
 <!--                        login / register for anonymous user-->
                         <li sec:authorize="isAnonymous()">
-                            <a class="uk-link-text" href="/chef/login">Login</a>
+                            <a class="uk-link-text" href="/login">Login</a>
                         </li>
                         <li sec:authorize="isAnonymous()">
                             <a class="uk-link-text" href="/chef/create">Register</a>

@@ -13,31 +13,19 @@
 
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
-
     <div class="uk-container">
-
         <div class="uk-grid">
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate">Add ingredient!</p>
-            </div>
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: message(message='Add ingredient')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-
     </div> <!-- container -->
-
 </div> <!-- subhdr-wrapper -->
 
 <hr>
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
-
-        <div class="uk-container"> <!-- UIKit class to center + set max width -->
-<!--            now set up the form-->
-
-            <div class="container-form"> <!-- div to build the form in for
-            sizing and positioning -->
+        <div class="uk-container">
+            <div class="container-form">
 
                 <form class="uk-form-horizontal uk-margin-small"
                         th:action="@{save}" th:object="${ingredient}" method="post">

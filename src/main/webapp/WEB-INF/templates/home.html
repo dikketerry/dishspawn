@@ -14,9 +14,7 @@
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
 
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
-<!--        now set row with 2 elements: title of form + image-->
-
+    <div class="uk-container">
         <div class="uk-grid">
             <div class ="uk-width-1-2 page-subhdr">
                 <div class="margin16">
@@ -34,10 +32,7 @@
                 </div>
             </div>
 
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png"
-                     alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
 
         </div>
         <hr class="custom-hr">

@@ -1,0 +1,30 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<form th:fragment="login-form" class="uk-form-horizontal uk-margin-small"
+      th:action="@{/login}" method="post">
+    <br>
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: user"></span>
+            <input class="uk-input uk-form-width-medium" type="text" name="username"
+                   placeholder="Username"
+                   required autofocus>
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <div class="uk-inline">
+            <span class="uk-form-icon" uk-icon="icon: lock"></span>
+            <input class="uk-input uk-form-width-medium" type="password" name="password"
+                   placeholder="Password"
+                   required>
+        </div>
+    </div>
+
+    <button class="uk-button uk-button-small uk-button-primary uk-border-pill"
+            type="submit">Login</button>
+</form>
+
+</html>

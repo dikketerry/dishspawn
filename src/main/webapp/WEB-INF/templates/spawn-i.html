@@ -18,13 +18,8 @@
         <!--        now set row with 2 elements: title of form + image-->
 
         <div class="uk-grid">
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate">Spawn me a dish!</p>
-            </div>
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png"
-                     alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: message(message='Spwan me a dish!')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
 
         <hr class="custom-hr">

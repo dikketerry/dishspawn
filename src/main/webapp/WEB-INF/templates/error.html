@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="UTF-8">
-    <title>Error!</title>
-    <link rel="icon" type="image/png" href="img/spagh-favicon.png">
-
-    <style>
-        .error {color:red}
-    </style>
-
+    <title>Login</title>
+    <div th:replace="fragments/header :: header-head"/>
 </head>
 <body>
 
-<p th:text="'ERROR: ' + ${error}"></p>
+<div th:replace="fragments/header :: header"/>
+
+<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+    <div class="uk-container">
+        <div class="uk-grid">
+            <div th:replace="fragments/subheader :: message(message='Authentication failed')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
+        </div>
+    </div>
+</div> <!-- subhdr-wrapper -->
+
+<main>
+    <div class="content-wrapper">
+        <div class="uk-container">
+            <div class="container-form"> <!-- form div -->
+                <form th:replace="/fragments/login-form :: login-form"/>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!--<p th:text="'ERROR: ' + ${error}"></p>-->
 
 </body>
 </html>

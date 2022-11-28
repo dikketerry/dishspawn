@@ -13,16 +13,10 @@
 
 <!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
-
     <div class="uk-container">
-
         <div class="uk-grid">
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate">New recipe!</p>
-            </div>
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png" alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: message(message='New recipe!')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
     </div> <!-- container -->
 </div> <!-- subhdr-wrapper -->
@@ -30,17 +24,12 @@
 <hr>
 <main>
     <div class="content-wrapper">
-
         <div class="uk-container">
-
-            <div class="container-form"> <!-- div to build the form in for
-            sizing and positioning -->
+            <div class="container-form">
                 <h3>New recipe</h3>
 
                 <form class="uk-form-horizontal uk-margin-small"
                         th:action="@{save}" th:object="${recipe}" method="post">
-
-                    <!-- TODO: add error handling for field input errors -->
 
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
@@ -51,7 +40,7 @@
                                    placeholder="enter name of recipe" required autofocus>
                         </div>
                     </div>
-
+<!--                    todo -->
 <!--                    add ingredients to recipe -> recipe ingredients-->
 <!--                    1. find ingredient-->
 <!--                    2. add unit-->

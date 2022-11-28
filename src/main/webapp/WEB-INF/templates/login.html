@@ -9,63 +9,23 @@
 
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
     <div class="uk-container">
         <div class="uk-grid">
-
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate">Login</p>
-            </div>
-
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png"
-                     alt="swedish-chef-image">
-            </div>
-
+            <div th:replace="fragments/subheader :: message(message='Login')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-    </div> <!-- container -->
+    </div>
 </div> <!-- subhdr-wrapper -->
 
 <main>
-
-    <div th:if="${param.error}">
-        Invalid username and password.</div>
-    <div th:if="${param.logout}">
-        You have been logged out.</div>
-
-    <div class="content-wrapper"> <!-- div without width spanning browser width -->
-        <div class="uk-container"> <!-- UIKit ('UK-..') class to center + set max width -->
+    <div class="content-wrapper">
+        <div class="uk-container">
             <div class="container-form"> <!-- form div -->
-
-                <form class="uk-form-horizontal uk-margin-small"
-                      th:action="@{/chef/login}" method="post">
-                    <br>
-                    <div class="uk-margin">
-                        <div class="uk-inline">
-                            <span class="uk-form-icon" uk-icon="icon: user"></span>
-                            <input class="uk-input uk-form-width-medium" type="text" name="username"
-                                   placeholder="Username"
-                                   required autofocus>
-                        </div>
-                    </div>
-
-                    <div class="uk-margin">
-                        <div class="uk-inline">
-                            <span class="uk-form-icon" uk-icon="icon: lock"></span>
-                            <input class="uk-input uk-form-width-medium" type="password" name="password"
-                                   placeholder="Password"
-                                   required>
-                        </div>
-                    </div>
-
-                    <button class="uk-button uk-button-small uk-button-primary uk-border-pill"
-                            type="submit">Login</button>
-                </form>
+                <form th:replace="/fragments/login-form :: login-form"/>
             </div>
         </div>
     </div>
-
 </main>
 </body>
 </html>

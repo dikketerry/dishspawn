@@ -1,0 +1,14 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<div th:fragment="message(message)" class="uk-width-1-2 rotate-div">
+    <p class="rotate">[[${message}]]</p>
+</div>
+
+<div th:fragment="swedish-chef" class="uk-width-expand">
+    <img id="swedish-chef" src="/img/swedish-chef.png"
+         alt="swedish-chef-image">
+</div>
+
+</html>

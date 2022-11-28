@@ -17,13 +17,8 @@
     <div class="uk-container"> <!-- UIKit class to center + set max width -->
 
         <div class="uk-grid">
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate">Search result</p>
-            </div>
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png"
-                     alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: message(message='Search result')"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
     </div> <!-- container -->
 </div> <!-- subhdr-wrapper -->
@@ -35,9 +30,7 @@
         <div class="uk-container"> <!-- UIKit class to center + set max width -->
 
             <div class="search-result">
-                <!--todo-->
-                <h2>TODO: LAYOUT TO BE UPDATED</h2>
-
+                <!--todo layout-->
                 <h4>Chefs</h4>
                 <ul>
                     <li th:each="chef:${searchChefResult}">

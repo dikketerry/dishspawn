@@ -16,25 +16,18 @@
     <div class="uk-container"> <!--div to center + set max width -->
 
         <div class="uk-grid"> <!-- div to align content horizontally -->
-            <div class="uk-width-1-2 rotate-div">
-                <p class="rotate" id="recipe-title"
-                   th:text="${visual.recipe.name}">recipe-name</p>
-            </div>
-
-            <div class="uk-width-expand">
-                <img id="swedish-chef" src="/img/swedish-chef.png"
-                     alt="swedish-chef-image">
-            </div>
+            <div th:replace="fragments/subheader :: message(${visual.recipe.name})"/>
+            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
 
         <hr class="custom-hr">
 
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
+    </div>
+</div>
 
 <main>
-    <div class="content-wrapper"> <!-- div without width spanning browser width -->
-        <div class="uk-container"> <!-- div to center + set max width -->
+    <div class="content-wrapper">
+        <div class="uk-container">
 
             <div class="main-headers">
                 <div class="main-titles margin16"> <!-- div title header -->
@@ -84,7 +77,6 @@
                             <span th:if="${recipeIngredient.quantity == 0}"
                                   th:text="${#strings.capitalize(recipeIngredient.ingredient.name)}">name</span>
                             <span th:text="${recipeIngredient.quantity != 0} ? ${recipeIngredient.quantity} + ' ' : ''">quantity</span>
-<!--                            <span th:text="${recipeIngredient.unitName != null} ? ${#strings.toLowerCase(recipeIngredient.unitName)} + ' ' : ''">unit</span>-->
                             <span th:if="${recipeIngredient.unitName != null} AND ${recipeIngredient.unitName != 'PIECE'}"
                                   th:text="${#strings.toLowerCase(recipeIngredient.unitName)}"></span>
                         </li>
