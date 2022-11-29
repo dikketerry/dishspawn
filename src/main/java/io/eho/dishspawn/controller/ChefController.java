@@ -1,5 +1,7 @@
 package io.eho.dishspawn.controller;
 
+import io.eho.dishspawn.exception.ResourceNotFoundException;
+import io.eho.dishspawn.exception.UsernameAlreadyExistsException;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.security.SecurityChef;
@@ -16,9 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -95,6 +99,18 @@ public class ChefController {
         return "chef";
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ModelAndView resourceNotFound(ResourceNotFoundException rnfe) {
+        String message = rnfe.getMessage();
+        return errorView(message);
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ModelAndView usernameAlreadyExists(UsernameAlreadyExistsException uaee) {
+        String message = uaee.getMessage();
+        return errorView(message);
+    }
+
     private List<Visual> last200MinusFirst(List<Visual> top200VisualsChef) {
         return top200VisualsChef.stream()
                 .skip(1)
@@ -121,5 +137,11 @@ public class ChefController {
 
     private void resetMessage() {
         message.setLength(0);
+    }
+
+    private ModelAndView errorView(String message) {
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("message", message).setViewName("testerror");
+        return mav;
     }
 }

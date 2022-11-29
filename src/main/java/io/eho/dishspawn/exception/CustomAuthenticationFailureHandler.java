@@ -15,6 +15,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
                                         HttpServletResponse response,
                                         AuthenticationException exception)
             throws IOException, ServletException {
-        response.sendRedirect("/error");
+        response.sendRedirect("/er");
     }
 }

@@ -21,7 +21,7 @@ public class SecurityConfiguration {
                     .mvcMatchers("/ingredient/add").hasAnyRole("superchef", "admin")
                     .mvcMatchers("/recipe/add", "/loveVisual").hasAnyRole("chef", "superchef", "admin")
                     .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn/**", "/visual/**", "/login",
-                                 "/customError").permitAll()
+                                 "/error").permitAll()
                 .and()
                 .formLogin()
                     .loginPage("/login.html")       // form for login template

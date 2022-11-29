@@ -15,6 +15,7 @@ import io.eho.dishspawn.service.RecipeService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -133,14 +134,15 @@ public class ImageController {
         String chefUserName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-        Optional<Chef> optChef = chefService.findChefByUserName(chefUserName);
-        if (optChef.isPresent()) {
-            Chef chef = optChef.get();
-            newVisual.setChef(chef);
-        } else {
+
+        Chef chef = null;
+        try {
+            chef = chefService.findChefByUserName(chefUserName);
+        } catch (UsernameNotFoundException unfe) {
             throw new SaveImageNotPossible("save image not possible when not logged in");
         }
 
+        newVisual.setChef(chef);
         newVisual.setRecipe(this.recipe);
         newVisual.setFileName(fileName);
         newVisual.setFileLocation("/spawns/" + fileName);

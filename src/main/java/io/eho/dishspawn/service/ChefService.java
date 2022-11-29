@@ -14,5 +14,5 @@ public interface ChefService {
     List<Chef> findAllChefByUserNameContaining(String input);
     void updateChef(Chef chef);
     void deleteChef(Chef chef);
-    Optional<Chef> findChefByUserName(String inputUserName);
+    Chef findChefByUserName(String inputUserName);
 }
