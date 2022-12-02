@@ -1,10 +1,10 @@
 package io.eho.dishspawn.config;
 
-import io.eho.dishspawn.exception.CustomAuthenticationFailureHandler;
+import io.eho.dishspawn.security.CustomAuthenticationFailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -24,8 +24,7 @@ public class SecurityConfiguration {
                                  "/error").permitAll()
                 .and()
                 .formLogin()
-                    .loginPage("/login.html")       // form for login template
-                    .loginProcessingUrl("/login")   // for the POST method
+                    .loginPage("/login")       // will redirect when login is required
                     .defaultSuccessUrl("/home")
                     .failureHandler(authenticationFailureHandler())
                     .failureUrl("/error")
@@ -38,7 +37,7 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
