@@ -26,8 +26,8 @@ public class SecurityConfiguration {
                 .formLogin()
                     .loginPage("/login")       // will redirect when login is required
                     .defaultSuccessUrl("/home")
-                    .failureHandler(authenticationFailureHandler())
-                    .failureUrl("/error")
+//                    .failureHandler(authenticationFailureHandler())
+//                    .failureUrl("/error")
                 .and()
                 .logout()
                     .logoutSuccessUrl("/home")
