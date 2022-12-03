@@ -99,17 +99,17 @@ public class ChefController {
         return "chef";
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ModelAndView resourceNotFound(ResourceNotFoundException rnfe) {
-        String message = rnfe.getMessage();
-        return errorView(message);
-    }
-
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ModelAndView usernameAlreadyExists(UsernameAlreadyExistsException uaee) {
-        String message = uaee.getMessage();
-        return errorView(message);
-    }
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ModelAndView resourceNotFound(ResourceNotFoundException rnfe) {
+//        String message = rnfe.getMessage();
+//        return errorView(message);
+//    }
+//
+//    @ExceptionHandler(UsernameAlreadyExistsException.class)
+//    public ModelAndView usernameAlreadyExists(UsernameAlreadyExistsException uaee) {
+//        String message = uaee.getMessage();
+//        return errorView(message);
+//    }
 
     private List<Visual> last200MinusFirst(List<Visual> top200VisualsChef) {
         return top200VisualsChef.stream()
@@ -139,9 +139,9 @@ public class ChefController {
         message.setLength(0);
     }
 
-    private ModelAndView errorView(String message) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("message", message).setViewName("testerror");
-        return mav;
-    }
+//    private ModelAndView errorView(String message) {
+//        ModelAndView mav = new ModelAndView();
+//        mav.addObject("message", message).setViewName("ooops");
+//        return mav;
+//    }
 }

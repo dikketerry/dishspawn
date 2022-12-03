@@ -3,7 +3,7 @@
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>Login</title>
+    <title>error.html</title>
     <div th:replace="fragments/header :: header-head"/>
 </head>
 <body>
@@ -13,7 +13,7 @@
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
     <div class="uk-container">
         <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='Authentication failed')"/>
+            <div th:replace="fragments/subheader :: message(message=':(')"/>
             <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
     </div>
@@ -23,6 +23,10 @@
     <div class="content-wrapper">
         <div class="uk-container">
             <div class="container-form"> <!-- form div -->
+                <th:block th:if="${error}">
+                    <p th:text="${error}">hardcoded error</p>
+                    <p th:text="${status}">hardcoded error</p>
+                </th:block>
                 <form th:replace="/fragments/login-form :: login-form"/>
             </div>
         </div>
