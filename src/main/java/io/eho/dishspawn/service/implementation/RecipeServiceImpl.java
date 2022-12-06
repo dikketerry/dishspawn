@@ -1,5 +1,6 @@
 package io.eho.dishspawn.service.implementation;
 
+import io.eho.dishspawn.exception.ResourceNotFoundException;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.repository.RecipeRepository;
 import io.eho.dishspawn.service.RecipeService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +22,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe findRecipeById(Long id) {
-        return recipeRepository.getReferenceById(id);
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+        return recipeOptional.orElseThrow(() -> new ResourceNotFoundException("recipe with id " + id + " not found."));
     }
 
     @Override // TODO: add Chef as parameter

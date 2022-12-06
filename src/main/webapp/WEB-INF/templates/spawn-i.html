@@ -25,12 +25,9 @@
 </div> <!-- subhdr-wrapper -->
 
 <main>
-    <div class="content-wrapper"> <!-- div without width spanning browser width -->
-
-        <div class="uk-container"> <!-- UIKit class to center + set max width-->
-
+    <div class="content-wrapper">
+        <div class="uk-container">
             <div class="container-form">
-
                 <div class="uk-margin">
                     <div class="form-main-titles margin16">
                         <p>Ingredient selector</p>
@@ -46,11 +43,6 @@
                                         class="uk-button uk-button-small uk-button-secondary uk-border-pill"
                                         type="submit">search</button>
                     </form>
-                    <!-- little TODO - use search icon -->
-<!--                    <form class="uk-search uk-search-default">-->
-<!--                        <a th:href="@{/spawn/search}" method="get" uk-search-icon></a>-->
-<!--                        <input class="uk-search-input" type="text" name="searchKey" th:value="${searchKey}" placeholder="aubergine"/>-->
-<!--                    </form>-->
 
                     <div class="table-div" th:if="${!ingredientListPage.isEmpty()}">
                         <div class="form-main-titles margin16">

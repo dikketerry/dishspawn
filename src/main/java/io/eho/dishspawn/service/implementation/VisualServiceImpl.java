@@ -1,5 +1,6 @@
 package io.eho.dishspawn.service.implementation;
 
+import io.eho.dishspawn.exception.ResourceNotFoundException;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
@@ -74,14 +75,7 @@ public class VisualServiceImpl implements VisualService {
     @Override
     public Visual findVisualById(Long id) {
         Optional<Visual> optionalVisual = visualRepository.findById(id);
-
-        Visual visual = null;
-        if(optionalVisual.isPresent()) {
-            visual = optionalVisual.get();
-        } else {
-            throw new RuntimeException("visual with id " + id + " not found");
-        }
-        return visual;
+        return optionalVisual.orElseThrow(() -> new ResourceNotFoundException("visual with id " + id + " not found."));
     }
 
     @Override
