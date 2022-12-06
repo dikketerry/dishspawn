@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="https://www.thymeleaf.org">
 <head th:replace="fragments/header :: header-head(pageTitle='Ooops')"></head>
 <body>
 
 <div th:replace="fragments/header :: header"/>
 
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+<div class="subhdr-wrapper">
     <div class="uk-container">
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(${message})"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
+        <hr class="custom-hr">
     </div>
-</div> <!-- subhdr-wrapper -->
+</div>
 
 <main>
     <div class="content-wrapper">
         <div class="uk-container">
-            <div class="container-form"> <!-- form div -->
-                <form th:replace="/fragments/login-form :: login-form"/>
+
+            <div class="container-form">
+                <p>Sorry, I cannot find what you've requested.</p>
+                <a class="uk-button uk-button-small uk-button-primary uk-border-pill" href="/">Home</a>
             </div>
+
         </div>
     </div>
 </main>

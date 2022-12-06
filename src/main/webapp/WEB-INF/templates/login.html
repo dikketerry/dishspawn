@@ -7,19 +7,19 @@
 <body>
 <div th:replace="fragments/header :: header"/>
 
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+<div class="subhdr-wrapper">
     <div class="uk-container">
         <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='Login')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
+            <div th:replace="fragments/subheader :: message(message='Enter login details or register')"/>
         </div>
+        <hr class="custom-hr">
     </div>
-</div> <!-- subhdr-wrapper -->
+</div>
 
 <main>
     <div class="content-wrapper">
         <div class="uk-container">
-            <div class="container-form"> <!-- form div -->
+            <div class="container-form">
                 <form th:replace="/fragments/login-form :: login-form"/>
             </div>
         </div>

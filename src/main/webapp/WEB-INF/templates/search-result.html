@@ -5,27 +5,22 @@
 <head th:replace="fragments/header :: header-head(pageTitle='Search result')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
-
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
+<div class="subhdr-wrapper">
+    <div class="uk-container">
 
         <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='Search result')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
+            <div th:replace="fragments/subheader :: message(message='Search results:')"/>
         </div>
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
 
-<hr>
+    </div>
+</div>
+
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
-
         <div class="uk-container"> <!-- UIKit class to center + set max width -->
-
             <div class="search-result">
                 <!--todo layout-->
                 <h4>Chefs</h4>
@@ -46,8 +41,6 @@
             </div>
         </div>
     </div>
-
 </main>
-
 </body>
 </html>

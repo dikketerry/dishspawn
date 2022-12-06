@@ -5,21 +5,20 @@
 <head th:replace="fragments/header :: header-head(pageTitle='All Ingredients')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
-
     <div class="uk-container">
 
         <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='All ingredients')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
+            <div th:replace="fragments/subheader :: message(message='List of all ingredients:')"/>
         </div>
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
-<hr>
+        <hr class="custom-hr">
+
+    </div>
+</div>
+
 <main>
 
     <div th:each="ingredient:${ingredients}">

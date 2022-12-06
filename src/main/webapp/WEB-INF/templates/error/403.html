@@ -2,16 +2,15 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head th:replace="fragments/header :: header-head(pageTitle='404')"></head>
+<head th:replace="fragments/header :: header-head(pageTitle='403')"></head>
 <body>
 
 <div th:replace="fragments/header :: header"/>
 
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+<div class="subhdr-wrapper">
     <div class="uk-container">
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(message='Ooopss..')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
     </div>
 </div> <!-- subhdr-wrapper -->
@@ -23,7 +22,7 @@
 
                 <th:block th:if="${error}">
                     <p th:text="${error}">hardcoded error</p>
-                    <p>You know this error.. I couldn't find it!</p>
+                    <p>You're not authorized to view this page</p>
                 </th:block>
 
                 <a class="uk-button uk-button-small uk-button-primary uk-border-pill" href="/">Home</a>

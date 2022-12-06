@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head th:replace="fragments/header :: header-head(pageTitle='404')"></head>
+<head th:replace="fragments/header :: header-head(pageTitle='5XX')"></head>
 <body>
 
 <div th:replace="fragments/header :: header"/>
@@ -23,7 +24,8 @@
 
                 <th:block th:if="${error}">
                     <p th:text="${error}">hardcoded error</p>
-                    <p>You know this error.. I couldn't find it!</p>
+                    <p>Sorry. It looks like things in my databelly were used and/or edited by multiple people. Maybe a
+                        new try will be fruitful.</p>
                 </th:block>
 
                 <a class="uk-button uk-button-small uk-button-primary uk-border-pill" href="/">Home</a>

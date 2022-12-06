@@ -5,20 +5,19 @@
 <head th:replace="fragments/header :: header-head(pageTitle='New Ingredient')"></head>
 <body>
 
-<!--HEADER-->
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
     <div class="uk-container">
-        <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='Add ingredient')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
-        </div>
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
 
-<hr>
+        <div class="uk-grid">
+            <div th:replace="fragments/subheader :: message(message='Add ingredient:')"/>
+        </div>
+        <hr class="custom-hr">
+
+    </div>
+</div>
+
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
         <div class="uk-container">
@@ -31,7 +30,6 @@
                     <br>
 
                     <!-- TODO: add error handling for field input errors -->
-
                     <div class="uk-margin">
                         <label class="uk-form-label form-label"
                                for="ingredient-name-field">Ingredient name *</label>

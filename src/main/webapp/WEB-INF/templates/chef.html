@@ -5,25 +5,22 @@
 <head th:replace="fragments/header :: header-head(pageTitle='Chef')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
     <div class="uk-container">
 
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(${chef.userName})"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-
         <hr class="custom-hr">
+
     </div>
-</div> <!-- subhdr-wrapper -->
+</div>
 
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
-
         <div class="uk-container">
             <div class="main-headers">
                 <div class="main-titles margin16">
@@ -116,16 +113,5 @@
         </div>
     </div>
 </main>
-
-<!--<script>-->
-<!--    // below code waits for page to get loaded. gets element that needs to be active. gets its id (in plain text). uses this value as parameter-->
-<!--    document.addEventListener('readystatechange', event => {-->
-<!--        if (document.readyState === "complete") {-->
-<!--            let filterToActivate = [[${activeFilter}]].id;-->
-<!--            setActiveFilter(filterToActivate);-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->
-
 </body>
 </html>

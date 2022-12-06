@@ -5,24 +5,22 @@
 <head th:replace="fragments/header :: header-head(pageTitle='Spawn In!')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+<div class="subhdr-wrapper">
 
-    <div class="uk-container"> <!-- UIKit class to center + set max width -->
-        <!--        now set row with 2 elements: title of form + image-->
+    <div class="uk-container">
 
         <div class="uk-grid">
-            <div th:replace="fragments/subheader :: message(message='Spwan me a dish!')"/>
+            <div th:replace="fragments/subheader :: message(message='Spawn me a dish!')"/>
             <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
 
         <hr class="custom-hr">
 
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
+    </div>
+</div>
 
 <main>
     <div class="content-wrapper">
@@ -99,7 +97,6 @@
                 </div>
 
                 <div th:if="${findRecipe}">
-
                     <div th:if="${!recipeList.isEmpty()}">
                         <hr class="custom-hr">
                         <div class="form-main-titles margin16">
@@ -108,7 +105,6 @@
                         <table class="uk-table uk-table-middle uk-table-divider table-result">
                             <thead>
                             <tr>
-                                <!--                        <th>Id</th>-->
                                 <th>Recipe name</th>
                                 <th>By chef</th>
                                 <th></th>

@@ -1,14 +1,12 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:th="https://www.thymeleaf.org">
 
-<form th:fragment="login-form" class="uk-form-horizontal uk-margin-small"
-      th:action="@{/login}" method="post">
+<form th:fragment="login-form" class="uk-form-horizontal uk-margin-small" th:action="@{/login}" method="post">
     <br>
     <th:block th:if="${param.error}">
-<!--        todo: message to become dynamic-->
         <div th:replace="fragments/alerts :: error(message='Authentication failed')"></div>
     </th:block>
+
     <div class="uk-margin">
         <div class="uk-inline">
             <span class="uk-form-icon" uk-icon="icon: user"></span>
@@ -27,8 +25,8 @@
         </div>
     </div>
 
-    <button class="uk-button uk-button-small uk-button-primary uk-border-pill"
-            type="submit">Login</button>
+    <button class="uk-button uk-button-small uk-button-primary uk-border-pill" type="submit">Sign in</button>
+    <a class="uk-button uk-button-small uk-button-primary uk-border-pill" href="/chef/create">Register</a>
 </form>
 
 </html>

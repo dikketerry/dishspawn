@@ -5,86 +5,80 @@
 <head th:replace="fragments/header :: header-head(pageTitle='Recipe')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
     <div class="uk-container">
 
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(${recipe.name})"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
+        </div>
+        <hr class="custom-hr">
+
+    </div>
+</div>
+
+<main>
+    <div class="content-wrapper">
+<!--        title-->
+        <div class="main-headers">
+            <div class="main-titles margin16">
+                <p th:text="'Latest spawn by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
+            </div>
+            <div class="timestamp margin16">
+                <p th:text="'on ' +${recipe.timestampCreated}">timestamp-created</p>
+            </div>
+            <hr class="custom-hr">
+        </div>
+
+<!--        image-->
+        <div uk-lightbox>
+            <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+               th:attr="data-src=${recipeLastVisual.fileLocation}"
+               th:href="${recipeLastVisual.fileLocation}" uk-img></a>
         </div>
 
         <hr class="custom-hr">
 
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
-
-<main>
-    <div class="content-wrapper">
-            <div class="main-headers">
-<!--            div title header-->
-                <div class="main-titles margin16">
-                    <p th:text="'Latest spawn by ' +${recipe.chef.userName}">spawned-by-chef-username</p>
-                </div>
-                <div class="timestamp margin16">
-                    <p th:text="'on ' +${recipe.timestampCreated}">timestamp-created</p>
-                </div>
-                <hr class="custom-hr">
+<!--        ingredients-->
+        <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
+            <div id="ingredients-title" class="margin16">
+                <span>Ingredients</span>
             </div>
-
-            <!--            div img-->
-            <div uk-lightbox>
-                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                   th:attr="data-src=${recipeLastVisual.fileLocation}"
-                   th:href="${recipeLastVisual.fileLocation}" uk-img></a>
+            <div id="directions-title">
+                <span>Directions</span>
             </div>
+        </div>
 
-            <hr class="custom-hr">
-
-            <div class="ingredients-directions-titles-wrapper"> <!-- flex-->
-                <div id="ingredients-title" class="margin16">
-                    <span>Ingredients</span>
-                </div>
-                <div id="directions-title">
-                    <span>Directions</span>
-                </div>
+        <hr class="custom-hr">
+<!--        directions-->
+        <div class="ingredients-directions-content-wrapper">
+            <div id="ingredients-content" class="margin16">
+                <!-- TODO: find way to access labels of enums... refactor MassConverter and VolumeConverter into Converter? -->
+                <ul>
+                    <li th:each="recipeIngredient:${recipe.recipeIngredients}">
+                        <span th:if="${recipeIngredient.quantity != 0}"
+                              th:text="${#strings.capitalize(recipeIngredient.ingredient.name)} + ' - '">name</span>
+                        <span th:if="${recipeIngredient.quantity == 0}"
+                              th:text="${#strings.capitalize(recipeIngredient.ingredient.name)}">name</span>
+                        <span th:text="${recipeIngredient.quantity != 0} ? ${recipeIngredient.quantity} + ' ' : ''">quantity</span>
+                        <!--                            <span th:text="${recipeIngredient.unitName != null} ? ${#strings.toLowerCase(recipeIngredient.unitName)} + ' ' : ''">unit</span>-->
+                        <span th:if="${recipeIngredient.unitName != null} AND ${recipeIngredient.unitName != 'PIECE'}"
+                              th:text="${#strings.toLowerCase(recipeIngredient.unitName)}"></span>
+                    </li>
+                </ul>
             </div>
-
-            <hr class="custom-hr">
-
-            <div class="ingredients-directions-content-wrapper">
-
-                <div id="ingredients-content" class="margin16">
-                    <!-- TODO: find way to access labels of enums... refactor MassConverter and VolumeConverter into Converter? -->
-                    <ul>
-                        <li th:each="recipeIngredient:${recipe.recipeIngredients}">
-                            <span th:if="${recipeIngredient.quantity != 0}"
-                                  th:text="${#strings.capitalize(recipeIngredient.ingredient.name)} + ' - '">name</span>
-                            <span th:if="${recipeIngredient.quantity == 0}"
-                                  th:text="${#strings.capitalize(recipeIngredient.ingredient.name)}">name</span>
-                            <span th:text="${recipeIngredient.quantity != 0} ? ${recipeIngredient.quantity} + ' ' : ''">quantity</span>
-                            <!--                            <span th:text="${recipeIngredient.unitName != null} ? ${#strings.toLowerCase(recipeIngredient.unitName)} + ' ' : ''">unit</span>-->
-                            <span th:if="${recipeIngredient.unitName != null} AND ${recipeIngredient.unitName != 'PIECE'}"
-                                  th:text="${#strings.toLowerCase(recipeIngredient.unitName)}"></span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div id="directions-content">
-                    <ol>
-                        <li th:each="instruction:${recipe.instructions}">
-                            <span th:text="${instruction}"></span>
-                        </li>
-                    </ol>
-                </div>
+<!--        instructions-->
+            <div id="directions-content">
+                <ol>
+                    <li th:each="instruction:${recipe.instructions}">
+                        <span th:text="${instruction}"></span>
+                    </li>
+                </ol>
             </div>
         </div>
     </div>
-
 </main>
-
 </body>
 </html>

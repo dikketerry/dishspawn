@@ -5,24 +5,23 @@
 <head th:replace="fragments/header :: header-head(pageTitle='New Chef')"></head>
 <body>
 
-<!--HEADER-->
 <div th:replace="fragments/header :: header"/>
-<!--SUB-HEADER AREA-->
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
+
+<div class="subhdr-wrapper">
     <div class="uk-container">
+
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(message='Make me chef!')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
+        <hr class="custom-hr">
 
-<hr>
+    </div>
+</div>
+
 <main>
-    <div class="content-wrapper"> <!-- div without width spanning browser width -->
         <div class="uk-container">
-            <div class="container-form"> <!-- div to build the form in for
-            sizing and positioning -->
+    <div class="content-wrapper">
+            <div class="container-form">
 
                 <form class="uk-form-horizontal uk-margin-small"
                         th:action="@{/chef/create}" th:object="${formNewChefData}" method="post">

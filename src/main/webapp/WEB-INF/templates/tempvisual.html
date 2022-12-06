@@ -5,22 +5,19 @@
 <head th:replace="fragments/header :: header-head(pageTitle='New Visual')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
-    <div class="uk-container"> <!--div to center + set max width -->
+<div class="subhdr-wrapper">
+    <div class="uk-container">
 
-        <div class="uk-grid"> <!-- div to align content horizontally -->
+        <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(${recipe.name})"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-
         <hr class="custom-hr">
 
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
+    </div>
+</div>
 
 <main>
     <div class="content-wrapper"> <!-- div without width spanning browser width -->
@@ -105,7 +102,6 @@
             </div>
         </div>
     </div>
-
 </main>
 </body>
 </html>

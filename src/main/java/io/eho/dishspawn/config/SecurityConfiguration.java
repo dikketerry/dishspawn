@@ -18,7 +18,7 @@ public class SecurityConfiguration {
                     .mvcMatchers("/api/**", "/ingredient/all", "/chef/all", "/recipe/all").hasRole("admin")
                     .mvcMatchers("/ingredient/add").hasAnyRole("superchef", "admin")
                     .mvcMatchers("/recipe/add", "/loveVisual").hasAnyRole("chef", "superchef", "admin")
-                    .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn/**", "/visual/**", "/login",
+                    .mvcMatchers("/chef/**", "/home", "recipe**", "/search**", "/spawn/**", "/visual/**", "/login**",
                                  "/error").permitAll()
                 .and()
                 .formLogin()

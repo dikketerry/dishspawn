@@ -5,18 +5,16 @@
 <head th:replace="fragments/header :: header-head(pageTitle='Visual')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
-<div class="subhdr-wrapper"> <!-- div without width spanning browser width -->
-    <div class="uk-container"> <!--div to center + set max width -->
 
-        <div class="uk-grid"> <!-- div to align content horizontally -->
+<div class="subhdr-wrapper">
+    <div class="uk-container">
+
+        <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(${visual.recipe.name})"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-
         <hr class="custom-hr">
 
     </div>
@@ -39,17 +37,11 @@
                 <hr class="custom-hr">
             </div>
 
-            <!-- div main img UNCOMMENT BELOW DIV FOR PROCESSING IMPLEMENTATION -->
             <div uk-lightbox>
                 <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
                    th:attr="data-src=${visual.fileLocation}"
                    th:href="${visual.fileLocation}" uk-img></a>
             </div>
-
-<!--            COMMENT OUT BELOW DIV FOR SWITCH TO OLD-->
-<!--            <div id="canvas-holder">-->
-<!--                &lt;!&ndash;                for JS sketch&ndash;&gt;-->
-<!--            </div>-->
 
             <hr class="custom-hr">
 
@@ -89,7 +81,6 @@
             </div>
         </div>
     </div>
-
 </main>
 </body>
 </html>

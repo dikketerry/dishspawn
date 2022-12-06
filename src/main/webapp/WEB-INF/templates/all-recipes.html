@@ -2,25 +2,23 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head th:replace="fragments/header :: header-head(pageTitle='All Recipes')"></head>
+<head th:replace="fragments/header :: header-head(pageTitle='List of all recipes')"></head>
 
 <body>
-<!--HEADER-->
+
 <div th:replace="fragments/header :: header"/>
 
-<!--SUB-HEADER AREA-->
 <div class="subhdr-wrapper">
-
     <div class="uk-container">
 
         <div class="uk-grid">
             <div th:replace="fragments/subheader :: message(message='All recipes')"/>
-            <div th:replace="fragments/subheader :: swedish-chef"/>
         </div>
-    </div> <!-- container -->
-</div> <!-- subhdr-wrapper -->
+        <hr class="custom-hr">
 
-<hr>
+    </div>
+</div>
+
 <main>
 
     <div th:each="recipe:${recipes}">
