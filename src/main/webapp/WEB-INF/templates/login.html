@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <title>Login</title>
-    <div th:replace="fragments/header :: header-head"/>
+<head th:replace="fragments/header :: header-head(pageTitle='Login')">
 </head>
-<body>
 
+<body>
 <div th:replace="fragments/header :: header"/>
 
 <div class="subhdr-wrapper"> <!-- div without width spanning browser width -->

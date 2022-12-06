@@ -15,6 +15,7 @@ public class LoginController {
     public String loginForm(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
+            model.addAttribute("pageTitle", "Login");
             model.addAttribute("formLoginData", new FormLoginChef());
             return "login";
         } else {

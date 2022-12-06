@@ -1,26 +1,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head>
-    <div th:fragment="header-head">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head th:fragment="header-head(pageTitle)">
+    <title th:text="${pageTitle}">Template title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="icon" type="image/png" href="img/spagh-favicon.png">
+    <link rel="icon" type="image/png" href="img/spagh-favicon.png">
 
-        <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
-        <link rel="stylesheet" th:href="@{/css/master.css}">
+    <link rel="stylesheet" th:href="@{/css/uikit.min.css}">
+    <link rel="stylesheet" th:href="@{/css/master.css}">
 
-        <script type="text/javascript" th:src="@{/js/master.js}"></script>
-        <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
-        <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
-<!--        only for visual.html note below:-->
-<!--        COMMENT OUT p5 and script reference when running Processing implementation-->
-<!--        <
-
-script type="text/javascript" th:src="@{/js/p5.js}"></script>-->
-<!--        <script type="text/javascript" th:src="@{/js/testjs_noisescript.js}"></script>-->
-    </div>
+    <script type="text/javascript" th:src="@{/js/master.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uikit.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/uikit-icons.min.js}"></script>
 </head>
 
 <body>
