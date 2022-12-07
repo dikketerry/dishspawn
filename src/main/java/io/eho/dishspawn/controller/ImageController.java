@@ -160,7 +160,7 @@ public class ImageController {
         return "redirect:/visual?visualId=" + newId;
     }
 
-    public String imgToBase64String(final RenderedImage img, final String formatName) {
+    private String imgToBase64String(final RenderedImage img, final String formatName) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         try {
