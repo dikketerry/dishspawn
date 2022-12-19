@@ -12,6 +12,9 @@
     <groupId>io.eho</groupId>
     <artifactId>dish-spawn</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
+<!--    <packaging>war</packaging>-->
+
     <name>dish-spawn</name>
     <description>Demo project for Spring Boot</description>
 
@@ -87,6 +90,7 @@
     </dependencies>
 
     <build>
+        <finalName>dishspawn</finalName>
         <!-- pluginManagement line added due to issue with
         spring-boot-maven-plugin, which was not loaded / found without this
         line :( -->
