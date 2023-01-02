@@ -30,6 +30,8 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -128,7 +130,14 @@ public class ImageController {
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
         String fileName = "visual" + newId + ".png";
 
-        this.pImg.save("src/main/webapp/spawns/" + fileName);
+        // Determine the desired file path
+        String filePath = "src/main/webapp/spawns";
+        // Get the current working directory
+        String currentDir = System.getProperty("user.dir");
+        // Construct the full file path using the current working directory as a starting point
+        Path imagePath = Paths.get(currentDir, filePath);
+
+        this.pImg.save(imagePath + "/" + fileName);
 
         Visual newVisual = new Visual();
         String chefUserName = SecurityContextHolder.getContext()
