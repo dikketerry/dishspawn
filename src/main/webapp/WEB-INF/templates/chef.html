@@ -28,12 +28,13 @@
                 </div>
                 <hr class="custom-hr">
 
-                <div th:if="${visualsChef.isEmpty}">
+                <div th:if="${latestVisualForChef == null}">
                     <br>
                     <p id="empty-list-message" th:text="${message}">message</p>
                 </div>
 
-                <div th:if="${!visualsChef.isEmpty}">
+                <div th:unless="${latestVisualForChef == null}">
+
                     <div class="recipe-and-chef-wrapper margin16">
                         <div class="recipe-name">
                             <a th:href="@{/visual(visualId=${latestVisualForChef.id})}"
@@ -41,38 +42,41 @@
                                class="uk-link-text">recipename</a>
                         </div>
                     </div>
-                    <!--            date and time of creation                  TODO: #likes-->
+
+<!--                date and time of creation                  TODO: #likes-->
                     <div class="timestamp margin16">
                         <span th:text="${latestVisualForChef.timestampCreated}"></span>
                     </div>
-                    <!--            hr-->
+
                     <hr class="custom-hr">
+<!--                div img-->
+                    <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
+                       th:attr="data-src=${latestVisualForChef.fileLocation}"
+                       th:href="${latestVisualForChef.fileLocation}" uk-img></a>
+                    <hr class="custom-hr">
+
                 </div>
             </div>
 
-<!--            div img-->
-            <div th:if="${!visualsChef.isEmpty}" uk-lightbox>
-                <a class="uk-height-large uk-flex uk-flex-center uk-flex-middle uk-background-cover uk-light"
-                   th:attr="data-src=${latestVisualForChef.fileLocation}"
-                   th:href="${latestVisualForChef.fileLocation}" uk-img></a>
+<!--        div 2nd title header-->
+<!--        more spawns-->
+            <div th:if="${visualsChef.isEmpty} and ${latestVisualForChef != null}" class="main-headers">
+                <div class="main-titles margin16">
+                    <p>no more spawns</p>
+                </div>
+                <hr class="custom-hr">
             </div>
-<!--            hr-->
-            <hr th:if="${!visualsChef.isEmpty}" class="custom-hr">
 
-<!--            div 2nd title header-->
-<!--                more spawns-->
-            <div th:if="${!visualsChef.isEmpty}" class="main-headers">
+            <div th:unless="${visualsChef.isEmpty}" class="main-headers">
                 <div class="main-titles margin16">
                     <p>more spawns</p>
                 </div>
 <!--            hr-->
                 <hr class="custom-hr">
 
-<!--            gallery (3 recipes in a row) TODO: navigation pagination-->
+<!--            gallery (3 recipes in a row) -->
                 <div class="uk-text-center" uk-grid>
-
                     <div class="uk-width-1-3" th:each="visual:${visualsChef}">
-
                         <div class="love">
 <!--                        love line -->
                             <p>&lt3</p> <!-- placeholder -->
@@ -90,10 +94,6 @@
                                class="uk-link-text">recipename</a>
                         </div>
 
-<!--                        <div class="chef-name">-->
-<!--                            <a th:href="@{/chef/{chefId}(chefId=${visual.chef.id})}"-->
-<!--                               th:text="${visual.chef.userName}" class="uk-link-text">chefname</a>-->
-<!--                        </div>-->
                         <!--date and time of creation                  TODO: #likes-->
                         <div class="main-subtitle-timestamp">
                             <span th:text="${visual.timestampCreated}">timestamp
