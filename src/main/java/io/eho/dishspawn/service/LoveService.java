@@ -8,7 +8,5 @@ public interface LoveService {
     void saveLove(Visual visual, Chef chef);
     void deleteLove(Visual visual, Chef chef);
     Boolean chefLovedVisual(Visual visual, Chef chef);
-    int getCountOfLovesForVisual(Visual visual);
-
 
 }

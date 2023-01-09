@@ -36,15 +36,6 @@ public class LoveServiceImpl implements LoveService {
         visualRepository.save(visual);
     }
 
-    // todo: not used - love count obtained via int loveCount in visual entity
-    @Override
-    public int getCountOfLovesForVisual(Visual visual) {
-        List<Love> lovesForVisual =
-                loveRepository.findAllByVisual(visual);
-        int loveCount = lovesForVisual.size();
-        return loveCount;
-    }
-
     @Override
     public Boolean chefLovedVisual(Visual visual, Chef chef) {
         Love love = loveRepository.findLoveByVisualAndChef(visual, chef);

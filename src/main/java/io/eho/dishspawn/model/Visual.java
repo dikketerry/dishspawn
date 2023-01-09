@@ -15,10 +15,9 @@ import java.util.List;
 @Entity
 @Table(name = "visual")
 
+// the class Visual represents the path to an image and is stored in the DB. The image itself will
+// be stored outside the project src path
 public class Visual {
-    // the class Visual is there to represent the path to an image that will
-    // be stored outside the src path (in the end..)
-
     @CreationTimestamp
     @Column(name="timestamp_created")
     @Setter(AccessLevel.NONE)
@@ -50,8 +49,9 @@ public class Visual {
     @Column(name = "love_count")
     private int loveCount;
 
-//    @Column(name = "chef_ids_that_loved_visual")
-//    private List<Long> chefIdsThatLovedVisual;
+    // transient property to allow checking if a chef loved a certain visual
+    @Transient
+    private boolean userLove;
 
     @Override
     public String toString()

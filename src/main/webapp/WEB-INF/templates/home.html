@@ -61,10 +61,12 @@
                             <span th:text="${latestVisual.timestampCreated}"></span>
                         </div>
                     </div>
-<!--                    lovecount-->
+<!--                    love-->
                     <div class="love-box uk-width-expand">
-                        <a th:if="${chefLovedPost}" th:href="@{/loveVisual(visualId=${latestVisual.id})}" uk-icon="heart" style="color: red"></a>
-                        <a th:unless="${chefLovedPost}" th:href="@{/loveVisual(visualId=${latestVisual.id})}" uk-icon="heart"></a>
+                        <a th:if="${latestVisual.userLove}" th:href="${'/visual/' + latestVisual.id + '/love'}"
+                           uk-icon="heart" style="color: red"></a>
+                        <a th:unless="${latestVisual.userLove}" th:href="${'/visual/' + latestVisual.id + '/love'}"
+                           uk-icon="heart"></a>
                         <span>&nbsp&nbsp</span>
                         <span th:text="${latestVisual.loveCount}"></span>
                     </div>
@@ -92,9 +94,9 @@
                     <div class="uk-width-1-3" th:each="visual:${pagedVisuals}">
 <!--                        lovecount-->
                         <div class="love-box">
-                            <a th:if="${chefLovedPost}" th:href="@{/loveVisual(visualId=${visual.id})}"
+                            <a th:if="${visual.userLove}" th:href="${'/visual/' + visual.id + '/love'}"
                                uk-icon="heart" style="color: red"></a>
-                            <a th:unless="${chefLovedPost}" th:href="@{/loveVisual(visualId=${visual.id})}"
+                            <a th:unless="${visual.userLove}" th:href="${'/visual/' + visual.id + '/love'}"
                                uk-icon="heart"></a>
                             <span>&nbsp&nbsp</span>
                             <span th:text="${visual.loveCount}"></span>

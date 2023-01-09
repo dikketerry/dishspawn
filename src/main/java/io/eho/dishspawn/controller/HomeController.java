@@ -1,5 +1,6 @@
 package io.eho.dishspawn.controller;
 
+import io.eho.dishspawn.controller.util.ListSkipper;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.ChefService;
@@ -7,6 +8,7 @@ import io.eho.dishspawn.service.LoveService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,55 +16,75 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/home")
 public class HomeController {
 
-    private VisualService visualService;
-    private LoveService loveService;
-    private ChefService chefService;
+    private final VisualService visualService;
+    private final LoveService loveService;
+    private final ChefService chefService;
 
     private int totalFoundVisualPages;
 
     @Autowired
     public HomeController(VisualService visualService,
-                            LoveService loveService, ChefService chefService) {
+                          LoveService loveService,
+                          ChefService chefService) {
         this.visualService = visualService;
         this.loveService = loveService;
         this.chefService = chefService;
     }
 
     @GetMapping()
-    public String getVisualsPaged(
-            @RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr,
+    public String getVisualsPaged(@RequestParam(value="pageNr", required=false, defaultValue="1")int searchPageNr,
             Model model) {
 
-        // get most recent visual
-        Visual latestVisual = visualService.findLatestVisual();
-        Chef chef = chefService.findChefById(17l); // todo security
-//        int loveCount = loveService.getCountOfLovesForVisual(latestVisual);
-        int loveCount = latestVisual.getLoveCount();
-        // diagnostic print
-        System.out.println("love count = " + loveCount);
-        Boolean chefLovedPost = loveService.chefLovedVisual(latestVisual, chef);
+        // not used - but might be useful at some point
+        Boolean loggedIn = false;
 
-        // get paged list most recent 200 visuals minus most recent
+        Visual latestVisual = visualService.findLatestVisual();
+        Chef chef = null;
+
+        // check if authenticated or anonymous
+        try {
+            String currentUserName = SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getName();
+            chef = chefService.findChefByUserName(currentUserName);
+
+            if (!currentUserName.equals("anonymousUser")) {
+                loggedIn = true;
+                latestVisual.setUserLove(loveService.chefLovedVisual(latestVisual, chef));
+            }
+        } catch (Exception e) {
+            System.out.println("User not logged in.");
+        }
+
+        // get most recent 200 visuals minus most recent
         List<Visual> mostRecent200Visuals = visualService.findLast200Visuals();
-        List<Visual> mostRecent200MinusFirst = last200MinusFirst(mostRecent200Visuals); // remove 1 visual
+//        List<Visual> mostRecent200MinusFirst = last200MinusFirst(mostRecent200Visuals); // remove 1 visual
+        List<Visual> mostRecent200MinusFirst = ListSkipper.skipFirst(mostRecent200Visuals);
+
+        // assign love boolean per visual
+        for (Visual v : mostRecent200MinusFirst) {
+            v.setUserLove(loveService.chefLovedVisual(v, chef));
+        }
+
+        // page visuals
         List<Visual> pageVisuals = createPageVisuals(mostRecent200MinusFirst, searchPageNr); // page it!
 
+        // add stuff to the model for handling in the web page
         model.addAttribute("latestVisual", latestVisual);
         model.addAttribute("totalPages", totalFoundVisualPages);
         model.addAttribute("pagedVisuals", pageVisuals);
         model.addAttribute("chef", chef);
-//        model.addAttribute("loveCount", loveCount);
-        model.addAttribute("chefLovedPost", chefLovedPost);
 
         return "home";
     }
 
+//     helper to create paged content - todo: investigate how to place this in a util class - issue is i need to set
+//      a nr. of pages AND return a paged list.
     private List<Visual> createPageVisuals(List<Visual> visuals, int searchPageNr) {
 
         PagedListHolder page = new PagedListHolder(visuals);
@@ -73,12 +95,6 @@ public class HomeController {
         List<Visual> visualListPage = page.getPageList();
 
         return visualListPage;
-    }
-
-    private List<Visual> last200MinusFirst(List<Visual> last200Visuals) {
-        return last200Visuals.stream()
-                .skip(1)
-                .collect(Collectors.toList());
     }
 
 }

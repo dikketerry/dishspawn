@@ -1,32 +1,21 @@
 package io.eho.dishspawn.controller;
 
-import io.eho.dishspawn.exception.ResourceNotFoundException;
-import io.eho.dishspawn.exception.UsernameAlreadyExistsException;
+import io.eho.dishspawn.controller.util.ListSkipper;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
-import io.eho.dishspawn.security.SecurityChef;
 import io.eho.dishspawn.web.FormCreateChef;
-import io.eho.dishspawn.web.FormLoginChef;
 import io.eho.dishspawn.service.ChefService;
 import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-// todo review redirects
 @Controller
 @RequestMapping("/chef")
 public class ChefController {
@@ -84,9 +73,9 @@ public class ChefController {
         Visual latestVisualForChef = visualService.findLatestVisualForChef(chef);
 
         List<Visual> top200VisualsChef = visualService.findLast200VisualsForChef(chef);
-        List<Visual> top200MinusFirst = last200MinusFirst(top200VisualsChef); // remove 1 visual
+//        List<Visual> top200MinusFirst = last200MinusFirst(top200VisualsChef); // remove 1 visual
+        List<Visual> top200MinusFirst = ListSkipper.skipFirst(top200VisualsChef);
         List<Visual> visualsChefPage = createPageVisualsChefList(top200MinusFirst, searchPageNr);
-        System.out.println("visualsChef size: " + visualsChefPage.size());
 
         resetMessage();
         noSpawnsFoundCheck(top200VisualsChef);
@@ -98,12 +87,6 @@ public class ChefController {
         model.addAttribute("message", message.toString());
 
         return "chef";
-    }
-
-    private List<Visual> last200MinusFirst(List<Visual> top200VisualsChef) {
-        return top200VisualsChef.stream()
-                .skip(1)
-                .collect(Collectors.toList());
     }
 
     // private helpers below

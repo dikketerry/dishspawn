@@ -19,12 +19,9 @@ public class VisualController {
     }
 
     @GetMapping("/visual")
-    public String showRecipe(@RequestParam Long visualId, Model model) {
-
+    public String showVisual(@RequestParam Long visualId, Model model) {
         Visual visual = visualService.findVisualById(visualId);
-        System.out.println("file location: " + visual.getFileLocation());
         model.addAttribute("visual", visual);
-
         return "visual";
     }
 
