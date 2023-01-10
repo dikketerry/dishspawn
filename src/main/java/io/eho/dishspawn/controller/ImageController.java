@@ -35,20 +35,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/spawn")
 public class ImageController {
 
-    private RecipeService recipeService;
-    private RecipeIngredientService recipeIngredientService;
-    private VisualService visualService;
-    private ChefService chefService;
+    private final RecipeService recipeService;
+    private final RecipeIngredientService recipeIngredientService;
+    private final VisualService visualService;
+    private final ChefService chefService;
 
-    private TheSketch theSketch;
-    private PImage pImg;
+    private TheSketch theSketch;    // custom PApplet class (Processing)
+    private PImage pImg;            // Processing class, used for
     private Recipe recipe;
 
     @Autowired
@@ -60,53 +59,52 @@ public class ImageController {
         this.chefService = chefService;
     }
 
+    // generate image
     @PostMapping("/spawn/{id}")
     public String generateSpawn(@PathVariable String id, Model model) {
-        // get recipe
         // help method to convert String to Long and catch non-numerical input
         Long idLong = Parser.convertStringIdToLong(id);
         this.pImg = null;
 
-        // todo - this does overlook the possibility 0 is provided per input
         if (idLong == 0l) {
             String noNumber = id + " is not a numeric format";
             model.addAttribute("error", noNumber);
             return "error-page";
         }
+        // get recipe
         Recipe recipe = recipeService.findRecipeById(idLong);
         this.recipe = recipe;
 
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
-        // todo translate recipe-ingredients to visual properties
         // narrow down list to list with visual impact Y ri's
         List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
                 .filter(ri -> ri.isVisualImpact() == true)
                 .collect(Collectors.toList());
 
-        // get a total of mass and amount
+        // get a total of mass and amount - TODO: NOT USED YET - FALLS UNDER ALGO WORK
         int totalSize = recipeIngredientsWithVisualImpact.stream()
                 .filter(ri -> ri.getMassOrVolume() > 0)
                 .mapToInt(ri -> ri.getMassOrVolume())
                 .sum();
 
-        // initiate the sketch
+        // initiate the sketch (the Processing PApplet)
         theSketch = getTheSketch();
 
-        // transform each ri to a shape and place in list
+        // transform each ri to a shape, place in a list and assign to the active sketch
         List<Shape> shapeList = new ArrayList<>();
         for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
-            Shape s = Transformer.setShape(theSketch, ri);
+            Shape s = Transformer.setShape(theSketch, ri); // note: this does NOT assign the shape yet to the sketch!
             s.setColor(ri.getColor());
             shapeList.add(s);
-            System.out.println(s);
+            System.out.println(s);      // diagnostic - print the shapes in list
         }
 
-        // set the list of shapes in the sketch
+        // assign the list of shapes to sketch
         theSketch.setShapes(shapeList);
 
-        // short intermezzo. lets the sketch run for time specified
+        // intermezzo. let the sketch run for time specified
         try {
             Thread.sleep(7777);
         } catch (InterruptedException e) {
@@ -114,9 +112,12 @@ public class ImageController {
             e.printStackTrace();
         }
 
-        theSketch.dispose(); // stops animation; does NOT close the window with the sketch
-        this.pImg = theSketch.get();
-        theSketch.exitActual();
+        theSketch.dispose();            // stops animation; does NOT close the window with the sketch
+        this.pImg = theSketch.get();    // assign the image to variable pImg
+        theSketch.exitActual();         // exits processing PApplet without closing the JVM! Important!
+
+        // convert pImg to BufferedImage to String with help of Base64 encoder and PImage .getNative, which returns a
+        // Buffered image from a PImage
         String imageString = imgToBase64String((BufferedImage) pImg.getNative(), "PNG");
 
         model.addAttribute("recipe", recipe);
@@ -125,6 +126,7 @@ public class ImageController {
         return "tempvisual";
     }
 
+    // save image and Visual entity
     @PostMapping("/spawn/{id}/save")
     public String saveVisual(Model model) {
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
@@ -136,19 +138,21 @@ public class ImageController {
         String currentDir = System.getProperty("user.dir");
         // Construct the full file path using the current working directory as a starting point
         Path imagePath = Paths.get(currentDir, filePath);
-
+        // save the PImage (NOT the buffered, encoded one) to the specified folder
         this.pImg.save(imagePath + "/" + fileName);
 
+        // create new Visual entity for storing location, chef etc.
         Visual newVisual = new Visual();
         String chefUserName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
-        Chef chef = null;
+        Chef chef;
         try {
             chef = chefService.findChefByUserName(chefUserName);
         } catch (UsernameNotFoundException unfe) {
-            throw new SaveImageNotPossible("save image not possible when not logged in");
+            throw new SaveImageNotPossible("save image not possible when not logged in"); // todo: will never be
+            // thrown as save option not available when not logged in
         }
 
         newVisual.setChef(chef);
@@ -157,18 +161,15 @@ public class ImageController {
         newVisual.setFileLocation("/spawns/" + fileName);
         visualService.saveVisual(newVisual);
 
-        // re-initialize theSketch todo
-        // reset the spawn selector
-
         Visual visual = visualService.findVisualById(newId);
-        System.out.println(visual);
+        System.out.println(visual);     // diagnostic check
 
-        // add recipe and visual to model / show on page
         model.addAttribute(recipe);
         model.addAttribute("visual", visual);
         return "redirect:/visual?visualId=" + newId;
     }
 
+    // help method to encode image to String with Base64 encoder
     private String imgToBase64String(final RenderedImage img, final String formatName) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
 
@@ -181,6 +182,7 @@ public class ImageController {
         }
     }
 
+    // Processing PApplet initialization - bit weird, but hey, it works.
     private TheSketch getTheSketch() {
 		System.setProperty("java.awt.headless", "false"); // app needs to be headfull to allow display functionality
 		TheSketch theSketch = new TheSketch();

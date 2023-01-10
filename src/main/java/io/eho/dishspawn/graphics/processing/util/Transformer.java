@@ -14,9 +14,9 @@ public final class Transformer {
 
     private Transformer() {}
 
+    // assigns a shape to a sketch based on provided recipe-ingredient
     public static Shape setShape(PApplet sketch,
-                                 RecipeIngredient recipeIngredient)
-    {
+                                 RecipeIngredient recipeIngredient) {
         String form = recipeIngredient.getForm().toString();
         Shape shape;
 
@@ -86,9 +86,7 @@ public final class Transformer {
 
         positioning: program some relation between the layers of shapes: if shapes A are located on xA and yA, positions
         of xB and yB should somehow relate to xA and yA.
-        background color: relative to set color of biggest ingredient
-         */
-
-
+        background color: relative (opposite?) to set color of the biggest ingredient
+    */
 
 }

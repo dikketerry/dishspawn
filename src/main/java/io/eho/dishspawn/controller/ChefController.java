@@ -20,13 +20,11 @@ import java.util.List;
 @RequestMapping("/chef")
 public class ChefController {
 
-    private ChefService chefService;
-    private VisualService visualService;
+    private final ChefService chefService;
+    private final VisualService visualService;
 
     private int totalFoundVisualsChefPages;
     private StringBuilder message = new StringBuilder();
-
-    public ChefController() {}
 
     @Autowired
     public ChefController(ChefService chefService, VisualService visualService) {

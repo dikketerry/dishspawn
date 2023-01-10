@@ -3,7 +3,6 @@ package io.eho.dishspawn.security;
 import io.eho.dishspawn.model.Chef;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

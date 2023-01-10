@@ -25,6 +25,7 @@ public abstract class Shape implements ColorizeIt {
     private int maxAlpha = 224;
     private int alpha = 24;
 
+    // constructor not yet in use, but might be useful later on
     public Shape(PApplet sketch) {
         this(sketch, 400, 400);
     }
@@ -37,12 +38,14 @@ public abstract class Shape implements ColorizeIt {
         this.ySpeed = sketch.random(-10, 10); // only used in moveStraight algo
     }
 
+    // implementation the same for all types of shape to keep it simple for now
     public void step()
     {
 //        moveStraightAndBounceAtBorder(); // per step position shape algo 1
         movePerlinNoiseWithinFrame(); // per step position shape algo 2
     }
 
+    // render is type-of-shape specific (circle needs other set of variables to be rendered than square)
     public abstract void render();
 
     // default shape -> color implementation
@@ -80,7 +83,7 @@ public abstract class Shape implements ColorizeIt {
         return sketch;
     }
 
-    @Override // todo
+    @Override // todo: check if correct
     public boolean equals(Object o)
     {
         if ((o != null) && (getClass() == o.getClass()) && (((Shape) o).getX() == getX()) && (((Shape) o).getY() == getY())) {
@@ -114,7 +117,7 @@ public abstract class Shape implements ColorizeIt {
         this.x = sketch.map(sketch.noise(offset1), 0, 1, 0, sketch.width);
         this.y = sketch.map(sketch.noise(offset2), 0, 1, 0, sketch.height);
 
-        offset1 += 0.02;
+        offset1 += 0.02; // todo: make offsets global
         offset2 += 0.02;
     }
 

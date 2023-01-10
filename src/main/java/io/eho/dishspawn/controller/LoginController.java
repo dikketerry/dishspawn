@@ -22,4 +22,6 @@ public class LoginController {
             return "redirect:/";
         }
     }
+
+    // a PostMapping is not required as Spring Security provides this per default at /login endpoint
 }
