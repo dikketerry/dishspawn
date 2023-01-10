@@ -15,19 +15,17 @@ import java.util.List;
 @Controller
 public class SearchController {
 
-    private ChefService chefService;
-    private RecipeService recipeService;
+    private final ChefService chefService;
+    private final RecipeService recipeService;
 
     @Autowired
-    public SearchController(ChefService chefService,
-                            RecipeService recipeService) {
+    public SearchController(ChefService chefService, RecipeService recipeService) {
         this.chefService = chefService;
         this.recipeService = recipeService;
     }
 
     @GetMapping("/search")
     public String searchFunction(@RequestParam(value = "searchKey")String searchKey, Model model) {
-
         List<Chef> chefs = chefService.findAllChefByUserNameContaining(searchKey);
         List<Recipe> recipes = recipeService.findAllRecipeByNameContaining(searchKey);
 

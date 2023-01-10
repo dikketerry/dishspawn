@@ -15,9 +15,9 @@ import java.util.Optional;
 
 @Controller
 public class LoveController {
-    private LoveService loveService;
-    private VisualService visualService;
-    private ChefService chefService;
+    private final LoveService loveService;
+    private final VisualService visualService;
+    private final ChefService chefService;
 
     @Autowired
     public LoveController(LoveService loveService, VisualService visualService, ChefService chefService) {
@@ -35,10 +35,7 @@ public class LoveController {
                 .getAuthentication()
                 .getName();
 
-        System.out.println("username string: " + currentUserName);
-
         Chef chef = chefService.findChefByUserName(currentUserName);
-        System.out.println("username: " + chef.getUserName());
 
         if ( !loveService.chefLovedVisual(visual, chef) ) {
             loveService.saveLove(visual, chef);

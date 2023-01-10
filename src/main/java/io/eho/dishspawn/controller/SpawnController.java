@@ -21,11 +21,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/spawn")
 public class SpawnController {
 
-    private IngredientService ingredientService;
-    private RecipeService recipeService;
-    private RecipeIngredientService recipeIngredientService;
+    private final IngredientService ingredientService;
+    private final RecipeIngredientService recipeIngredientService;
 
-    // model-attribute vars are defined globally to enable returning always the same page
+    // model-attributes defined globally to enable returning same page
     private List<Ingredient> ingredientSpawnList = new ArrayList<>();
     private List<Recipe> recipeSpawnList = new ArrayList<>();
     private List<Ingredient> ingredientListPage = new ArrayList<>();
@@ -41,28 +40,21 @@ public class SpawnController {
 
     // StringBuilder vars for storing searchKey ingredient search and messages
     private StringBuilder searchKey = new StringBuilder();
+
+    //todo: refactor to 1 message (messages will never be shown at the same time)
     private StringBuilder noRecipeMessage = new StringBuilder();
     private StringBuilder noIngredientMessage = new StringBuilder();
     private StringBuilder incorrectIngredientsAmountMessage = new StringBuilder();
 
-    public SpawnController() {
-//        reset();
-    }
-
     @Autowired
-    public SpawnController(IngredientService ingredientService, RecipeService recipeService,
-                           RecipeIngredientService recipeIngredientService) {
+    public SpawnController(IngredientService ingredientService, RecipeIngredientService recipeIngredientService) {
         this.ingredientService = ingredientService;
-        this.recipeService = recipeService;
         this.recipeIngredientService = recipeIngredientService;
+        reset(); // todo
     }
 
     @GetMapping("")
     public String spawnGet(Model model) {
-
-        // todo: reset all? hmmm...
-//        reset();
-
         // null check on searchKey to avoid NPE when launching spawn page without a searchKey
         if (searchKey != null) {
             model.addAttribute("searchKey", searchKey.toString());
@@ -103,7 +95,7 @@ public class SpawnController {
         return "redirect:/spawn";
     }
 
-    @GetMapping("/add/{id}")
+    @GetMapping("/add/{id}") // TODO refactor to exception / 4xx page
     public String addIngredientToSpawn(@PathVariable String id, Model model) {
 
         Long idLong = Parser.convertStringIdToLong(id);
@@ -116,15 +108,8 @@ public class SpawnController {
         }
 
         Ingredient ingredientDB = checkIngredientIdExists(idLong);
-
-        // silly if check here, ingredient was found in DB so will never be null..., but hey anyway
-        if (ingredientDB == null) {
-            String idNotExist = "no ingredient with id: " + idLong;
-            model.addAttribute("error", idNotExist);
-            return "error-page";
-        }
-
         ingredientSpawnList.add(ingredientDB);
+
         return "redirect:/spawn";
     }
 
@@ -139,11 +124,13 @@ public class SpawnController {
         findRecipeMethodIsUsed = true; // use of the find recipe function to 'true'
         int selectedIngredientListSize = ingredientSpawnList.size(); // size is needed in following if statements
 
+        // check if amount of ingredients is within range
         if (selectedIngredientListSize <= 0 || selectedIngredientListSize > 3)
         {
             incorrectIngredientsAmountMessage.append("Please select min 1, max 3 ingredient(s) for spawn");
         }
 
+        // todo move to service layer
         else if (selectedIngredientListSize == 1) // 1 ingredient selected
         {
             Ingredient i1 = ingredientSpawnList.get(0);
@@ -244,10 +231,7 @@ public class SpawnController {
     }
 
     private List createRecipeList(Ingredient ingredient) {
-        // todo: needs a converter: List<Recipe> recipeList = recipeIngredientService.findAllRecipeByIngredientByIngredient(ingredient)
-        List<RecipeIngredient> recipeIngredientList =
-                recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
-
+        List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
         List<Recipe> recipeList = new ArrayList<>();
 
         for (RecipeIngredient ri : recipeIngredientList) {
@@ -272,6 +256,7 @@ public class SpawnController {
         this.noRecipeMessage.setLength(0);
     }
 
+    // todo: improve
     private Ingredient checkIngredientIdExists(Long id) {
         Ingredient ingredientDB;
 

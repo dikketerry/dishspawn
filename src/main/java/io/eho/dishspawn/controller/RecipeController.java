@@ -14,13 +14,8 @@ import java.util.List;
 @Controller
 public class RecipeController {
 
-    private RecipeService recipeService;
-    private VisualService visualService;
-
-    // property lastRecipe - global, needed in multiple methods
-    private Recipe lastRecipe;
-
-    public RecipeController() {}
+    private final RecipeService recipeService;
+    private final VisualService visualService;
 
     @Autowired
     public RecipeController(RecipeService recipeService, VisualService visualService) {
@@ -28,13 +23,11 @@ public class RecipeController {
         this.visualService = visualService;
     }
 
-    // recipe page is shown with latest visual. TODO: functionality to browse different visuals for recipe
+    // recipe page is shown with latest visual. TODO: same layout as home
     @GetMapping("/recipe")
-    public String showRecipe(@RequestParam Long recipeId,
-                             Model model) {
+    public String showRecipe(@RequestParam Long recipeId, Model model) {
         Recipe recipe = recipeService.findRecipeById(recipeId);
         Visual recipeLastVisual = visualService.findLastVisualForRecipe(recipe);
-        System.out.println(recipe);
 
         model.addAttribute("recipe", recipe);
         model.addAttribute("recipeLastVisual", recipeLastVisual);
@@ -42,29 +35,28 @@ public class RecipeController {
         return "recipe";
     }
 
-    // add get mapping for "/recipe/all"
+    // show all recipes
     @GetMapping("/recipe/all")
     public String getAllRecipes(Model model) {
         List<Recipe> recipesFromDB = recipeService.findAllRecipes();
 
-        if (recipesFromDB == null) {
-            model.addAttribute("error", "no recipes found");
-            return "error-page"; // TODO - layout page
-        }
+        // TODO link to 4xx
+//        if (recipesFromDB == null) {
+//            model.addAttribute("error", "no recipes found");
+//            return "error-page";
+//        }
 
         model.addAttribute("recipes", recipesFromDB);
         return "all-recipes"; // TODO - layout page
     }
 
+    // form to add new recipe TODO
     @GetMapping("/recipe/add")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new Recipe());
-        return "add-recipe"; // TODO: complete form
+        return "add-recipe";
     }
 
-    // recipe(s) with ingredients
-
-    // post - save
     @PostMapping("/recipe/save")
     public String saveRecipe(@ModelAttribute("recipe") Recipe recipe) {
         recipeService.saveRecipe(recipe);

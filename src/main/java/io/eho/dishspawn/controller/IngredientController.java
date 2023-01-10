@@ -16,9 +16,7 @@ import java.util.List;
 @RequestMapping("/ingredient")
 public class IngredientController {
 
-    private IngredientService ingredientService;
-
-    public IngredientController() { }
+    private final IngredientService ingredientService;
 
     @Autowired
     public IngredientController(IngredientService ingredientService) {
@@ -47,7 +45,6 @@ public class IngredientController {
 
     @PostMapping("save")
     public String saveIngredient(@ModelAttribute("ingredient") Ingredient ingredient) {
-//        TODO: error handling + page redirection
         ingredientService.saveIngredient(ingredient);
         return "redirect:all";
     }

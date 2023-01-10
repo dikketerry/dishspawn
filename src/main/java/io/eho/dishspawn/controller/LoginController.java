@@ -13,6 +13,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(Model model) {
+        // check if user is already logged in, and only if not, go to login page
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
             model.addAttribute("pageTitle", "Login");
