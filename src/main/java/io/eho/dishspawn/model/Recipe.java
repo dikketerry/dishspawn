@@ -43,7 +43,6 @@ public class Recipe {
     @Fetch(value = FetchMode.SUBSELECT)
     @CollectionTable(name="recipe_instructions", joinColumns = @JoinColumn(name="recipe_id"))
     @Column(length = 4000, name = "instructions")
-//    @Size(max = 4000)
     private List<String> instructions;
 
     @JsonManagedReference
