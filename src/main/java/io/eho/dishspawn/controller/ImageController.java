@@ -94,19 +94,33 @@ public class ImageController {
 
         // transform each ri to a shape, place in a list and assign to the active sketch
         List<Shape> shapeList = new ArrayList<>();
-        for (RecipeIngredient ri : recipeIngredientsWithVisualImpact) {
-            Shape s = Transformer.setShape(theSketch, ri); // note: this does NOT assign the shape yet to the sketch!
-            s.setColor(ri.getColor());
-            shapeList.add(s);
-            System.out.println(s);      // diagnostic - print the shapes in list
+        RecipeIngredient ri = recipeIngredientsWithVisualImpact.get(0);
+        System.out.println("name: " + ri.getIngredient().getName() + "; Color hex: " + ri.getColor());
+
+//        theSketch.fill(theSketch.unhex(Transformer.assignColor(ri.getColor())));
+
+        Shape s = Transformer.setShape(theSketch, ri);
+        s.setColor(ri.getColor());
+        System.out.println("Shape: " + s + "; and color set: " + theSketch.hex(s.getColorValues()));
+
+        shapeList.add(s);
+
+        // for looping through ri's'
+        for (Shape shape : shapeList) {
+            theSketch.color(shape.getColorValues());
+
+
         }
 
         // assign the list of shapes to sketch
         theSketch.setShapes(shapeList);
 
+        // after setting below boolean to true, the shapes will start to get drawn
+        theSketch.setGenerate(true);
+
         // intermezzo. let the sketch run for time specified
         try {
-            Thread.sleep(7777);
+            Thread.sleep(3333);
         } catch (InterruptedException e) {
             System.out.println("diagnostic: interrupted during sleep");
             e.printStackTrace();

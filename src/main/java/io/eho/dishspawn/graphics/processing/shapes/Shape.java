@@ -1,6 +1,7 @@
 package io.eho.dishspawn.graphics.processing.shapes;
 
 import io.eho.dishspawn.graphics.processing.ColorizeIt;
+import io.eho.dishspawn.graphics.processing.util.Randomizer;
 import processing.core.PApplet;
 
 import java.util.Random;
@@ -39,8 +40,7 @@ public abstract class Shape implements ColorizeIt {
     }
 
     // implementation the same for all types of shape to keep it simple for now
-    public void step()
-    {
+    public void step() {
 //        moveStraightAndBounceAtBorder(); // per step position shape algo 1
         movePerlinNoiseWithinFrame(); // per step position shape algo 2
     }
@@ -49,8 +49,7 @@ public abstract class Shape implements ColorizeIt {
     public abstract void render();
 
     // default shape -> color implementation
-    public void setColor(String hex)
-    {
+    public void setColor(String hex) {
 
         System.out.println("hex input: " + hex); // diagnostic print
 
@@ -58,11 +57,11 @@ public abstract class Shape implements ColorizeIt {
         sb.append(hex);
         sb.deleteCharAt(0);
 
-        alpha = getRandomNumberInRange(minAlpha, maxAlpha);
+        alpha = Randomizer.getRandomNumberInRange(minAlpha, maxAlpha);
         String opacity = Integer.toHexString(alpha);
-        sb.insert(0, opacity);
+        sb.insert(6, opacity);
 
-        System.out.println("hex value: " + sb.toString()); // diagnostic print
+        System.out.println("hex value: " + sb); // diagnostic print
 
         this.colorValues = sketch.unhex(sb.toString());
     }
@@ -119,17 +118,6 @@ public abstract class Shape implements ColorizeIt {
 
         offset1 += 0.02; // todo: make offsets global
         offset2 += 0.02;
-    }
-
-    private int getRandomNumberInRange(int min, int max)
-    {
-        if (min >= max)
-        {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
     }
 
 }
