@@ -28,8 +28,9 @@ public class Triangle extends Shape {
         renderTriangle();
     }
 
-    private void renderTriangle()
-    {
+    private void renderTriangle() {
+        getSketch().noStroke();
+        getSketch().fill(super.getColorValues());
         getSketch().triangle(super.getX(), super.getY(), x2, y2, x3, y3);
     }
 

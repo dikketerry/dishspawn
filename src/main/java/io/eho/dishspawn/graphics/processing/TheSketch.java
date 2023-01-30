@@ -12,6 +12,7 @@ import java.util.List;
 public class TheSketch extends PApplet {
 
     private List<Shape> shapes = new ArrayList<>();
+    private int shapeIndex = 0;
 
     private boolean generate;
     private final int COLOR_CEILING = 255;
@@ -22,7 +23,7 @@ public class TheSketch extends PApplet {
 
     @Override
     public void setup() {
-        frameRate(1);
+        frameRate(30);
 
         red = (int) random(0, COLOR_CEILING);
         green = (int) random(0, COLOR_CEILING);
@@ -39,10 +40,26 @@ public class TheSketch extends PApplet {
     @Override
     public void draw() {
         if (generate) {
-            for (Shape s: shapes) {
-                s.step();
-                s.render();
+
+//            System.out.println("size: " + shapes.size() + "index: " + shapeIndex + "; class: " + shapes.get(shapeIndex).getClass());
+
+            this.color(shapes.get(shapeIndex).getColorValues());
+            shapes.get(shapeIndex).render();
+
+            shapeIndex++;
+
+            if (shapeIndex == shapes.size()) {
+                this.noLoop();
             }
+
+            // old way
+//            for (Shape s: shapes) {
+//                s.render();
+//                s.step();
+//                // s.colorchange ?
+//                // s.slight shapechange ?
+//            }
+
         }
     }
 

@@ -2,6 +2,7 @@ package io.eho.dishspawn.controller;
 
 import io.eho.dishspawn.controller.util.Parser;
 import io.eho.dishspawn.exception.SaveImageNotPossible;
+import io.eho.dishspawn.graphics.processing.util.Randomizer;
 import io.eho.dishspawn.graphics.processing.util.Transformer;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import io.eho.dishspawn.graphics.processing.TheSketch;
@@ -34,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,38 +80,61 @@ public class ImageController {
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
 
-        // narrow down list to list with visual impact Y ri's
-        List<RecipeIngredient> recipeIngredientsWithVisualImpact = recipeIngredientList.stream()
-                .filter(ri -> ri.isVisualImpact() == true)
+        // filter recipe-ingredients with visual impact and mass/volume > 0, sort on mass (biggest first)
+        List<RecipeIngredient> recipeIngredientsWithVisualImpactSortedOnMass = recipeIngredientList.stream()
+                .filter(ri -> ri.isVisualImpact() == true && ri.getMassOrVolume() > 0)
+                .sorted(Comparator.comparingDouble(RecipeIngredient::getMassOrVolume).reversed())
                 .collect(Collectors.toList());
 
-        // get a total of mass and amount - TODO: NOT USED YET - FALLS UNDER ALGO WORK
-        int totalSize = recipeIngredientsWithVisualImpact.stream()
-                .filter(ri -> ri.getMassOrVolume() > 0)
-                .mapToInt(ri -> ri.getMassOrVolume())
-                .sum();
+        // filter recipe-ingredients with visual impact and mass/volume == 0
+        List<RecipeIngredient> recipeIngredientsWithVisualImpactNoMass = recipeIngredientList.stream()
+                .filter(ri -> ri.isVisualImpact() == true && ri.getMassOrVolume() == 0)
+                .collect(Collectors.toList());
+
+        for (RecipeIngredient ri : recipeIngredientsWithVisualImpactSortedOnMass) {
+            System.out.println("ri mass / volume > 0: " + ri.getMassOrVolume());
+        }
+
+        for (RecipeIngredient ri : recipeIngredientsWithVisualImpactNoMass) {
+            System.out.println("ri mass / volume == 0: " + ri.getMassOrVolume());
+        }
+
+        // get a total of mass / volume
+        int totalSize = 0;
+        for (RecipeIngredient ri : recipeIngredientsWithVisualImpactSortedOnMass) {
+            totalSize += ri.getMassOrVolume();
+        }
+        System.out.println("total mass: " + totalSize);
 
         // initiate the sketch (the Processing PApplet)
         theSketch = getTheSketch();
 
-        // transform each ri to a shape, place in a list and assign to the active sketch
+        // init a list for storing shapes
         List<Shape> shapeList = new ArrayList<>();
-        RecipeIngredient ri = recipeIngredientsWithVisualImpact.get(0);
-        System.out.println("name: " + ri.getIngredient().getName() + "; Color hex: " + ri.getColor());
 
-//        theSketch.fill(theSketch.unhex(Transformer.assignColor(ri.getColor())));
+        // set total # of shapes
+        int totalShapes = Randomizer.getRandomNumberInRange(120, 180); // this can become another dependency on
+        // recipe characteristics
+        System.out.println("total shapes: " + totalShapes);
 
-        Shape s = Transformer.setShape(theSketch, ri);
-        s.setColor(ri.getColor());
-        System.out.println("Shape: " + s + "; and color set: " + theSketch.hex(s.getColorValues()));
+        // for riMass-list, loop
+        for (RecipeIngredient ri : recipeIngredientsWithVisualImpactSortedOnMass) {
+            double riSize = ri.getMassOrVolume();
+            System.out.println("name: " + ri.getIngredient().getName() + "; Color hex: " + ri.getColor() + "; Mass: " + riSize);
 
-        shapeList.add(s);
+            // set shape per ri
 
-        // for looping through ri's'
-        for (Shape shape : shapeList) {
-            theSketch.color(shape.getColorValues());
+            int nrOfShapes = (int) Math.ceil((riSize / totalSize) * totalShapes);
+            System.out.println("nr of shapes: " + nrOfShapes + " for ri: " + ri.getIngredient().getName());
 
-
+            for (int i = 0; i < nrOfShapes; i++) {
+                Shape s = Transformer.setShape(theSketch, ri);
+                s.setColor(ri.getColor());
+                s.step();
+                shapeList.add(s);
+                System.out.println("shape: " + s.getClass() + " with color " + theSketch.hex(s.getColorValues()) +
+                                           " and position " + s.getX() + " " + s.getY() + " added");
+            }
         }
 
         // assign the list of shapes to sketch
@@ -120,7 +145,7 @@ public class ImageController {
 
         // intermezzo. let the sketch run for time specified
         try {
-            Thread.sleep(3333);
+            Thread.sleep(7777);
         } catch (InterruptedException e) {
             System.out.println("diagnostic: interrupted during sleep");
             e.printStackTrace();

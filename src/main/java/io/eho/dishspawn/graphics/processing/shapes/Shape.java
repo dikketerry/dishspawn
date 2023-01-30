@@ -52,16 +52,18 @@ public abstract class Shape implements ColorizeIt {
     public void setColor(String hex) {
 
         System.out.println("hex input: " + hex); // diagnostic print
-
         StringBuilder sb = new StringBuilder();
+
         sb.append(hex);
+//        System.out.println(sb);
+
         sb.deleteCharAt(0);
+//        System.out.println(sb);
 
         alpha = Randomizer.getRandomNumberInRange(minAlpha, maxAlpha);
         String opacity = Integer.toHexString(alpha);
-        sb.insert(6, opacity);
-
-        System.out.println("hex value: " + sb); // diagnostic print
+        sb.insert(0, opacity);
+//        System.out.println("hex value: " + sb); // diagnostic print
 
         this.colorValues = sketch.unhex(sb.toString());
     }
