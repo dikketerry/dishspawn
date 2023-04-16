@@ -1,4 +1,4 @@
-package io.eho.dishspawn.controller.util;
+package io.eho.dishspawn.controller.utils;
 
 import java.util.List;
 import java.util.stream.Collectors;

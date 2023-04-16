@@ -1,12 +1,11 @@
 package io.eho.dishspawn.controller;
 
-import io.eho.dishspawn.controller.util.Parser;
+import io.eho.dishspawn.controller.utils.Parser;
 import io.eho.dishspawn.model.Ingredient;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.service.IngredientService;
 import io.eho.dishspawn.service.RecipeIngredientService;
-import io.eho.dishspawn.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;

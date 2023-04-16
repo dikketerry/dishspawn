@@ -1,6 +1,6 @@
 package io.eho.dishspawn.controller;
 
-import io.eho.dishspawn.controller.util.ListSkipper;
+import io.eho.dishspawn.controller.utils.ListSkipper;
 import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.ChefService;

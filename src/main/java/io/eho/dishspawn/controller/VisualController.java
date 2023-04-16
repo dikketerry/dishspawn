@@ -24,5 +24,4 @@ public class VisualController {
         model.addAttribute("visual", visual);
         return "visual";
     }
-
 }

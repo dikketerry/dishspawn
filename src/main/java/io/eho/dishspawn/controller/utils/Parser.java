@@ -1,4 +1,4 @@
-package io.eho.dishspawn.controller.util;
+package io.eho.dishspawn.controller.utils;
 
 // utility class to convert stuff when required
 public class Parser {
@@ -15,6 +15,4 @@ public class Parser {
 
         return idLong;
     }
-
-
 }

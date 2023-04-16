@@ -1,6 +1,6 @@
 package io.eho.dishspawn.controller;
 
-import io.eho.dishspawn.controller.util.Parser;
+import io.eho.dishspawn.controller.utils.Parser;
 import io.eho.dishspawn.exception.SaveImageNotPossible;
 import io.eho.dishspawn.graphics.processing.util.Randomizer;
 import io.eho.dishspawn.graphics.processing.util.Transformer;
@@ -10,10 +10,7 @@ import io.eho.dishspawn.model.Chef;
 import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.model.Visual;
-import io.eho.dishspawn.service.ChefService;
-import io.eho.dishspawn.service.RecipeIngredientService;
-import io.eho.dishspawn.service.RecipeService;
-import io.eho.dishspawn.service.VisualService;
+import io.eho.dishspawn.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -45,37 +42,45 @@ public class ImageController {
 
     private final RecipeService recipeService;
     private final RecipeIngredientService recipeIngredientService;
+    private final ImageService imageService;
     private final VisualService visualService;
     private final ChefService chefService;
 
     private TheSketch theSketch;    // custom PApplet class (Processing)
-    private PImage pImg;            // Processing class, used for
+    private PImage pImg;            // Processing class
     private Recipe recipe;
 
     @Autowired
     public ImageController(RecipeService recipeService, RecipeIngredientService recipeIngredientService,
-                           VisualService visualService, ChefService chefService) {
+                           ImageService imageService, VisualService visualService, ChefService chefService) {
         this.recipeService = recipeService;
         this.recipeIngredientService = recipeIngredientService;
+        this.imageService = imageService;
         this.visualService = visualService;
         this.chefService = chefService;
     }
 
     // generate image
     @PostMapping("/spawn/{id}")
-    public String generateSpawn(@PathVariable String id, Model model) {
-        // help method to convert String to Long and catch non-numerical input
-        Long idLong = Parser.convertStringIdToLong(id);
+    public String generateImage(@PathVariable String id, Model model) {
+        // ensure pImg is empty
         this.pImg = null;
+
+        // help method to convert String to Long and catch non-numerical input
+        // TODO: should be Util
+        Long idLong = Parser.convertStringIdToLong(id);
 
         if (idLong == 0l) {
             String noNumber = id + " is not a numeric format";
             model.addAttribute("error", noNumber);
-            return "error-page";
+            return "error-page"; // todo: error page not existing anymore
         }
         // get recipe
         Recipe recipe = recipeService.findRecipeById(idLong);
         this.recipe = recipe;
+
+        // TODO: imageService.generateImage and JUnit
+//        String imageString = imageService.generateImage(recipe);
 
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
@@ -132,8 +137,8 @@ public class ImageController {
                 s.setColor(ri.getColor());
                 s.step();
                 shapeList.add(s);
-                System.out.println("shape: " + s.getClass() + " with color " + theSketch.hex(s.getColorValues()) +
-                                           " and position " + s.getX() + " " + s.getY() + " added");
+//                System.out.println("shape: " + s.getClass() + " with color " + theSketch.hex(s.getColorValues()) +
+//                                           " and position " + s.getX() + " " + s.getY() + " added");
             }
         }
 
@@ -166,6 +171,7 @@ public class ImageController {
     }
 
     // save image and Visual entity
+    // TODO: move logic to ImageService
     @PostMapping("/spawn/{id}/save")
     public String saveVisual(Model model) {
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
@@ -181,6 +187,7 @@ public class ImageController {
         this.pImg.save(imagePath + "/" + fileName);
 
         // create new Visual entity for storing location, chef etc.
+        // TODO: createVisual in VisualService
         Visual newVisual = new Visual();
         String chefUserName = SecurityContextHolder.getContext()
                 .getAuthentication()

@@ -33,7 +33,6 @@ public class VisualServiceImpl implements VisualService {
     @Override
     public void deleteVisual(Visual visual) {
         visualRepository.delete(visual);
-
     }
 
     @Override
