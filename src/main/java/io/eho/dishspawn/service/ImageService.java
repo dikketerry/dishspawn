@@ -1,9 +1,10 @@
 package io.eho.dishspawn.service;
 
 import io.eho.dishspawn.model.Recipe;
-import org.springframework.stereotype.Service;
+import io.eho.dishspawn.model.Visual;
 
 public interface ImageService {
 
-    public String generateImage(Recipe recipe);
+    String generateImage(Recipe recipe);
+    Visual saveVisual(Recipe recipe, Long newId);
 }

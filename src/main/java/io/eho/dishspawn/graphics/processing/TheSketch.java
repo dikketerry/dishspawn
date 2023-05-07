@@ -4,11 +4,13 @@ import io.eho.dishspawn.graphics.processing.shapes.Circle;
 import io.eho.dishspawn.graphics.processing.shapes.Ellipse;
 import io.eho.dishspawn.graphics.processing.shapes.Rectangle;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
+import org.springframework.stereotype.Service;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TheSketch extends PApplet {
 
     private List<Shape> shapes = new ArrayList<>();
@@ -39,6 +41,7 @@ public class TheSketch extends PApplet {
 
     @Override
     public void draw() {
+
         if (generate) {
 
 //            System.out.println("size: " + shapes.size() + "index: " + shapeIndex + "; class: " + shapes.get(shapeIndex).getClass());
