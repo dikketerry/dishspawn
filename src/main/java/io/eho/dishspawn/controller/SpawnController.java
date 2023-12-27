@@ -210,7 +210,7 @@ public class SpawnController {
         }
     }
 
-    private List createIntersectionRecipes(List<Recipe> recipeList1, List<Recipe> recipeList2) {
+    private List<Recipe> createIntersectionRecipes(List<Recipe> recipeList1, List<Recipe> recipeList2) {
         List<Recipe> intersection = recipeList1.stream()
                 .distinct()
                 .filter(recipeList2::contains)
@@ -218,8 +218,8 @@ public class SpawnController {
         return intersection;
     }
 
-    private List createPageRecipesSpawnList(List<Recipe> intersectionRecipes, int searchPageNr) {
-        PagedListHolder page = new PagedListHolder(intersectionRecipes);
+    private List<Recipe> createPageRecipesSpawnList(List<Recipe> intersectionRecipes, int searchPageNr) {
+        PagedListHolder<Recipe> page = new PagedListHolder<Recipe>(intersectionRecipes);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 
@@ -229,7 +229,7 @@ public class SpawnController {
         return recipeSpawnList;
     }
 
-    private List createRecipeList(Ingredient ingredient) {
+    private List<Recipe> createRecipeList(Ingredient ingredient) {
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
         List<Recipe> recipeList = new ArrayList<>();
 
