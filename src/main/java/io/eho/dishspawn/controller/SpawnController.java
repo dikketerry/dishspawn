@@ -85,7 +85,7 @@ public class SpawnController {
         this.noIngredientMessage.setLength(0);
 
         // paged search results ingredients
-        Page ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
+        Page<Ingredient> ingredientPage = ingredientService.findPageIngredientsByNameContaining(searchKey, searchPageNr);
         ingredientListPage = ingredientPage.getContent();
         totalFoundIngredientPages = ingredientPage.getTotalPages();
         totalFoundIngredients = ingredientPage.getTotalElements();

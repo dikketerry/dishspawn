@@ -13,5 +13,5 @@ public interface RecipeIngredientService {
     List<RecipeIngredient> findAllRecipeIngredients();
     List<RecipeIngredient> findAllRecipeIngredientByRecipe(Recipe recipe);
     List<RecipeIngredient> findAllRecipeIngredientByIngredient(Ingredient ingredient);
-    Page findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr);
+    Page<RecipeIngredient> findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr);
 }

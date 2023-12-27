@@ -87,7 +87,7 @@ public class HomeController {
 //      a nr. of pages AND return a paged list.
     private List<Visual> createPageVisuals(List<Visual> visuals, int searchPageNr) {
 
-        PagedListHolder page = new PagedListHolder(visuals);
+        PagedListHolder<Visual> page = new PagedListHolder<Visual>(visuals);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 

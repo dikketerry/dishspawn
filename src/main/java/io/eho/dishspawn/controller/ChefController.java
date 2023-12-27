@@ -94,8 +94,10 @@ public class ChefController {
         }
     }
 
-    private List createPageVisualsChefList(List<Visual> visualsChef, int searchPageNr) {
-        PagedListHolder page = new PagedListHolder(visualsChef);
+    private List<Visual> createPageVisualsChefList(List<Visual> visualsChef, int searchPageNr) {
+        // PagedListHolder page = new PagedListHolder();
+        // page.setSource(visualsChef);
+        PagedListHolder<Visual> page = new PagedListHolder<Visual>(visualsChef);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 

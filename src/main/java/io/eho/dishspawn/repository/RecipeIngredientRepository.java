@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Long> {
 
-    Page findAllByIngredient(Ingredient ingredient, Pageable pageable);
+    Page<RecipeIngredient> findAllByIngredient(Ingredient ingredient, Pageable pageable);
     List<RecipeIngredient> findAllByIngredient(Ingredient ingredient);
     List<RecipeIngredient> findAllByRecipe(Recipe recipe);
 }

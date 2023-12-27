@@ -46,7 +46,7 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
     }
 
     @Override
-    public Page findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr) {
+    public Page<RecipeIngredient> findPageRecipeIngredientsByIngredient(Ingredient ingredient, int pageNr) {
         Pageable pageable = PageRequest.of(pageNr - 1, 3, Sort.Direction.ASC, "timestampCreated");
         return recipeIngredientRepository.findAllByIngredient(ingredient, pageable);
     }
