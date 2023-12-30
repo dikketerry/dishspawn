@@ -65,7 +65,7 @@ public abstract class Shape implements ColorizeIt {
         sb.insert(0, opacity);
 //        System.out.println("hex value: " + sb); // diagnostic print
 
-        this.colorValues = sketch.unhex(sb.toString());
+        this.colorValues = PApplet.unhex(sb.toString());
     }
 
     public float getX() {
@@ -115,8 +115,8 @@ public abstract class Shape implements ColorizeIt {
         float offset1 = sketch.random(0, 100);
         float offset2 = sketch.random(9950, 10050);
 
-        this.x = sketch.map(sketch.noise(offset1), 0, 1, 0, sketch.width);
-        this.y = sketch.map(sketch.noise(offset2), 0, 1, 0, sketch.height);
+        this.x = PApplet.map(sketch.noise(offset1), 0, 1, 0, sketch.width);
+        this.y = PApplet.map(sketch.noise(offset2), 0, 1, 0, sketch.height);
 
         offset1 += 0.02; // todo: make offsets global
         offset2 += 0.02;

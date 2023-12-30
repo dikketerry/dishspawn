@@ -69,6 +69,7 @@ public class ImageServiceImpl implements ImageService {
                 .filter(ri -> ri.isVisualImpact() == true && ri.getMassOrVolume() == 0)
                 .collect(Collectors.toList());
 
+        // todo: extend sysouts with ingredient
         for (RecipeIngredient ri : recipeIngredientsWithVisualImpactSortedOnMass) {
             System.out.println("ri mass / volume > 0: " + ri.getMassOrVolume());
         }
@@ -77,7 +78,7 @@ public class ImageServiceImpl implements ImageService {
             System.out.println("ri mass / volume == 0: " + ri.getMassOrVolume());
         }
 
-        // get a total of mass / volume
+        // get a total of mass / volume; todo move to mass ingredients
         int totalSize = 0;
         for (RecipeIngredient ri : recipeIngredientsWithVisualImpactSortedOnMass) {
             totalSize += ri.getMassOrVolume();
@@ -100,7 +101,7 @@ public class ImageServiceImpl implements ImageService {
             double riSize = ri.getMassOrVolume();
             System.out.println("name: " + ri.getIngredient().getName() + "; Color hex: " + ri.getColor() + "; Mass: " + riSize);
 
-            // set shape per ri
+            // set shape per ri; todo add 'compressor'
 
             int nrOfShapes = (int) Math.ceil((riSize / totalSize) * totalShapes);
             System.out.println("nr of shapes: " + nrOfShapes + " for ri: " + ri.getIngredient().getName());

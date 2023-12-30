@@ -1,7 +1,7 @@
 package io.eho.dishspawn.graphics.processing;
 
-import io.eho.dishspawn.graphics.processing.shapes.Circle;
-import io.eho.dishspawn.graphics.processing.shapes.Ellipse;
+// import io.eho.dishspawn.graphics.processing.shapes.Circle;
+// import io.eho.dishspawn.graphics.processing.shapes.Ellipse;
 import io.eho.dishspawn.graphics.processing.shapes.Rectangle;
 import io.eho.dishspawn.graphics.processing.shapes.Shape;
 import org.springframework.stereotype.Service;
