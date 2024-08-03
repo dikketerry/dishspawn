@@ -17,7 +17,7 @@ public class TheSketch extends PApplet {
     private int shapeIndex = 0;
 
     private boolean generate;
-    private final int COLOR_CEILING = 255;
+    private static final int COLOR_CEILING = 255;
 
     int red;
     int green;
@@ -75,6 +75,7 @@ public class TheSketch extends PApplet {
         this.getSurface().setVisible(false);
     }
 
+    @Override
     public void mouseDragged() {
         shapes.add(new Rectangle(this, mouseX, mouseY));
     }
