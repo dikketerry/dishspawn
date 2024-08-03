@@ -89,22 +89,18 @@ public class ChefController {
 
     // private helpers below
     private void noSpawnsFoundCheck(List<Visual> visualsChef) {
-        if (visualsChef.size() == 0) {
+        if (visualsChef.isEmpty()) {
             message.append(" has not created any spawns yet :( ");
         }
     }
 
     private List<Visual> createPageVisualsChefList(List<Visual> visualsChef, int searchPageNr) {
-        // PagedListHolder page = new PagedListHolder();
-        // page.setSource(visualsChef);
-        PagedListHolder<Visual> page = new PagedListHolder<Visual>(visualsChef);
+        PagedListHolder<Visual> page = new PagedListHolder<>(visualsChef);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 
         totalFoundVisualsChefPages = page.getPageCount();
-        List<Visual> visualsChefPage = page.getPageList();
-
-        return visualsChefPage;
+        return page.getPageList();
     }
 
     private void resetMessage() {
