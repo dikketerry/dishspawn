@@ -59,6 +59,10 @@ public final class Transformer {
             default:
                 shape = new Circle(sketch);
         }
+
+        // Set texture from RecipeIngredient
+        shape.setTexture(recipeIngredient.getTexture());
+
         return shape;
     }
 

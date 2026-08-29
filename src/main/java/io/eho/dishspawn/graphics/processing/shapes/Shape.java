@@ -2,6 +2,7 @@ package io.eho.dishspawn.graphics.processing.shapes;
 
 import io.eho.dishspawn.graphics.processing.ColorizeIt;
 import io.eho.dishspawn.graphics.processing.util.Randomizer;
+import io.eho.dishspawn.model.util.visualproperties.RecipeIngredientTexture;
 import processing.core.PApplet;
 
 import java.util.Random;
@@ -17,7 +18,7 @@ public abstract class Shape implements ColorizeIt {
     private float y;
 
 //    private float sizeImpact; // todo
- 
+
     private float xSpeed;
     private float ySpeed;
 
@@ -25,6 +26,8 @@ public abstract class Shape implements ColorizeIt {
     private int minAlpha = 64;
     private int maxAlpha = 224;
     private int alpha = 24;
+
+    private RecipeIngredientTexture texture;
 
     // constructor not yet in use, but might be useful later on
     public Shape(PApplet sketch) {
@@ -82,6 +85,86 @@ public abstract class Shape implements ColorizeIt {
 
     public PApplet getSketch() {
         return sketch;
+    }
+
+    public RecipeIngredientTexture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(RecipeIngredientTexture texture) {
+        this.texture = texture;
+    }
+
+    // Apply texture-based rendering style before drawing shape
+    protected void applyTextureStyle() {
+        if (texture == null) {
+            // Default: filled, no stroke
+            getSketch().noStroke();
+            getSketch().fill(colorValues);
+            return;
+        }
+
+        switch (texture) {
+            case CRUNCHY:
+                // Thick stroke, no fill - crispy edges
+                getSketch().stroke(colorValues);
+                getSketch().strokeWeight(3);
+                getSketch().noFill();
+                break;
+            case CREAMY:
+                // Filled with higher transparency - smooth and soft
+                getSketch().noStroke();
+                getSketch().fill(colorValues);
+                break;
+            case POWDERY:
+                // Thin stroke with light fill - dusty appearance
+                getSketch().stroke(colorValues);
+                getSketch().strokeWeight(1);
+                getSketch().fill(colorValues, 100); // low opacity fill
+                break;
+            case WATERY:
+                // Very transparent fill, no stroke - liquid
+                getSketch().noStroke();
+                getSketch().fill(colorValues, 80);
+                break;
+            case OILY:
+                // Filled with medium transparency - glossy
+                getSketch().noStroke();
+                getSketch().fill(colorValues, 180);
+                break;
+            case FIRM:
+                // Solid fill with thin stroke - defined edges
+                getSketch().stroke(colorValues);
+                getSketch().strokeWeight(2);
+                getSketch().fill(colorValues);
+                break;
+            case CHEWY:
+                // Medium stroke, semi-transparent - elastic feel
+                getSketch().stroke(colorValues);
+                getSketch().strokeWeight(2);
+                getSketch().fill(colorValues, 150);
+                break;
+            case BREADY:
+                // Soft edges with fill - airy texture
+                getSketch().stroke(colorValues, 100);
+                getSketch().strokeWeight(1);
+                getSketch().fill(colorValues);
+                break;
+            case MOIST:
+                // Filled with subtle stroke - slightly wet
+                getSketch().stroke(colorValues, 150);
+                getSketch().strokeWeight(1);
+                getSketch().fill(colorValues, 200);
+                break;
+            case PASTY:
+                // Thick, opaque - dense appearance
+                getSketch().noStroke();
+                getSketch().fill(colorValues, 220);
+                break;
+            default:
+                getSketch().noStroke();
+                getSketch().fill(colorValues);
+        }
     }
 
     @Override // todo: check if correct

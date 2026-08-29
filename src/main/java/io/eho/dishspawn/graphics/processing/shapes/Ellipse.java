@@ -25,8 +25,7 @@ public class Ellipse extends Shape {
     }
 
     private void renderEllipse() {
-        getSketch().noStroke();
-        getSketch().fill(super.getColorValues());
+        applyTextureStyle();
         getSketch().ellipse(super.getX(), super.getY(), width, height);
     }
 

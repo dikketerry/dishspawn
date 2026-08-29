@@ -1,0 +1,354 @@
+HELP.md         mvnw            pom.xml         src
+extra-resources mvnw.cmd        readme.md       target
+./extra-resources:
+DishSpawn-overview.key
+Kitchen-Converstion-Chart-The-Cookie-Rookie.pdf
+archive-ingredients
+dish-spawn-DBModel3.mwb
+dish-spawn-uml.drawio
+front-end
+overviewDishSpawn.drawio
+own-table-enums-decision-tree.numbers
+readme
+swedish-chef.png
+temp images
+temp-sql-dump
+./extra-resources/archive-ingredients:
+test.json  train.json
+./extra-resources/front-end:
+register.jpg
+./extra-resources/readme:
+galleryview.jpg     rebusbackground.jpg visualview.jpg
+home.jpg            recipefinder.jpg
+./extra-resources/temp images:
+ClearcutDangerousBengaltiger-mobile.mp4 testdish3.jpg
+avatarlp2.png                           testdish4.jpg
+testdish1.png                           testdish5.png
+testdish2.jpg                           vectorstock_16361894
+testdish22.jpg
+./extra-resources/temp images/vectorstock_16361894:
+free-license-attribution.txt vectorstock_16361894
+./extra-resources/temp images/vectorstock_16361894/vectorstock_16361894:
+robot-adapted.afdesign   vectorstock_16361894.eps vectorstock_16361894.pdf
+vectorstock_16361894.ai  vectorstock_16361894.jpg vectorstock_16361894.png
+./extra-resources/temp-sql-dump:
+./src:
+main test
+./src/main:
+java      resources webapp
+./src/main/java:
+io
+./src/main/java/io:
+eho
+./src/main/java/io/eho:
+dishspawn
+./src/main/java/io/eho/dishspawn:
+DishSpawnApplication.java exception                 repository
+config                    graphics                  security
+controller                model                     service
+error                     play                      web
+./src/main/java/io/eho/dishspawn/config:
+SecurityConfiguration.java
+./src/main/java/io/eho/dishspawn/controller:
+ChefController.java       LoginController.java      SpawnController.java
+HomeController.java       LoveController.java       VisualController.java
+ImageController.java      RecipeController.java     rest
+IngredientController.java SearchController.java     utils
+./src/main/java/io/eho/dishspawn/controller/rest:
+ChefRestController.java       RecipeRestController.java
+IngredientRestController.java VisualRestController.java
+./src/main/java/io/eho/dishspawn/controller/utils:
+ListSkipper.java Parser.java
+./src/main/java/io/eho/dishspawn/error:
+CustomErrorController.java     ExceptionControllerAdvice.java
+./src/main/java/io/eho/dishspawn/exception:
+GlobalDefaultExceptionHandler.java  UnitDoesNotExistException.java
+ResourceNotFoundException.java      UsernameAlreadyExistsException.java
+SaveImageNotPossible.java
+./src/main/java/io/eho/dishspawn/graphics:
+processing  vanillajava
+./src/main/java/io/eho/dishspawn/graphics/processing:
+ColorizeIt.java   PositionIt.java   TheSketch.java    util
+MoveIt.java       SketchThread.java shapes
+./src/main/java/io/eho/dishspawn/graphics/processing/shapes:
+Circle.java    Ellipse.java   Rectangle.java Shape.java     Triangle.java
+./src/main/java/io/eho/dishspawn/graphics/processing/util:
+Randomizer.java  Transformer.java
+./src/main/java/io/eho/dishspawn/graphics/vanillajava:
+Ball.java        ImageCanvas.java ImageWindow.java
+./src/main/java/io/eho/dishspawn/model:
+Chef.java                        RecipeIngredientCreationDto.java
+Ingredient.java                  Role.java
+Love.java                        Visual.java
+Recipe.java                      util
+RecipeIngredient.java
+./src/main/java/io/eho/dishspawn/model/util:
+unitconversion   visualproperties
+./src/main/java/io/eho/dishspawn/model/util/unitconversion:
+AbstractUnitConverter.java VolumeConverter.java
+MassConverter.java
+./src/main/java/io/eho/dishspawn/model/util/visualproperties:
+IngredientCategory.java            RecipeIngredientTexture.java
+RecipeIngredientCookingMethod.java dish-spawn.code-workspace
+RecipeIngredientForm.java
+./src/main/java/io/eho/dishspawn/play:
+filehandle modeltest  sketchtest
+./src/main/java/io/eho/dishspawn/play/filehandle:
+PlayFileAndPath.java
+./src/main/java/io/eho/dishspawn/play/modeltest:
+PlayRecipe.java PlayRole.java   TestJDBC.java
+./src/main/java/io/eho/dishspawn/play/sketchtest:
+processing  vanillajava
+./src/main/java/io/eho/dishspawn/play/sketchtest/processing:
+BallOld.java    PlayHexa.java   PlaySketch.java
+./src/main/java/io/eho/dishspawn/play/sketchtest/vanillajava:
+Image.java
+./src/main/java/io/eho/dishspawn/repository:
+ChefRepository.java             RecipeRepository.java
+IngredientRepository.java       RoleRepository.java
+LoveRepository.java             VisualRepository.java
+RecipeIngredientRepository.java
+./src/main/java/io/eho/dishspawn/security:
+SecurityChef.java SecurityRole.java
+./src/main/java/io/eho/dishspawn/service:
+ChefService.java             RecipeService.java
+ImageService.java            RoleService.java
+IngredientService.java       VisualService.java
+LoveService.java             implementation
+RecipeIngredientService.java
+./src/main/java/io/eho/dishspawn/service/implementation:
+ChefServiceImpl.java             RecipeServiceImpl.java
+ImageServiceImpl.java            RoleServiceImpl.java
+IngredientServiceImpl.java       ServiceUtils.java
+LoveServiceImpl.java             VisualServiceImpl.java
+RecipeIngredientServiceImpl.java
+./src/main/java/io/eho/dishspawn/web:
+FormCreateChef.java FormLoginChef.java
+./src/main/resources:
+application-local.properties static
+application-prod.properties  templates
+application.properties
+./src/main/resources/static:
+css        img        index.html js
+./src/main/resources/static/css:
+master.css    uikit.min.css
+./src/main/resources/static/img:
+bento-favicon.png  egg-favicon.png    readme             swedish-chef.png
+default-avatar.png logo               spagh-favicon.png
+./src/main/resources/static/img/logo:
+icons8-bento-100.png              icons8-paella-100.png
+icons8-cheese-100.png             icons8-rice-bowl-100.png
+icons8-dumplings-100.png          icons8-salad-100.png
+icons8-food-and-wine-100.png      icons8-spaghetti-100.png
+icons8-french-fries-100.png       icons8-sunny-side-up-eggs-100.png
+./src/main/resources/static/img/readme:
+galleryview.jpg     rebusbackground.jpg visualview.jpg
+home.jpg            recipefinder.jpg
+./src/main/resources/static/js:
+master.js             testjs_noisescript.js uikit.min.js
+p5.js                 uikit-icons.min.js
+./src/main/resources/templates:
+./src/main/webapp:
+WEB-INF spawns
+./src/main/webapp/WEB-INF:
+templates
+./src/main/webapp/WEB-INF/templates:
+add-chef.html        chef.html            recipe.html
+add-ingredient.html  error                search-result.html
+add-recipe.html      fragments            spawn-i.html
+all-chefs.html       home.html            tempvisual.html
+all-ingredients.html login.html           visual.html
+all-recipes.html     ooops.html
+./src/main/webapp/WEB-INF/templates/error:
+403.html 404.html 405.html 409.html 5xx.html
+./src/main/webapp/WEB-INF/templates/fragments:
+alerts.html     header.html     login-form.html subheader.html
+./src/main/webapp/spawns:
+visual145.png visual175.png visual204.png visual233.png visual281.png
+visual146.png visual176.png visual205.png visual234.png visual282.png
+visual147.png visual177.png visual206.png visual235.png visual283.png
+visual148.png visual178.png visual207.png visual236.png visual284.png
+visual149.png visual179.png visual208.png visual237.png visual297.png
+visual150.png visual180.png visual209.png visual238.png visual298.png
+visual151.png visual181.png visual210.png visual239.png visual299.png
+visual152.png visual182.png visual211.png visual240.png visual300.png
+visual153.png visual183.png visual212.png visual241.png visual301.png
+visual154.png visual184.png visual213.png visual242.png visual302.png
+visual155.png visual185.png visual214.png visual243.png visual303.png
+visual156.png visual186.png visual215.png visual244.png visual304.png
+visual157.png visual187.png visual216.png visual245.png visual305.png
+visual158.png visual188.png visual217.png visual246.png visual306.png
+visual160.png visual189.png visual218.png visual247.png visual307.png
+visual161.png visual190.png visual219.png visual248.png visual308.png
+visual162.png visual191.png visual220.png visual249.png visual309.png
+visual163.png visual192.png visual221.png visual250.png visual311.png
+visual164.png visual193.png visual222.png visual251.png visual312.png
+visual165.png visual194.png visual223.png visual252.png visual313.png
+visual166.png visual195.png visual224.png visual253.png visual315.png
+visual167.png visual196.png visual225.png visual263.png visual316.png
+visual168.png visual197.png visual226.png visual269.png visual319.png
+visual169.png visual198.png visual227.png visual272.png visual320.png
+visual170.png visual199.png visual228.png visual273.png visual321.png
+visual171.png visual200.png visual229.png visual274.png visual322.png
+visual172.png visual201.png visual230.png visual275.png visual323.png
+visual173.png visual202.png visual231.png visual279.png visual326.png
+visual174.png visual203.png visual232.png visual280.png
+./src/test:
+java
+./src/test/java:
+io
+./src/test/java/io:
+eho
+./src/test/java/io/eho:
+dishspawn
+./src/test/java/io/eho/dishspawn:
+DishSpawnApplicationTests.java
+./target:
+classes                generated-sources      maven-status
+dishspawn.jar          generated-test-sources surefire-reports
+dishspawn.jar.original maven-archiver         test-classes
+./target/classes:
+application-local.properties io
+application-prod.properties  static
+application.properties
+./target/classes/io:
+eho
+./target/classes/io/eho:
+dishspawn
+./target/classes/io/eho/dishspawn:
+DishSpawnApplication.class model
+config                     play
+controller                 repository
+error                      security
+exception                  service
+graphics                   web
+./target/classes/io/eho/dishspawn/config:
+SecurityConfiguration.class
+./target/classes/io/eho/dishspawn/controller:
+ChefController.class       RecipeController.class
+HomeController.class       SearchController.class
+ImageController.class      SpawnController.class
+IngredientController.class VisualController.class
+LoginController.class      rest
+LoveController.class       utils
+./target/classes/io/eho/dishspawn/controller/rest:
+ChefRestController.class       RecipeRestController.class
+IngredientRestController.class VisualRestController.class
+./target/classes/io/eho/dishspawn/controller/utils:
+ListSkipper.class Parser.class
+./target/classes/io/eho/dishspawn/error:
+ExceptionControllerAdvice.class
+./target/classes/io/eho/dishspawn/exception:
+GlobalDefaultExceptionHandler.class  UnitDoesNotExistException.class
+ResourceNotFoundException.class      UsernameAlreadyExistsException.class
+SaveImageNotPossible.class
+./target/classes/io/eho/dishspawn/graphics:
+processing  vanillajava
+./target/classes/io/eho/dishspawn/graphics/processing:
+ColorizeIt.class   PositionIt.class   TheSketch.class    util
+MoveIt.class       SketchThread.class shapes
+./target/classes/io/eho/dishspawn/graphics/processing/shapes:
+Circle.class    Ellipse.class   Rectangle.class Shape.class     Triangle.class
+./target/classes/io/eho/dishspawn/graphics/processing/util:
+Randomizer.class  Transformer.class
+./target/classes/io/eho/dishspawn/graphics/vanillajava:
+Ball.class        ImageCanvas.class ImageWindow.class
+./target/classes/io/eho/dishspawn/model:
+Chef.class                        RecipeIngredientCreationDto.class
+Ingredient.class                  Role.class
+Love.class                        Visual.class
+Recipe.class                      util
+RecipeIngredient.class
+./target/classes/io/eho/dishspawn/model/util:
+unitconversion   visualproperties
+./target/classes/io/eho/dishspawn/model/util/unitconversion:
+AbstractUnitConverter.class      VolumeConverter$1.class
+MassConverter$1.class            VolumeConverter$VolumeUnit.class
+MassConverter$MassUnit.class     VolumeConverter.class
+MassConverter.class
+./target/classes/io/eho/dishspawn/model/util/visualproperties:
+IngredientCategory.class            RecipeIngredientForm.class
+RecipeIngredientCookingMethod.class RecipeIngredientTexture.class
+./target/classes/io/eho/dishspawn/play:
+filehandle modeltest  sketchtest
+./target/classes/io/eho/dishspawn/play/filehandle:
+PlayFileAndPath.class
+./target/classes/io/eho/dishspawn/play/modeltest:
+PlayRecipe.class PlayRole.class   TestJDBC.class
+./target/classes/io/eho/dishspawn/play/sketchtest:
+processing  vanillajava
+./target/classes/io/eho/dishspawn/play/sketchtest/processing:
+BallOld.class    PlayHexa.class   PlaySketch.class
+./target/classes/io/eho/dishspawn/play/sketchtest/vanillajava:
+Image.class
+./target/classes/io/eho/dishspawn/repository:
+ChefRepository.class             RecipeRepository.class
+IngredientRepository.class       RoleRepository.class
+LoveRepository.class             VisualRepository.class
+RecipeIngredientRepository.class
+./target/classes/io/eho/dishspawn/security:
+SecurityChef.class SecurityRole.class
+./target/classes/io/eho/dishspawn/service:
+ChefService.class             RecipeService.class
+ImageService.class            RoleService.class
+IngredientService.class       VisualService.class
+LoveService.class             implementation
+RecipeIngredientService.class
+./target/classes/io/eho/dishspawn/service/implementation:
+ChefServiceImpl.class             RecipeServiceImpl.class
+ImageServiceImpl.class            RoleServiceImpl.class
+IngredientServiceImpl.class       ServiceUtils.class
+LoveServiceImpl.class             VisualServiceImpl.class
+RecipeIngredientServiceImpl.class
+./target/classes/io/eho/dishspawn/web:
+FormCreateChef.class FormLoginChef.class
+./target/classes/static:
+css        img        index.html js
+./target/classes/static/css:
+master.css    uikit.min.css
+./target/classes/static/img:
+bento-favicon.png  egg-favicon.png    readme             swedish-chef.png
+default-avatar.png logo               spagh-favicon.png
+./target/classes/static/img/logo:
+icons8-bento-100.png              icons8-paella-100.png
+icons8-cheese-100.png             icons8-rice-bowl-100.png
+icons8-dumplings-100.png          icons8-salad-100.png
+icons8-food-and-wine-100.png      icons8-spaghetti-100.png
+icons8-french-fries-100.png       icons8-sunny-side-up-eggs-100.png
+./target/classes/static/img/readme:
+galleryview.jpg     rebusbackground.jpg visualview.jpg
+home.jpg            recipefinder.jpg
+./target/classes/static/js:
+master.js             testjs_noisescript.js uikit.min.js
+p5.js                 uikit-icons.min.js
+./target/generated-sources:
+annotations
+./target/generated-sources/annotations:
+./target/generated-test-sources:
+test-annotations
+./target/generated-test-sources/test-annotations:
+./target/maven-archiver:
+pom.properties
+./target/maven-status:
+maven-compiler-plugin
+./target/maven-status/maven-compiler-plugin:
+compile     testCompile
+./target/maven-status/maven-compiler-plugin/compile:
+default-compile
+./target/maven-status/maven-compiler-plugin/compile/default-compile:
+createdFiles.lst inputFiles.lst
+./target/maven-status/maven-compiler-plugin/testCompile:
+default-testCompile
+./target/maven-status/maven-compiler-plugin/testCompile/default-testCompile:
+createdFiles.lst inputFiles.lst
+./target/surefire-reports:
+TEST-io.eho.dishspawn.DishSpawnApplicationTests.xml
+io.eho.dishspawn.DishSpawnApplicationTests.txt
+./target/test-classes:
+io
+./target/test-classes/io:
+eho
+./target/test-classes/io/eho:
+dishspawn
+./target/test-classes/io/eho/dishspawn:
+DishSpawnApplicationTests 2.class DishSpawnApplicationTests.class

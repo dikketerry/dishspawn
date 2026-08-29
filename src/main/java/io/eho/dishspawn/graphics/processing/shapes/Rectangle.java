@@ -26,8 +26,7 @@ public class Rectangle extends Shape {
     }
 
     private void renderRectangle() {
-        getSketch().noStroke();
-        getSketch().fill(super.getColorValues());
+        applyTextureStyle();
         getSketch().rect(super.getX(), super.getY(), width, height);
     }
 

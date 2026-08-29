@@ -1,0 +1,530 @@
+# DishSpawn — Improvement Opportunities
+
+> **Document status:** Step 2 deliverable. Where Step 1 (`01-functional-overview.md`)
+> described *what the app does and how it fits together*, this document describes *what
+> could be better and why*. It is an **analysis and a menu**, not a set of changes already
+> made — nothing in the codebase is modified by this document. Each opportunity is written
+> so you can decide, in a later session, whether and when to act on it.
+>
+> Written by reading the source directly on branch `testLint`, 2026-08-07. Evidence is
+> cited as `file:line` so you can verify every claim yourself.
+
+---
+
+## 0. How to read this document
+
+Improvements are grouped into seven themes:
+
+- **A. Correctness & concurrency** — where the code can produce wrong results or corrupt
+  state, especially with more than one user.
+- **B. Security**
+- **C. Persistence & efficiency** — the database and JPA layer.
+- **D. Architecture & design** — how responsibilities are divided.
+- **E. Readability & hygiene** — the day-to-day "can I understand and trust this?" layer.
+- **F. Libraries & build**
+- **G. Testing**
+
+Every item carries two quick tags so you can triage at a glance:
+
+- **Severity** — 🔴 high (can cause wrong behaviour / data loss / security exposure),
+  🟠 medium (real problem, limited blast radius today), 🟡 low (hygiene / polish).
+- **Effort** — **S** (an afternoon), **M** (a focused session or two), **L** (a project
+  in its own right, likely overlapping Steps 3–5).
+
+Section 8 collects everything into a single ranked table with a suggested order. If you
+only read one section, read that one — then come back up here for the "why".
+
+**A deliberate framing note.** Many of these findings share a *single root cause*: the app
+was built and tested as a **single-user desktop application** (one developer, one browser,
+a real Processing window opening on screen). Almost none of that is "bad code" in that
+context — it's code that made a different assumption than "a web server with concurrent
+users" requires. I'll point this out repeatedly because seeing the *one* underlying
+assumption makes a dozen separate findings click into place at once.
+
+---
+
+## 1. Housekeeping first — the uncommitted working tree (your requested "step 0")
+
+Before any analysis is acted on, there's a loose thread to tie off. The working tree on
+`testLint` currently has **uncommitted changes** (this is the in-progress generative-art
+work from the previous sessions):
+
+- `pom.xml` — Java 11 → 19, Lombok annotation-processor path added.
+- `graphics/processing/TheSketch.java` — adds `setComplementaryBackground(...)` and a
+  `setDominantIngredientColor(...)` setter.
+- `graphics/processing/shapes/Shape.java` + `Circle/Ellipse/Triangle/Rectangle.java` —
+  adds `applyTextureStyle()` and wires texture → stroke/fill/opacity into rendering.
+- `graphics/processing/util/Transformer.java` — passes the ingredient's texture to the shape.
+
+**Todo (recommended as the very first action of the next working session):**
+
+- [ ] Decide the fate of these changes: **commit them** on `testLint` with a clear message
+      (they are coherent and self-contained — texture-driven rendering + a
+      complementary-background hook), or deliberately stash/discard them.
+- [ ] Do this *before* starting any refactor below, so that the analysis changes and the
+      art changes don't tangle together in one diff.
+
+There is nothing wrong with the changes — this is purely about not building new work on top
+of an uncommitted base, which makes everything afterwards harder to review and to undo.
+This is noted as an aside precisely because it's process, not code quality.
+
+---
+
+## 2. Corrections to the Step 1 document (accuracy first)
+
+While reading the code closely for Step 2, I found that a few statements in
+`01-functional-overview.md` — including one *I* added last session — are not quite right.
+Honesty about the map matters more than the map looking finished, so here they are. I can
+fold these into the Step 1 doc on your say-so.
+
+1. **The generated PNGs are *not* in version control.** Step 1 §7 says the ~200 (I
+   corrected to 150) `visualN.png` files live "inside the source tree **and in version
+   control**." The count is right (150 on disk), but `/src/main/webapp/spawns/` is listed
+   in `.gitignore:6`, and `git ls-files` tracks **zero** files under it. So: they sit in
+   the source *folder* on disk, but git ignores them. The accurate statement is "generated
+   artefacts are written into the source tree on disk but are git-ignored." (My earlier
+   correction fixed the number but left the wrong "in version control" clause — mea culpa.)
+
+2. **`application-prod.properties` *is* committed, despite being git-ignored.** It's in
+   `.gitignore:5`, but it was committed *before* being ignored (git-ignore doesn't untrack
+   already-tracked files), so it's still in history. It contains only `${RDS_*}`
+   placeholders, so no real secret leaks — but the file is there.
+
+3. **Local DB credentials *are* committed.** `application-local.properties` is tracked and
+   contains `spring.datasource.username=hbstudent` / `password=hbstudent` in plaintext (see
+   §B1). Worth stating plainly in the "current state" section.
+
+4. **The app actually runs under the `local` profile, not `prod`.** Step 1 §2 says the
+   `prod` profile is "active by default" (true of the *Maven* profile). But
+   `application.properties` hard-codes `spring.profiles.active=local`, which is what the
+   running app obeys. So the effective default runtime profile is **local**.
+
+None of these change Step 1's conclusions; they tighten its facts.
+
+---
+
+## 3. Theme A — Correctness & concurrency
+
+This is the most important section. These are the places where the code can produce a
+**wrong result or corrupted state**, and most of them are invisible with one user and
+appear the moment a second user (or a background tab) acts at the same time.
+
+### A1. 🔴 Request state is stored on singleton beans (the big one) — Effort **M**
+
+Spring `@Controller` and `@Service` beans are **singletons**: one instance shared by every
+request on every thread. Several of them keep per-request, per-user data in **instance
+fields**:
+
+- `SpawnController.java:27-46` — the spawn basket (`ingredientSpawnList`), the results
+  (`recipeSpawnList`), the current page lists, paging counters, totals, the
+  `findRecipeMethodIsUsed` flag, the `searchKey`, and four message `StringBuilder`s. All
+  mutable, all shared.
+- `ImageServiceImpl.java:43-44` — `theSketch` and `pImg` (the in-progress image) are
+  instance fields, mutated across `generateImage(...)` and later read in `saveVisual(...)`.
+- `ImageController.java:24` — `private Recipe recipe;` holds "the recipe being spawned"
+  between the generate request and the save request.
+- `ChefController.java:26-27` — `totalFoundVisualsChefPages` and a `message` builder.
+
+**Why it matters (the concrete failure):** Chef A searches for "tomato, basil"; before A
+clicks a result, Chef B searches "flour". They share `ingredientSpawnList`, so B's search
+mutates A's basket. Worse, in the image flow: A generates an image (sets `pImg`), B
+generates an image (overwrites `pImg`), A clicks *Save* → A saves **B's** image under A's
+name. This is not theoretical; it's the direct consequence of the field placement. It also
+makes the code impossible to reason about under load and impossible to unit-test in
+isolation (state leaks between tests too).
+
+**Direction (in rough order of preference):**
+- Move this state to the **HTTP session** (`@SessionAttributes`, or an explicit
+  `@Scope("session")` bean for the basket) — smallest conceptual change, matches "this is
+  per-user workflow state."
+- Or make it **stateless**: pass the basket/selection as request parameters or a form, and
+  return results directly to the model rather than stashing them on the bean.
+- For the image pipeline specifically, `generateImage` should **return** everything the
+  save step needs (or hold the pending image in the session), so no `@Service` field is
+  reused across requests.
+
+This one finding is the strongest argument for the whole "built as single-user" framing,
+and it deserves to be tackled early because so much else (testability, the image race
+below, statelessness for future scaling) sits downstream of it.
+
+### A2. 🔴 The visual's filename/id is derived from a sequence read — race + fragility — Effort **M**
+
+`ImageController.saveVisual` (`ImageController.java:62-73`) asks
+`visualService.findNextIdValue()` (`VisualServiceImpl.java:24-26`, which runs
+`getNextValSequence()` against the DB), then `ImageServiceImpl.saveVisual`
+(`ImageServiceImpl.java:143-179`) both **names the PNG** `visual{newId}.png` *and* assumes
+the newly-persisted `Visual` will have exactly that id (`findVisualById(newId)` at the end).
+
+**Why it matters:** the id is read from the sequence **separately** from the insert that
+actually assigns the id (via `@GeneratedValue(AUTO)`). Under concurrency these can diverge,
+so the file can be named for one id while the row gets another — the follow-up
+`findVisualById(newId)` then fetches the wrong row or throws. Even single-user, it couples
+a **filename on disk** to a **DB sequence internal**, which is brittle.
+
+**Direction:** persist the `Visual` first, let JPA assign the id, then name the file from
+`visual.getId()`. One source of truth, no second sequence read, no race.
+
+### A3. 🔴 The image pipeline opens a real desktop window and blocks the request thread — Effort **L**
+
+`ImageServiceImpl.getTheSketch()` sets `java.awt.headless=false`
+(`ImageServiceImpl.java:197`) and launches a Processing `PApplet` — an actual on-screen
+window — then the request thread **sleeps 7.777 seconds** (`:127`) waiting for it to draw,
+then screenshots it. Step 1 flagged this; from the *improvement* angle the key points are:
+
+- **It cannot run on a headless server** (no display) without a virtual framebuffer, and
+  opening GUI windows from a web request is fundamentally the wrong execution model.
+- **It serialises throughput**: each spawn holds a request thread for ~8s; a handful of
+  concurrent spawns exhaust the thread pool.
+- Combined with **A1**, concurrent spawns also fight over the shared `pImg`/`theSketch`.
+
+**Direction (this is really a Step 4/5 topic, noted here for completeness):** render
+**off-screen** (Processing/`PGraphics` in headless mode, or the future Clojure renderer
+producing a `BufferedImage` directly), make generation **asynchronous** (a job + polling or
+websocket, rather than a blocked thread), and drop the fixed sleep in favour of "render
+completes → return." This is the natural seam where Step 5's Clojure rewrite can enter.
+
+### A4. 🟠 `String ==` comparison — a latent unit-conversion bug — Effort **S**
+
+`RecipeIngredient.massOrVolumeSetter()` compares strings with `==`:
+`if (this.unitName == "PIECE")` (`RecipeIngredient.java:94`) and again at `:97`. `==`
+compares **references**, not contents; it only appears to work when the string happens to
+be interned. For a value read back from the database this is unreliable, so the "PIECE"
+and null branches can silently fall through to the `switch`, which throws
+`UnsupportedOperationException` for an unhandled unit. Use `.equals()` / `"PIECE".equals(x)`
+(null-safe order), or better, make `unitName` an enum.
+
+### A5. 🟠 Entities used in `Set`/`contains`/`distinct` but define no `equals`/`hashCode` — Effort **M**
+
+No entity in `model/` overrides `equals`/`hashCode` (grep confirms none; the classes even
+carry `// equals / hash` "todo" comments — `Recipe.java:125`, `RecipeIngredient.java:171`,
+`Chef.java:102`). Yet:
+
+- `Recipe.recipeIngredients` is a `Set<RecipeIngredient>` (`Recipe.java:51`).
+- The recipe-intersection search relies on `List.contains`/`distinct` over `Recipe`
+  objects (`SpawnController.java:213-219`).
+
+Today this *happens* to work because Hibernate's first-level cache returns the **same
+instance** for a given id within one session, and Spring's Open-Session-In-View keeps that
+session open for the whole request — so reference-equality accidentally behaves like
+identity-equality. That's a **fragile coincidence**: change the transaction boundaries
+(A1's fixes, adding `@Transactional`, turning OSIV off) and the intersection can silently
+start returning wrong/empty results. Define `equals`/`hashCode` on a **stable business key**
+(or id-with-care) so correctness doesn't depend on session scope.
+
+### A6. 🟡 Sentinel-value error handling hides failures — Effort **S**
+
+`Parser.convertStringIdToLong` returns `0L` on bad input (`Parser.java:6-17`) and callers
+test `idLong == 0l` to branch to an error page (`SpawnController.java:103`,
+`ImageController.java:42`). `checkIngredientIdExists` returns `null` on
+`NoSuchElementException` (`SpawnController.java:259-270`), and the caller immediately does
+`ingredientSpawnList.add(ingredientDB)` (`:110`) — so a not-found id adds a **null** to the
+basket, which later NPEs elsewhere. Prefer exceptions (you already have
+`ResourceNotFoundException`) handled centrally, or `Optional`, over magic return values.
+
+---
+
+## 4. Theme B — Security
+
+### B1. 🔴 Database credentials committed in plaintext — Effort **S**
+
+`application-local.properties` (tracked) contains
+`spring.datasource.username=hbstudent` / `spring.datasource.password=hbstudent` and
+`useSSL=false`. These are the well-known defaults from the Java/Spring course this project
+grew out of, so the *immediate* risk is low — but committing any credential trains a bad
+habit and leaks the moment the repo goes public or the pattern is copied to real creds.
+**Direction:** externalise to environment variables (as `application-prod.properties`
+already does), and consider `git rm --cached` + history scrubbing if the repo will ever be
+shared.
+
+### B2. 🟠 Authorisation is URL-pattern-only, and the patterns are easy to get subtly wrong — Effort **M**
+
+All authz lives in one `SecurityFilterChain` as `mvcMatchers` (`SecurityConfiguration.java`).
+Two concrete concerns:
+
+- **A likely typo weakening a rule:** the permit-all list contains `"recipe**"`
+  (`SecurityConfiguration.java:21`) with **no leading slash**, whereas every sibling uses
+  `/...`. As written this almost certainly does not match `/recipe/**` the way intended,
+  which interacts with the `/recipe/add` rule above it. This needs verifying against actual
+  request behaviour — it's exactly the kind of silent gap URL-based security produces.
+- **No defence in depth:** there are **no method-level** `@PreAuthorize` checks anywhere,
+  so a future controller added without a matching URL rule inherits whatever the catch-all
+  gives it. Ownership checks are also absent — e.g. can a chef save/love/act on another
+  chef's resource? Worth auditing per action.
+
+**Direction:** keep the filter chain, but add method-level authorisation on the sensitive
+service/controller methods, and add explicit **owner checks** where a resource belongs to a
+chef. Write a few `spring-security-test` slices (`@WithMockUser`) to *prove* each role
+boundary — this doubles as Step-G testing.
+
+### B3. 🟠 `ddl-auto=update` against the real database — Effort **S/M**
+
+Both `application-local.properties` and `application-prod.properties` set
+`spring.jpa.hibernate.ddl-auto=update`. Letting Hibernate mutate the schema from entity
+diffs is convenient in dev but risky in prod (it never drops/renames safely, can lock
+tables, and makes schema history invisible). **Direction:** move to a managed migration
+tool (**Flyway** or **Liquibase**) with versioned SQL, and set `ddl-auto=validate` (or
+`none`) in prod. This also becomes the clean delivery mechanism for **Step 3's** bulk
+recipe/ingredient seed data.
+
+### B4. 🟡 Verbose diagnostics leak into stdout / could leak to users — Effort **S**
+
+39 `System.out.println` / `printStackTrace` calls across 15 files (e.g. the entire image
+pipeline narrates itself to stdout; `Parser` prints stack traces on bad input). Stack
+traces to stdout can expose internals and are the wrong tool for a server. Rolls up with
+**E1**.
+
+---
+
+## 5. Theme C — Persistence & efficiency
+
+### C1. 🔴 "Find recipes containing all N ingredients" is done in Java, not SQL — Effort **M/L**
+
+Step 1 described this; here is the efficiency verdict. For 2–3 ingredients,
+`SpawnController` calls `createRecipeList(ingredient)` (`:232-242`), which calls
+`findAllRecipeIngredientByIngredient` — **loading every `RecipeIngredient` for that
+ingredient**, mapping each to its `Recipe`, then intersecting the lists **in memory**
+(`:213-219`). With a large catalogue (the explicit goal of **Step 3**), a popular
+ingredient like "salt" pulls thousands of rows into the app just to intersect them.
+
+**Direction:** express the intersection as **one SQL/JPQL query** — e.g.
+`SELECT ri.recipe FROM RecipeIngredient ri WHERE ri.ingredient.id IN (:ids) GROUP BY
+ri.recipe HAVING COUNT(DISTINCT ri.ingredient.id) = :n` — paged at the database. This
+collapses the 1/2/3 branch duplication into a single code path *and* makes Step 3's scaling
+target achievable. This is the single most important efficiency change and it directly
+enables Step 3.
+
+### C2. 🟠 Almost everything is `FetchType.EAGER` — Effort **M**
+
+11 EAGER associations, several on the hot entities: `Recipe` eagerly loads
+`recipeIngredients`, `visuals`, **and** `chef` (`Recipe.java:42-67`); `RecipeIngredient`
+eagerly loads both `ingredient` and `recipe` (`:33-40`); `Chef` eagerly loads all `roles`
+(`:59`). Loading one `Recipe` therefore drags in its ingredients, each ingredient's data,
+all its visuals, and the chef — often as multiple queries or a cartesian-product join.
+Combined with **C1** (which already over-fetches), a single search can be surprisingly
+heavy. **Direction:** default to `LAZY` and fetch **explicitly** where needed
+(`JOIN FETCH`, entity graphs, or projection DTOs for read-only views). Pairs naturally with
+adding `@Transactional` boundaries (**C3**).
+
+### C3. 🟠 No `@Transactional` anywhere — Effort **M**
+
+Grep finds **zero** `@Transactional` annotations in `src/main` (there are commented-out
+ones in `RecipeIngredientServiceImpl`). Service methods that do multiple repository
+operations therefore run without an explicit transaction, and the app leans entirely on
+Open-Session-In-View to keep lazy loading working — which is also what props up **A5**'s
+accidental correctness. **Direction:** add `@Transactional` on service methods
+(read-only where applicable), which gives real atomicity, lets you turn OSIV off, and makes
+the fetch strategy (**C2**) something you control rather than inherit.
+
+### C4. 🟡 Deprecated Hibernate dialect + `useSSL=false` — Effort **S**
+
+`spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect` targets
+MySQL 5 and is deprecated in the Hibernate version Boot 2.7 ships; with a modern MySQL 8
+(the driver is `mysql-connector-j` 8.2) you generally shouldn't set the dialect by hand at
+all (let Hibernate detect it) or use the MySQL 8 dialect. `useSSL=false` disables transport
+encryption. Both are small config fixes.
+
+---
+
+## 6. Theme D — Architecture & design
+
+### D1. 🟠 Controllers hold business logic that belongs in services — Effort **M**
+
+`SpawnController.findRecipes` (`:115-189`) contains the entire search algorithm — the
+1/2/3-ingredient branching, list building, intersection, and paging — with the code's own
+`// todo move to service layer` (`:132`) admitting it. Controllers should translate HTTP ↔
+domain and delegate; the recipe-finding logic should live in a service (where it can be
+unit-tested and where **C1**'s single-query rewrite naturally lands). Same pattern in the
+image save flow (`ImageController` `// TODO: move logic to ImageService`, `:61`).
+
+### D2. 🟠 The three-way ingredient branch is copy-paste that won't generalise — Effort **M**
+
+`findRecipes` has near-identical blocks for 1, 2, and 3 ingredients (`:133-186`). Beyond
+duplication, it **hard-caps the feature at 3 ingredients** by construction. Once the search
+is a single query (**C1**), N ingredients is just `IN (:ids)` + `HAVING COUNT = :n` — the
+branch collapses to one path and the arbitrary cap becomes a tunable parameter.
+
+### D3. 🟡 The `service` interface / `service.implementation` split adds ceremony with one impl each — Effort **S**
+
+Every service is an interface plus a single `*Impl`. This is a common enterprise habit, but
+with exactly one implementation it mostly adds indirection (and files) without buying
+substitutability. Not wrong — just worth a conscious decision: keep it as a deliberate
+convention, or collapse to concrete `@Service` classes and reintroduce interfaces only
+where a second implementation actually appears. (Mentioned as a readability/altitude call,
+not a defect.)
+
+### D4. 🟠 Error handling is half-wired — Effort **S/M**
+
+- `GlobalDefaultExceptionHandler` (`exception/`) is a **completely empty class** — dead
+  code that implies an intention never finished.
+- `ExceptionControllerAdvice` has a **malformed annotation**:
+  `@RequestMapping("${server.error.path")` (`ExceptionControllerAdvice.java:11`) — note the
+  missing closing `}` on the property placeholder — and `@RequestMapping` on a
+  `@ControllerAdvice` is meaningless anyway.
+- It handles only `ResourceNotFoundException` and `UsernameAlreadyExistsException`; the
+  other custom exceptions (`SaveImageNotPossible`, `UnitDoesNotExistException`) and runtime
+  ones (the `UnsupportedOperationException` from **A4**) fall through.
+
+**Direction:** delete the empty class, fix/remove the annotation, and make the advice cover
+the full set of app exceptions with appropriate views/status codes.
+
+---
+
+## 7. Theme E — Readability & hygiene
+
+### E1. 🟡 Replace `System.out`/`printStackTrace` with a logger — Effort **S**
+39 occurrences across 15 files (§B4). Swap for SLF4J (`log.debug/info/warn/error`), which
+Boot already provides, so verbosity is controllable per environment and errors are captured
+properly.
+
+### E2. 🟡 Scratch and legacy code ships inside `src/main` — Effort **S**
+`play/` (`PlaySketch`, `TestJDBC`, `BallOld`, `PlayHexa`, …) and
+`graphics/vanillajava/` (`Ball`, `ImageCanvas`, `ImageWindow`) — **11 tracked files** — are
+experiments and a superseded non-Processing rendering attempt, compiled and shipped as part
+of the app. They blur "the app" vs "the sketchbook." **Direction:** move to a separate
+module/branch, a `sandbox/` outside `src/main`, or delete (git history keeps them). Clears
+the ground before Step 5 introduces the Clojure renderer.
+
+### E3. 🟡 Pervasive `// todo` / dead commented code — Effort **S (ongoing)**
+The hot files are dotted with `todo`, commented-out alternatives (e.g. `Recipe.toString`'s
+commented loops, `Chef`'s commented `role` field), and "not yet in use" constructors. Each
+is small; together they add friction to reading. Worth a hygiene pass — and each `todo` is
+either a real backlog item (capture it) or noise (delete it).
+
+### E4. 🟡 Magic numbers / hardcoded ids — Effort **S**
+The default role is fetched by a **hardcoded id** `roleRepository.findById(276l)`
+(`ChefServiceImpl.java:76`) — brittle if the row isn't exactly 276, and `role.get()` will
+throw if absent. Prefer look-up **by role name**. Similar magic constants: page sizes of 3
+sprinkled around, the `120–180` shape budget, the `7777`ms sleep.
+
+### E5. 🟡 Stray files in the tree — Effort **S**
+`.DS_Store` files exist under `src/main/resources` (not tracked — good, but present) and an
+untracked `.output.txt` sits in the repo root. Minor cleanup; make sure `.DS_Store` is
+globally ignored.
+
+---
+
+## 8. Theme F — Libraries & build
+
+### F1. 🟠 Spring Boot 2.7.5 is end-of-life — Effort **L**
+Boot 2.7.x reached end of OSS support (Nov 2023); 2.7.5 specifically is several patch
+releases behind even within 2.7, so it's missing accumulated security fixes. The modern
+line is Boot 3.x (Spring Framework 6, Jakarta EE — `javax.*` → `jakarta.*`). **Direction:**
+plan a deliberate upgrade to a supported 3.x. It's an **L** because of the `javax`→`jakarta`
+namespace migration across the entities and security config — worth doing, but as its own
+scoped effort, not a drive-by.
+
+### F2. 🟠 Java 19 is a non-LTS, already-EOL release — Effort **S/M**
+The `pom.xml` change set moves to Java 19, which is past end-of-life (non-LTS releases get
+~6 months). **Direction:** target an **LTS** — Java 17 (pairs with Boot 2.7/3.x) or Java 21.
+Small change, meaningful for security patches and tooling support.
+
+### F3. 🟠 The Processing dependency is a personal fork on JitPack — Effort **M**
+`com.github.micycle1:processing-core-4:4.0.1` via JitPack (`pom.xml:24-29,78-82`) is a
+**third-party individual's** repackaging of Processing, built on demand by JitPack. That's
+a supply-chain and longevity risk (no guarantees it stays available or maintained). This is
+also precisely the dependency **Step 5** aims to move away from by reimplementing the
+renderer in Clojure — so the mitigation and the roadmap align. Until then, at least pin and
+document why this coordinate is used.
+
+---
+
+## 9. Theme G — Testing
+
+### G1. 🔴 There is effectively no test suite — Effort **M (ongoing)**
+The entire `src/test` tree is one file, `DishSpawnApplicationTests.java`, containing only
+the default `contextLoads()` smoke test. There are **no** unit tests for the search
+intersection, the unit converters, the image parameter math, or the security rules; and no
+integration tests for controllers. Every refactor proposed above is therefore being made
+**without a safety net**.
+
+**Why this is both a symptom and a blocker:** the current design actively *resists* testing
+— singleton request-state (**A1**), logic trapped in controllers (**D1**), and a rendering
+step that opens a GUI window and sleeps (**A3**) are all hard to test precisely *because*
+of how they're built. So testing and the design fixes reinforce each other.
+
+**Direction — a pragmatic order that also de-risks the refactors:**
+1. **Pure logic first (easy wins, no Spring):** unit-test `MassConverter`/`VolumeConverter`,
+   `Transformer` (form → shape), and the shape-count math. These are already close to pure
+   functions.
+2. **The search algorithm:** as it moves into a service (**D1/C1**), test the
+   intersection/`HAVING COUNT` behaviour with an in-memory or Testcontainers MySQL.
+3. **Security slices:** `@WebMvcTest` + `spring-security-test` (`@WithMockUser`) to *prove*
+   each role boundary from **B2** — these tests are the verification for that finding.
+4. **A regression test per bug fixed:** e.g. a test that two "sessions" don't share a basket
+   (**A1**), locking in each correctness fix as you make it.
+
+The dev dependencies you need are already on the classpath (`spring-boot-starter-test`,
+`spring-security-test`).
+
+---
+
+## 10. Prioritised roadmap (the one table to keep)
+
+Ranked by *value ÷ risk-of-leaving-it*. "Enables" shows how a fix unblocks later roadmap
+steps.
+
+| # | Finding | Theme | Sev | Effort | Enables |
+|---|---|---|---|---|---|
+| 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | testability; Step 4/5; scaling |
+| 2 | Search intersection in Java → single SQL query | C1 | 🔴 | M/L | **Step 3** scaling |
+| 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | correct saves |
+| 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | safe refactoring of all others |
+| 5 | Committed DB credentials → externalise | B1 | 🔴 | S | security hygiene |
+| 6 | `String ==` unit bug → `.equals`/enum | A4 | 🟠 | S | correct mass/volume |
+| 7 | `equals`/`hashCode` on entities | A5 | 🟠 | M | robust search under tx changes |
+| 8 | Logic in controllers → services | D1/D2 | 🟠 | M | prep for #2; N-ingredient search |
+| 9 | EAGER → LAZY + `@Transactional` | C2/C3 | 🟠 | M | performance; controlled fetching |
+| 10 | Role-based authz audit + method security + owner checks | B2 | 🟠 | M | security |
+| 11 | `ddl-auto=update` → Flyway/Liquibase + `validate` | B3 | 🟠 | S/M | **Step 3** seed delivery |
+| 12 | Error handling half-wired → fix/complete advice | D4 | 🟠 | S/M | robustness |
+| 13 | Boot 2.7 EOL → 3.x; Java 19 → LTS 17/21 | F1/F2 | 🟠 | L/S | supportability, security |
+| 14 | Processing fork dependency risk | F3 | 🟠 | M | aligns with **Step 5** |
+| 15 | Headless/async image rendering | A3 | 🔴* | L | **Step 4/5** |
+| 16 | Logging, dead code, scratch packages, magic numbers | E1–E5 | 🟡 | S | readability |
+| 17 | Dialect / `useSSL` config | C4 | 🟡 | S | polish |
+| 18 | Service interface/impl split — conscious call | D3 | 🟡 | S | simplicity |
+
+\* A3 is high-*impact* but large and best sequenced with Steps 4–5, so it sits lower in
+*order* despite its severity.
+
+**Suggested first working session of Step-2 execution** (small, high-value, low-risk — a
+good "prove the loop" batch): #5 (credentials), #6 (`String ==`), plus the first slice of
+#4 (unit-test the converters). Then tackle #1 with its regression test, because everything
+else is easier once request-state is off the singletons.
+
+---
+
+## 11. How this feeds the rest of the roadmap
+
+- **Step 3 (grow the database)** depends on **#2** (SQL intersection) and **#11** (Flyway as
+  the seed-data delivery mechanism). Doing those two first turns "add thousands of recipes"
+  from a performance cliff into a config-and-data task.
+- **Step 4 (better images)** depends on **#15** (headless/async rendering) and benefits from
+  **#1** (no shared `pImg`). The half-wired complementary-background and texture work in the
+  uncommitted tree (§1) is the first content of Step 4.
+- **Step 5 (Clojure renderer)** slots in at the `ImageService` → renderer seam once **#1**
+  and **#15** make that boundary clean and stateless; it's also the exit strategy for the
+  Processing-fork risk (**#14**).
+
+So the correctness/design work here isn't a detour from your goals — it's the groundwork
+that makes Steps 3–5 tractable.
+
+---
+
+## 12. Open questions for you (to steer the next sessions)
+
+1. **Deployment reality:** is DishSpawn ever meant to run on a real server with multiple
+   users, or is it explicitly a single-user local/portfolio app? Your answer changes how
+   hard we push A1/A3 — if it's genuinely single-user-forever, they drop in priority (though
+   testability still argues for A1).
+2. **Boot/Java upgrade appetite:** are you open to the Boot 3 + Jakarta migration (#13) as a
+   dedicated session, or should we stay on 2.7 for now and revisit later?
+3. **Where do you want to start executing?** The "prove the loop" batch in §10, or straight
+   at the highest-value item (#1 or #2)?
+4. **Scope of this doc:** shall I fold the four Step-1 corrections (§2) back into
+   `01-functional-overview.md` so both documents stay consistent?
+
+---
+
+*End of Step 2 document. Nothing here has been changed in the code — these are options,
+ranked, with the reasoning shown, for you to choose from in later sessions.*
