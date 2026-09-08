@@ -25,8 +25,6 @@ public class HomeController {
     private final LoveService loveService;
     private final ChefService chefService;
 
-    private int totalFoundVisualPages;
-
     @Autowired
     public HomeController(VisualService visualService,
                           LoveService loveService,
@@ -63,7 +61,6 @@ public class HomeController {
 
         // get most recent 200 visuals minus most recent
         List<Visual> mostRecent200Visuals = visualService.findLast200Visuals();
-//        List<Visual> mostRecent200MinusFirst = last200MinusFirst(mostRecent200Visuals); // remove 1 visual
         List<Visual> mostRecent200MinusFirst = ListSkipper.skipFirst(mostRecent200Visuals);
 
         // assign love boolean per visual
@@ -72,29 +69,24 @@ public class HomeController {
         }
 
         // page visuals
-        List<Visual> pageVisuals = createPageVisuals(mostRecent200MinusFirst, searchPageNr); // page it!
-
+        PagedListHolder<Visual> page = paginate(mostRecent200Visuals, searchPageNr);
         // add stuff to the model for handling in the web page
         model.addAttribute("latestVisual", latestVisual);
-        model.addAttribute("totalPages", totalFoundVisualPages);
-        model.addAttribute("pagedVisuals", pageVisuals);
+        model.addAttribute("totalPages", page.getPageCount());
+        model.addAttribute("pagedVisuals", page.getPageList());
         model.addAttribute("chef", chef);
 
         return "home";
     }
 
-//     helper to create paged content - todo: investigate how to place this in a util class - issue is i need to set
-//      a nr. of pages AND return a paged list.
-    private List<Visual> createPageVisuals(List<Visual> visuals, int searchPageNr) {
-
-        PagedListHolder<Visual> page = new PagedListHolder<Visual>(visuals);
+//  helper to page a list - todo: investigate how to place this in a util class - issue is i need to set
+    private PagedListHolder<Visual> paginate(List<Visual> visuals, int searchPageNr) {
+        PagedListHolder<Visual> page = new PagedListHolder<>(visuals);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 
-        totalFoundVisualPages = page.getPageCount();
-        List<Visual> visualListPage = page.getPageList();
-
-        return visualListPage;
+        return page;
     }
+
 
 }

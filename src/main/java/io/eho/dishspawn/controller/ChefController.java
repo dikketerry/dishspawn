@@ -23,9 +23,6 @@ public class ChefController {
     private final ChefService chefService;
     private final VisualService visualService;
 
-    private int totalFoundVisualsChefPages;
-    private StringBuilder message = new StringBuilder();
-
     @Autowired
     public ChefController(ChefService chefService, VisualService visualService) {
         this.chefService = chefService;
@@ -71,40 +68,27 @@ public class ChefController {
         Visual latestVisualForChef = visualService.findLatestVisualForChef(chef);
 
         List<Visual> top200VisualsChef = visualService.findLast200VisualsForChef(chef);
-//        List<Visual> top200MinusFirst = last200MinusFirst(top200VisualsChef); // remove 1 visual
         List<Visual> top200MinusFirst = ListSkipper.skipFirst(top200VisualsChef);
-        List<Visual> visualsChefPage = createPageVisualsChefList(top200MinusFirst, searchPageNr);
-
-        resetMessage();
-        noSpawnsFoundCheck(top200VisualsChef);
+        PagedListHolder<Visual> page = paginate(top200MinusFirst, searchPageNr);
+        String message = top200VisualsChef.isEmpty() ? " has not created any spawns yet :( " : "";
 
         model.addAttribute("chef", chef);
         model.addAttribute("latestVisualForChef", latestVisualForChef);
-        model.addAttribute("visualsChef", visualsChefPage);
-        model.addAttribute("totalPages", totalFoundVisualsChefPages);
-        model.addAttribute("message", message.toString());
+        model.addAttribute("visualsChef", page.getPageList());
+        model.addAttribute("totalPages", page.getPageCount());
+        model.addAttribute("message", message);
 
         return "chef";
     }
 
-    // private helpers below
-    private void noSpawnsFoundCheck(List<Visual> visualsChef) {
-        if (visualsChef.isEmpty()) {
-            message.append(" has not created any spawns yet :( ");
-        }
-    }
-
-    private List<Visual> createPageVisualsChefList(List<Visual> visualsChef, int searchPageNr) {
+    // private helpers
+    private PagedListHolder<Visual> paginate(List<Visual> visualsChef, int searchPageNr) {
         PagedListHolder<Visual> page = new PagedListHolder<>(visualsChef);
         page.setPageSize(3);
         page.setPage(searchPageNr - 1);
 
-        totalFoundVisualsChefPages = page.getPageCount();
-        return page.getPageList();
+        return page;
     }
 
-    private void resetMessage() {
-        message.setLength(0);
-    }
 
 }
