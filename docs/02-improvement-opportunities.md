@@ -1,13 +1,19 @@
 # DishSpawn — Improvement Opportunities
 
-> **Document status:** Step 2 deliverable. Where Step 1 (`01-functional-overview.md`)
-> described *what the app does and how it fits together*, this document describes *what
-> could be better and why*. It is an **analysis and a menu**, not a set of changes already
-> made — nothing in the codebase is modified by this document. Each opportunity is written
-> so you can decide, in a later session, whether and when to act on it.
+> **Document status:** Step 2 deliverable, now also the **live tracker** for Step-2
+> execution. Where Step 1 (`01-functional-overview.md`) described *what the app does and how
+> it fits together*, this document describes *what could be better and why*. It began as an
+> **analysis and a menu**; as of 2026-09-08 we have started acting on it, so each item now
+> also carries a **status** (see the §10 table and the per-finding "Update" notes).
 >
 > Written by reading the source directly on branch `testLint`, 2026-08-07. Evidence is
 > cited as `file:line` so you can verify every claim yourself.
+>
+> **Companion document:** `docs/open-points.md` records fixes we applied *deliberately
+> partially* (a light fix now, a fuller one deferred) and latent issues spotted in passing.
+> Entries there are cross-referenced from the findings below as **OP-1**, **OP-2**, ….
+>
+> **Execution log is §13** at the foot of this document.
 
 ---
 
@@ -31,8 +37,9 @@ Every item carries two quick tags so you can triage at a glance:
 - **Effort** — **S** (an afternoon), **M** (a focused session or two), **L** (a project
   in its own right, likely overlapping Steps 3–5).
 
-Section 8 collects everything into a single ranked table with a suggested order. If you
-only read one section, read that one — then come back up here for the "why".
+Section 10 collects everything into a single ranked table — with a suggested order and a
+**Status** column tracking what's done, in progress, deferred, or not started. If you only
+read one section, read that one — then come back up here for the "why".
 
 **A deliberate framing note.** Many of these findings share a *single root cause*: the app
 was built and tested as a **single-user desktop application** (one developer, one browser,
@@ -197,6 +204,14 @@ and null branches can silently fall through to the `switch`, which throws
 `UnsupportedOperationException` for an unhandled unit. Use `.equals()` / `"PIECE".equals(x)`
 (null-safe order), or better, make `unitName` an enum.
 
+> **Update (2026-09-08) — ✅ DONE (minimal fix).** `RecipeIngredient.java:94` now reads
+> `if ("PIECE".equals(this.unitName))`; the `== null` check on the next line is correct as
+> written and was left alone. The `unitName`-as-enum idea is *not* done — deferred, and it
+> now also connects to **OP-2** (the converters' `from → to` contract). Note discovered
+> while fixing: `massOrVolumeSetter()` is currently **unreachable** — nothing calls it, and
+> `mass`/`volume` carry `@Setter(AccessLevel.NONE)` — so this was a *latent* bug; the fix
+> makes the method correct for whenever it gets wired in.
+
 ### A5. 🟠 Entities used in `Set`/`contains`/`distinct` but define no `equals`/`hashCode` — Effort **M**
 
 No entity in `model/` overrides `equals`/`hashCode` (grep confirms none; the classes even
@@ -239,6 +254,15 @@ habit and leaks the moment the repo goes public or the pattern is copied to real
 **Direction:** externalise to environment variables (as `application-prod.properties`
 already does), and consider `git rm --cached` + history scrubbing if the repo will ever be
 shared.
+
+> **Update (2026-09-08) — ✅ DONE (option 1 of 4).** The plaintext values in
+> `application-local.properties` are replaced with
+> `spring.datasource.username=${DB_USERNAME:hbstudent}` /
+> `password=${DB_PASSWORD:hbstudent}` — env-var placeholders keeping the well-known course
+> default so zero-setup local dev still works. The three heavier options (drop the default,
+> `git rm --cached` + `.gitignore`, git-history scrub) were **consciously deferred** and are
+> written up in `docs/open-points.md` **§OP-1** with their trade-offs. Verified the Maven
+> resource-filtering pass leaves the `${…}` tokens intact for Spring to resolve at runtime.
 
 ### B2. 🟠 Authorisation is URL-pattern-only, and the patterns are easy to get subtly wrong — Effort **M**
 
@@ -460,6 +484,16 @@ of how they're built. So testing and the design fixes reinforce each other.
 The dev dependencies you need are already on the classpath (`spring-boot-starter-test`,
 `spring-security-test`).
 
+> **Update (2026-09-08) — 🔧 IN PROGRESS (slice 1 of 4 done).** Step 1 of the plan above is
+> done: `MassConverterTest` (11 cases) and `VolumeConverterTest` (8 cases) added under
+> `src/test/java/io/eho/dishspawn/model/util/unitconversion/` — plain JUnit 5, no Spring
+> context. `./mvnw -Plocal test` → **20 tests, all green** (the 19 new + the original
+> `contextLoads()`). Two latent converter issues surfaced while writing them and are logged
+> in `docs/open-points.md` **§OP-2** (`convert` ignores `unitTo` unless `unitFrom` is the
+> base unit) and **§OP-3** (`VolumeConverter` has no reachable exception path — why its test
+> has no throw cases). Slices 2–4 (search algorithm, security slices, regression-per-bug)
+> are not started.
+
 ---
 
 ## 10. Prioritised roadmap (the one table to keep)
@@ -467,34 +501,38 @@ The dev dependencies you need are already on the classpath (`spring-boot-starter
 Ranked by *value ÷ risk-of-leaving-it*. "Enables" shows how a fix unblocks later roadmap
 steps.
 
-| # | Finding | Theme | Sev | Effort | Enables |
-|---|---|---|---|---|---|
-| 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | testability; Step 4/5; scaling |
-| 2 | Search intersection in Java → single SQL query | C1 | 🔴 | M/L | **Step 3** scaling |
-| 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | correct saves |
-| 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | safe refactoring of all others |
-| 5 | Committed DB credentials → externalise | B1 | 🔴 | S | security hygiene |
-| 6 | `String ==` unit bug → `.equals`/enum | A4 | 🟠 | S | correct mass/volume |
-| 7 | `equals`/`hashCode` on entities | A5 | 🟠 | M | robust search under tx changes |
-| 8 | Logic in controllers → services | D1/D2 | 🟠 | M | prep for #2; N-ingredient search |
-| 9 | EAGER → LAZY + `@Transactional` | C2/C3 | 🟠 | M | performance; controlled fetching |
-| 10 | Role-based authz audit + method security + owner checks | B2 | 🟠 | M | security |
-| 11 | `ddl-auto=update` → Flyway/Liquibase + `validate` | B3 | 🟠 | S/M | **Step 3** seed delivery |
-| 12 | Error handling half-wired → fix/complete advice | D4 | 🟠 | S/M | robustness |
-| 13 | Boot 2.7 EOL → 3.x; Java 19 → LTS 17/21 | F1/F2 | 🟠 | L/S | supportability, security |
-| 14 | Processing fork dependency risk | F3 | 🟠 | M | aligns with **Step 5** |
-| 15 | Headless/async image rendering | A3 | 🔴* | L | **Step 4/5** |
-| 16 | Logging, dead code, scratch packages, magic numbers | E1–E5 | 🟡 | S | readability |
-| 17 | Dialect / `useSSL` config | C4 | 🟡 | S | polish |
-| 18 | Service interface/impl split — conscious call | D3 | 🟡 | S | simplicity |
+**Status legend:** ✅ done · 🔧 in progress · ⏸️ deferred by decision · ⬜ not started.
+Status last reviewed **2026-09-08**.
+
+| # | Finding | Theme | Sev | Effort | Status | Enables |
+|---|---|---|---|---|---|---|
+| 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | ⬜ next big target | testability; Step 4/5; scaling |
+| 2 | Search intersection in Java → single SQL query | C1 | 🔴 | M/L | ⬜ | **Step 3** scaling |
+| 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | ⬜ | correct saves |
+| 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | 🔧 slice 1/4 done (converters) | safe refactoring of all others |
+| 5 | Committed DB credentials → externalise | B1 | 🔴 | S | ✅ 2026-09-08 (→ OP-1) | security hygiene |
+| 6 | `String ==` unit bug → `.equals`/enum | A4 | 🟠 | S | ✅ 2026-09-08 (`.equals`; enum deferred) | correct mass/volume |
+| 7 | `equals`/`hashCode` on entities | A5 | 🟠 | M | ⬜ | robust search under tx changes |
+| 8 | Logic in controllers → services | D1/D2 | 🟠 | M | ⬜ | prep for #2; N-ingredient search |
+| 9 | EAGER → LAZY + `@Transactional` | C2/C3 | 🟠 | M | ⬜ | performance; controlled fetching |
+| 10 | Role-based authz audit + method security + owner checks | B2 | 🟠 | M | ⬜ | security |
+| 11 | `ddl-auto=update` → Flyway/Liquibase + `validate` | B3 | 🟠 | S/M | ⬜ | **Step 3** seed delivery |
+| 12 | Error handling half-wired → fix/complete advice | D4 | 🟠 | S/M | ⬜ | robustness |
+| 13 | Boot 2.7 EOL → 3.x; Java 19 → LTS 17/21 | F1/F2 | 🟠 | L/S | ⏸️ deferred — "last-last thing" (see §12 Q2) | supportability, security |
+| 14 | Processing fork dependency risk | F3 | 🟠 | M | ⬜ | aligns with **Step 5** |
+| 15 | Headless/async image rendering | A3 | 🔴* | L | ⬜ (headless part = deploy prereq, see §12 Q1) | **Step 4/5** |
+| 16 | Logging, dead code, scratch packages, magic numbers | E1–E5 | 🟡 | S | ⬜ | readability |
+| 17 | Dialect / `useSSL` config | C4 | 🟡 | S | ⬜ | polish |
+| 18 | Service interface/impl split — conscious call | D3 | 🟡 | S | ⬜ | simplicity |
 
 \* A3 is high-*impact* but large and best sequenced with Steps 4–5, so it sits lower in
 *order* despite its severity.
 
-**Suggested first working session of Step-2 execution** (small, high-value, low-risk — a
-good "prove the loop" batch): #5 (credentials), #6 (`String ==`), plus the first slice of
-#4 (unit-test the converters). Then tackle #1 with its regression test, because everything
-else is easier once request-state is off the singletons.
+**First working session of Step-2 execution — ✅ DONE (2026-09-08).** The "prove the loop"
+batch was #5 (credentials), #6 (`String ==`), plus the first slice of #4 (unit-test the
+converters). All three landed; `./mvnw -Plocal test` is green at 20 tests. **Next:** fold
+the §2 corrections into doc 01 (§12 Q4), then tackle #1 with its regression test, because
+everything else is easier once request-state is off the singletons.
 
 ---
 
@@ -535,12 +573,56 @@ that makes Steps 3–5 tractable.
      A1 fix (state → session) is exactly what keeps a future upscale cheap.
 2. **Boot/Java upgrade appetite:** are you open to the Boot 3 + Jakarta migration (#13) as a
    dedicated session, or should we stay on 2.7 for now and revisit later?
+   → **ANSWERED (2026-09-08): stay on Boot 2.7 for now.** The Boot 3 + Jakarta migration is
+   explicitly the **last** thing we do — after Steps 3–5. #13 is marked ⏸️ *deferred* in the
+   §10 table; don't let it block anything else.
 3. **Where do you want to start executing?** The "prove the loop" batch in §10, or straight
    at the highest-value item (#1 or #2)?
+   → **ANSWERED (2026-09-08): the "prove the loop" batch first, then Step 3.** The batch
+   (#5, #6, first slice of #4) is now ✅ done — see §13. After folding the §2 corrections
+   into doc 01 (Q4), the next execution target is **#1** (singleton request-state).
 4. **Scope of this doc:** shall I fold the four Step-1 corrections (§2) back into
    `01-functional-overview.md` so both documents stay consistent?
+   → **STILL OPEN.** Agreed in principle; the edit to doc 01 has not been made yet. This is
+   the first task of the next session.
 
 ---
 
-*End of Step 2 document. Nothing here has been changed in the code — these are options,
-ranked, with the reasoning shown, for you to choose from in later sessions.*
+## 13. Execution log
+
+Newest first. Each entry: what changed, where, and how it was verified.
+
+### 2026-09-08 — "prove the loop" batch (Step-2 execution session 1)
+
+Branch: `UNIT_BUG_AND_TESTS_START` (tests + #6) and a separate branch for #5.
+Working style: assistant proposed diffs, user applied and committed them.
+
+- **#6 — `String ==` bug (finding A4) — ✅ done.**
+  `RecipeIngredient.java:94`: `this.unitName == "PIECE"` → `"PIECE".equals(this.unitName)`.
+  One line; `== null` on the next line left as-is (correct). Noted that
+  `massOrVolumeSetter()` is currently dead code, so this was latent.
+- **#4 — first test slice (finding G1) — 🔧 in progress.**
+  New: `src/test/java/io/eho/dishspawn/model/util/unitconversion/MassConverterTest.java`
+  (11 cases) and `VolumeConverterTest.java` (8 cases). Plain JUnit 5, no Spring.
+  Cover: identity conversions, each factor both directions, round-trips within `1e-6`,
+  `parseStringToUnit` happy + bad input, and (mass only) the two exception paths.
+- **#5 — DB credentials (finding B1) — ✅ done (lightest option).**
+  `application-local.properties`: hard-coded `hbstudent` / `hbstudent` →
+  `${DB_USERNAME:hbstudent}` / `${DB_PASSWORD:hbstudent}`. Deferred options captured in
+  `docs/open-points.md` §OP-1.
+- **New companion doc:** `docs/open-points.md` created — register for deliberately-partial
+  fixes and latent issues. Entries: OP-1 (credentials), OP-2 (`convert` ignores `unitTo`
+  off the base unit), OP-3 (`VolumeConverter` has no reachable exception path).
+- **Verification:** `./mvnw -Plocal test` → `Tests run: 20, Failures: 0, Errors: 0`.
+  Full build `BUILD SUCCESS`. Maven resource filtering confirmed to leave the `${…}`
+  placeholders intact for Spring.
+
+### 2026-08-29 — housekeeping (see §1)
+
+Committed the in-progress generative-art work on `testLint`, fast-forward-merged to `main`
+(`2a700bf` → `bebb240`), pushed. Removed a dead GitHub token from the `origin` remote URL.
+
+---
+
+*End of Step 2 document. It is no longer "nothing has been changed" — Step-2 execution is
+underway; §10 and §13 track exactly where.*

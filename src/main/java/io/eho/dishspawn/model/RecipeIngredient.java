@@ -91,7 +91,7 @@ public class RecipeIngredient {
     }
 
     public void massOrVolumeSetter() {
-        if (this.unitName == "PIECE") {
+        if ("PIECE".equals(this.unitName)) {
             this.mass = -1;
             this.volume = -1;
         } else if (this.unitName == null) {
