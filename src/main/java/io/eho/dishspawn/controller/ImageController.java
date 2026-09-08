@@ -21,8 +21,6 @@ public class ImageController {
     private final ImageService imageService;
     private final VisualService visualService;
 
-    private Recipe recipe;
-
     @Autowired
     public ImageController(RecipeService recipeService, ImageService imageService, VisualService visualService) {
         this.recipeService = recipeService;
@@ -33,8 +31,6 @@ public class ImageController {
     // generate image
     @PostMapping("/spawn/{id}")
     public String generateImage(@PathVariable String id, Model model) {
-        // ensure pImg is empty
-
         // help method to convert String to Long and catch non-numerical input
         // TODO: should be Util
         Long idLong = Parser.convertStringIdToLong(id);
@@ -46,7 +42,6 @@ public class ImageController {
         }
         // get recipe
         Recipe recipe = recipeService.findRecipeById(idLong);
-        this.recipe = recipe;
 
         // delegate to imageService
         String imageString = imageService.generateImage(recipe);
@@ -60,8 +55,13 @@ public class ImageController {
     // save image and Visual entity
     // TODO: move logic to ImageService
     @PostMapping("/spawn/{id}/save")
-    public String saveVisual(Model model) {
-        Recipe recipe = this.recipe;
+    public String saveVisual(@PathVariable String id, Model model) {
+        Long idLong = Parser.convertStringIdToLong(id);
+        if (idLong == 0l) {
+            String noNumber = id + " is not a numeric format";
+            model.addAttribute("error", noNumber);
+        }
+        Recipe recipe = recipeService.findRecipeById(idLong);
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
 
         // delegate to imageService
