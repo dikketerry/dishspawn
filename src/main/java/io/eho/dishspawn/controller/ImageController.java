@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/spawn")
@@ -21,7 +22,8 @@ public class ImageController {
     private final ImageService imageService;
     private final VisualService visualService;
 
-    private Recipe recipe;
+    // key under which a freshly generated, not-yet-saved spawn PNG lives in the user's session
+    static final String PENDING_IMAGE = "pendingSpawnImage";
 
     @Autowired
     public ImageController(RecipeService recipeService, ImageService imageService, VisualService visualService) {
@@ -32,9 +34,7 @@ public class ImageController {
 
     // generate image
     @PostMapping("/spawn/{id}")
-    public String generateImage(@PathVariable String id, Model model) {
-        // ensure pImg is empty
-
+    public String generateImage(@PathVariable String id, Model model, HttpSession session) {
         // help method to convert String to Long and catch non-numerical input
         // TODO: should be Util
         Long idLong = Parser.convertStringIdToLong(id);
@@ -46,13 +46,12 @@ public class ImageController {
         }
         // get recipe
         Recipe recipe = recipeService.findRecipeById(idLong);
-        this.recipe = recipe;
 
-        // delegate to imageService
-        String imageString = imageService.generateImage(recipe);
-
+        // delegate to imageService; keep the raw PNG in THIS user's session until they save
+        ImageService.GeneratedImage generated = imageService.generateImage(recipe);
+        session.setAttribute(PENDING_IMAGE, generated.pngBytes());
         model.addAttribute("recipe", recipe);
-        model.addAttribute("imageString", imageString);
+        model.addAttribute("imageString", generated.previewBase64());
 
         return "tempvisual";
     }
@@ -60,12 +59,25 @@ public class ImageController {
     // save image and Visual entity
     // TODO: move logic to ImageService
     @PostMapping("/spawn/{id}/save")
-    public String saveVisual(Model model) {
-        Recipe recipe = this.recipe;
+    public String saveVisual(@PathVariable String id, Model model, HttpSession session) {
+        Long idLong = Parser.convertStringIdToLong(id);
+        if (idLong == 0l) {
+            model.addAttribute("error", id + " is not a numeric format");
+            return "error-page";
+        }
+
+        byte[] pngBytes = (byte[]) session.getAttribute(PENDING_IMAGE);
+        if (pngBytes == null) {
+            // nothing generated in this session (stale tab, double submit, direct hit) — back to spawn
+            return "redirect:/spawn";
+        }
+
+        Recipe recipe = recipeService.findRecipeById(idLong);
         Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
 
-        // delegate to imageService
-        Visual visual = imageService.saveVisual(recipe, newId);
+        // delegate with this session's image, then clear it
+        Visual visual = imageService.saveVisual(recipe, newId, pngBytes);
+        session.removeAttribute(PENDING_IMAGE);
 
         model.addAttribute(recipe);
         model.addAttribute("visual", visual);

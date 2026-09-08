@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Comparator;
@@ -40,8 +41,8 @@ public class ImageServiceImpl implements ImageService {
     private final RecipeIngredientService recipeIngredientService;
     private final VisualService visualService;
     private final ChefService chefService;
-    private TheSketch theSketch;    // custom PApplet class (Processing)
-    private PImage pImg;            // Processing class
+//    private TheSketch theSketch;    // custom PApplet class (Processing)
+//    private PImage pImg;            // Processing class
 
     @Autowired
     public ImageServiceImpl(RecipeIngredientService recipeIngredientService,
@@ -54,8 +55,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String generateImage(Recipe recipe) {
-        this.pImg = null;
+    public GeneratedImage generateImage(Recipe recipe) {
+//        this.pImg = null;
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
         // filter recipe-ingredients with visual impact and mass/volume > 0, sort on mass (biggest first)
@@ -86,7 +87,7 @@ public class ImageServiceImpl implements ImageService {
         System.out.println("total mass: " + totalSize);
 
         // initiate the sketch (the Processing PApplet)
-        this.theSketch = getTheSketch();
+        TheSketch theSketch = getTheSketch();
 
         // init a list for storing shapes
         List<Shape> shapeList = new ArrayList<>();
@@ -131,16 +132,22 @@ public class ImageServiceImpl implements ImageService {
         }
 
         theSketch.dispose();            // stops animation; does NOT close the window with the sketch
-        this.pImg = theSketch.get();    // assign the image to variable pImg
+//        this.pImg = theSketch.get();    // assign the image to variable pImg
+        PImage pImg = theSketch.get();
         theSketch.exitActual();         // exits processing PApplet without closing the JVM! Important!
 
-        // convert pImg to BufferedImage to String with help of Base64 encoder and PImage .getNative, which returns a
-        // Buffered image from a PImage
-        String imageString = imgToBase64String((BufferedImage) pImg.getNative(), "PNG");
-        return imageString;
+//        // convert pImg to BufferedImage to String with help of Base64 encoder and PImage .getNative, which returns a
+//        // Buffered image from a PImage
+//        String imageString = imgToBase64String((BufferedImage) pImg.getNative(), "PNG");
+//        return imageString;
+
+        // PImage -> BufferedImage -> PNG bytes; base64 for preview, raw bytes for a later save
+        byte[] pngBytes = toPngBytes((BufferedImage) pImg.getNative());
+        String previewBase64 = Base64.getEncoder().encodeToString(pngBytes);
+        return new GeneratedImage(previewBase64, pngBytes);
     }
 
-    public Visual saveVisual(Recipe recipe, Long newId) {
+    public Visual saveVisual(Recipe recipe, Long newId, byte[] pngBytes) {
         String fileName = "visual" + newId + ".png";
 
         // Determine the desired file path
@@ -148,10 +155,18 @@ public class ImageServiceImpl implements ImageService {
         // Get the current working directory
         String currentDir = System.getProperty("user.dir");
         // Construct the full file path using the current working directory as a starting point
-        Path imagePath = Paths.get(currentDir, filePath);
-        // save the PImage (NOT the buffered, encoded one) to the specified folder
-        this.pImg.save(imagePath + "/" + fileName);
+//        Path imagePath = Paths.get(currentDir, filePath);
+//        // save the PImage (NOT the buffered, encoded one) to the specified folder
+//        this.pImg.save(imagePath + "/" + fileName);
 
+        Path imageDir = Paths.get(currentDir, filePath);
+        // write the PNG bytes handed in by the caller (from that user's session)
+        try {
+            Files.createDirectories(imageDir);
+            Files.write(imageDir.resolve(fileName), pngBytes);
+        } catch (IOException ioe) {
+            throw new UncheckedIOException(ioe);
+        }
         // create new Visual entity for storing location, chef etc.
         // TODO: createVisual in VisualService
         Visual newVisual = new Visual();
@@ -180,14 +195,25 @@ public class ImageServiceImpl implements ImageService {
     }
 
     // help method to encode image to String with Base64 encoder
-    private String imgToBase64String(final RenderedImage img, final String formatName) {
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+//    private String imgToBase64String(final RenderedImage img, final String formatName) {
+//        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+//
+//        try {
+//            ImageIO.write(img, formatName, os);
+//            return Base64.getEncoder().encodeToString(os.toByteArray());
+//        }
+//        catch (final IOException ioe) {
+//            throw new UncheckedIOException(ioe);
+//        }
+//    }
 
+    // PImage's native image -> PNG byte[]
+    private byte[] toPngBytes(final RenderedImage img) {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
-            ImageIO.write(img, formatName, os);
-            return Base64.getEncoder().encodeToString(os.toByteArray());
-        }
-        catch (final IOException ioe) {
+            ImageIO.write(img, "PNG", os);
+            return os.toByteArray();
+        } catch (final IOException ioe) {
             throw new UncheckedIOException(ioe);
         }
     }

@@ -158,6 +158,27 @@ This one finding is the strongest argument for the whole "built as single-user" 
 and it deserves to be tackled early because so much else (testability, the image race
 below, statelessness for future scaling) sits downstream of it.
 
+> **Update (2026-09-08) — ✅ DONE, in five small steps (A1.1–A1.5). Details in §13.**
+> - **`HomeController` / `ChefController`** (the latter named above; `HomeController` had the
+>   same `totalFoundVisualPages` field, missed in the original write-up) — the page-count
+>   fields were within-request values leaked out of a paging helper as a side effect. The
+>   helper now returns the `PagedListHolder`; no fields.
+> - **`ImageController.recipe`** — deleted. `saveVisual` reads the recipe id from its own
+>   URL (`/spawn/spawn/{id}/save`), which the form already supplied.
+> - **`ImageServiceImpl`** — now **stateless**. `theSketch` → local variable. `pImg` →
+>   `generateImage` returns a `GeneratedImage(previewBase64, pngBytes)` record; the
+>   controller holds the bytes in the **HTTP session** until save, then passes them to
+>   `saveVisual(recipe, newId, pngBytes)`.
+> - **`SpawnController`** — the 12 workflow fields moved into a new `@SessionScope`
+>   `SpawnBasket` bean (Spring injects a per-session proxy); the controller is now
+>   stateless. The four `StringBuilder` messages became plain `String`s along the way.
+> - **Regression tests added:** `ImageControllerSessionIsolationTest` (save persists *this*
+>   session's image, not another's) and `SpawnControllerSessionIsolationTest` (two sessions,
+>   two baskets). Suite: 22 green.
+> - **Not** addressed here (still their own findings): the Processing on-screen window / fixed
+>   sleep (**A3**), the id/filename sequence race (**A2**), the 1/2/3-ingredient branching
+>   (**D1/D2**), null-into-basket (**A6**).
+
 ### A2. 🔴 The visual's filename/id is derived from a sequence read — race + fragility — Effort **M**
 
 `ImageController.saveVisual` (`ImageController.java:62-73`) asks
@@ -506,10 +527,10 @@ Status last reviewed **2026-09-08**.
 
 | # | Finding | Theme | Sev | Effort | Status | Enables |
 |---|---|---|---|---|---|---|
-| 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | ⬜ next big target | testability; Step 4/5; scaling |
+| 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | ✅ 2026-09-08 (A1.1–A1.5; also fixed `HomeController`) | testability; Step 4/5; scaling |
 | 2 | Search intersection in Java → single SQL query | C1 | 🔴 | M/L | ⬜ | **Step 3** scaling |
 | 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | ⬜ | correct saves |
-| 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | 🔧 slice 1/4 done (converters) | safe refactoring of all others |
+| 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | 🔧 slices 1 + 4 underway (converters; 2 session-isolation regression tests) — suite at 22 | safe refactoring of all others |
 | 5 | Committed DB credentials → externalise | B1 | 🔴 | S | ✅ 2026-09-08 (→ OP-1) | security hygiene |
 | 6 | `String ==` unit bug → `.equals`/enum | A4 | 🟠 | S | ✅ 2026-09-08 (`.equals`; enum deferred) | correct mass/volume |
 | 7 | `equals`/`hashCode` on entities | A5 | 🟠 | M | ⬜ | robust search under tx changes |
@@ -528,11 +549,15 @@ Status last reviewed **2026-09-08**.
 \* A3 is high-*impact* but large and best sequenced with Steps 4–5, so it sits lower in
 *order* despite its severity.
 
-**First working session of Step-2 execution — ✅ DONE (2026-09-08).** The "prove the loop"
-batch was #5 (credentials), #6 (`String ==`), plus the first slice of #4 (unit-test the
-converters). All three landed; `./mvnw -Plocal test` is green at 20 tests. **Next:** fold
-the §2 corrections into doc 01 (§12 Q4), then tackle #1 with its regression test, because
-everything else is easier once request-state is off the singletons.
+**Step-2 execution so far (2026-09-08):**
+- Session 1 — the "prove the loop" batch: #5 (credentials), #6 (`String ==`), first slice
+  of #4 (converter tests). Suite 20 green.
+- Session 2 — **#1** (singleton request-state), done in five steps A1.1–A1.5 with two
+  session-isolation regression tests. Suite 22 green. See §13.
+
+**Next:** fold the §2 corrections into doc 01 (§12 Q4), then **#2** (SQL intersection) and
+**#11** (Flyway) — the two that unblock Step 3 — or **#3** (id/filename race) as a quick
+correctness win.
 
 ---
 
@@ -579,8 +604,9 @@ that makes Steps 3–5 tractable.
 3. **Where do you want to start executing?** The "prove the loop" batch in §10, or straight
    at the highest-value item (#1 or #2)?
    → **ANSWERED (2026-09-08): the "prove the loop" batch first, then Step 3.** The batch
-   (#5, #6, first slice of #4) is now ✅ done — see §13. After folding the §2 corrections
-   into doc 01 (Q4), the next execution target is **#1** (singleton request-state).
+   (#5, #6, first slice of #4) is ✅ done, and **#1** (singleton request-state) is now ✅
+   done too — see §13. After folding the §2 corrections into doc 01 (Q4), the next targets
+   are **#2** + **#11** (unblock Step 3) or **#3** (quick correctness win).
 4. **Scope of this doc:** shall I fold the four Step-1 corrections (§2) back into
    `01-functional-overview.md` so both documents stay consistent?
    → **STILL OPEN.** Agreed in principle; the edit to doc 01 has not been made yet. This is
@@ -591,6 +617,39 @@ that makes Steps 3–5 tractable.
 ## 13. Execution log
 
 Newest first. Each entry: what changed, where, and how it was verified.
+
+### 2026-09-08 — #1 request state off the singleton beans (Step-2 execution session 2)
+
+Finding **A1**. Done in five independently-testable steps; working style: assistant
+proposed diffs, user applied.
+
+- **A1.1 — `HomeController` + `ChefController` page-count fields.** `totalFoundVisualPages`
+  / `totalFoundVisualsChefPages` (and `ChefController`'s `message` builder) were
+  within-request values leaked out of a paging helper via a side effect. Helper now
+  returns the `PagedListHolder`; handler reads `getPageCount()` / `getPageList()`. No
+  behaviour change. (`HomeController` was not in the original A1 write-up — same bug.)
+- **A1.2 — `ImageController.recipe` deleted.** `saveVisual` now takes `@PathVariable id`
+  (the save form already posts to `/spawn/spawn/{id}/save`) and re-loads the recipe.
+- **A1.3 — `ImageServiceImpl.theSketch` → local variable.** Only ever used within
+  `generateImage`.
+- **A1.4 — `ImageServiceImpl.pImg` off the service.** `generateImage` returns a
+  `GeneratedImage(previewBase64, pngBytes)` record; `ImageController` stashes `pngBytes`
+  in the `HttpSession` under `PENDING_IMAGE` and passes them back into
+  `saveVisual(recipe, newId, pngBytes)`, then clears the attribute. Disk write switched
+  from `PImage.save(...)` to `Files.write(...)`. Service is now stateless.
+  New test: `ImageControllerSessionIsolationTest` — two sessions with different pending
+  images; save in session A persists A's bytes.
+- **A1.5 — `SpawnController` → `@SessionScope SpawnBasket`.** New
+  `controller/SpawnBasket.java` holds the 12 workflow fields (the 4 `StringBuilder`
+  messages became `String`) plus the `reset*` helpers; Spring injects a per-session
+  proxy. Controller is now stateless.
+  New test: `SpawnControllerSessionIsolationTest` — two `MockHttpSession`s, two baskets.
+  (`@SpringBootTest` + `@AutoConfigureMockMvc` **with** the security filter chain on —
+  `spawn-i` renders `fragments/header`, which uses `#authorization` / `sec:authorize`.)
+- **Verification:** `./mvnw -Plocal test` → `Tests run: 22, Failures: 0, Errors: 0`,
+  `BUILD SUCCESS`.
+- **Left for their own findings:** A3 (on-screen window / fixed sleep), A2 (id/filename
+  sequence race), D1/D2 (1/2/3-ingredient branching), A6 (null into basket).
 
 ### 2026-09-08 — "prove the loop" batch (Step-2 execution session 1)
 
