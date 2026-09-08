@@ -40,7 +40,7 @@ public class ImageServiceImpl implements ImageService {
     private final RecipeIngredientService recipeIngredientService;
     private final VisualService visualService;
     private final ChefService chefService;
-    private TheSketch theSketch;    // custom PApplet class (Processing)
+//    private TheSketch theSketch;    // custom PApplet class (Processing)
     private PImage pImg;            // Processing class
 
     @Autowired
@@ -86,7 +86,7 @@ public class ImageServiceImpl implements ImageService {
         System.out.println("total mass: " + totalSize);
 
         // initiate the sketch (the Processing PApplet)
-        this.theSketch = getTheSketch();
+        TheSketch theSketch = getTheSketch();
 
         // init a list for storing shapes
         List<Shape> shapeList = new ArrayList<>();
