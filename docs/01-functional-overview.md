@@ -41,9 +41,15 @@ drawing.
 | Boilerplate reduction | **Lombok** |
 | Build | **Maven** (with `mvnw` wrapper) |
 
-Two Maven profiles exist: `local` (adds Spring DevTools) and `prod` (active by default).
+Two Maven profiles exist: `local` (adds Spring DevTools) and `prod` (marked
+`activeByDefault` in the POM). **At runtime the app always uses the `local` Spring
+profile**, though: `application.properties` hard-codes `spring.profiles.active=local`, and
+that is what the running app obeys regardless of which Maven profile built it.
 Configuration lives in `application.properties` + `application-local.properties` +
-`application-prod.properties`.
+`application-prod.properties`. Both `application-local.properties` and
+`application-prod.properties` are tracked in git — the latter appears in `.gitignore` but
+was committed before that rule was added, so it remains in history (it holds only
+`${RDS_*}` placeholders). See §8 for the credential detail.
 
 ---
 
@@ -295,8 +301,10 @@ model/util/ (unit conversion + visual-property enums)
 `add-ingredient`, `add-chef`, `login`, reusable `fragments/` (header, subheader, alerts,
 login-form), and `error/` pages (403/404/405/409/5xx).
 
-**Generated output:** `src/main/webapp/spawns/` holds 150 committed `visualN.png` files —
-i.e. generated artefacts currently live **inside the source tree** and in version control.
+**Generated output:** `src/main/webapp/spawns/` holds ~150 `visualN.png` files — generated
+artefacts written **into the source tree on disk**. The directory is listed in `.gitignore`,
+so despite sitting among the sources these files are **not** tracked in git (`git ls-files`
+shows zero under it).
 
 ---
 
@@ -310,6 +318,13 @@ i.e. generated artefacts currently live **inside the source tree** and in versio
 - Form login at `/login`; success → `/home`; logout clears `JSESSIONID`.
 - `SecurityChef` / `SecurityRole` adapt the `Chef`/`Role` entities to Spring Security's
   `UserDetails`.
+- **Datasource credentials:** `application-local.properties` (tracked) originally held
+  `spring.datasource.username` / `password` as plaintext `hbstudent` / `hbstudent` (the
+  well-known course defaults). As of 2026-09-08 they are externalised to
+  `${DB_USERNAME:hbstudent}` / `${DB_PASSWORD:hbstudent}` env placeholders — default kept
+  for zero-setup local dev; see `docs/open-points.md` §OP-1. `application-prod.properties`
+  carries `${RDS_*}` placeholders only. No real secret in either file, but both remain in
+  git history.
 
 ---
 

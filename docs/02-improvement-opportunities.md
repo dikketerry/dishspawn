@@ -81,12 +81,14 @@ uncommitted art changes. This section is now historical — no action outstandin
 
 ---
 
-## 2. Corrections to the Step 1 document (accuracy first)
+## 2. Corrections to the Step 1 document (accuracy first) — ✅ FOLDED IN (2026-09-08)
 
 While reading the code closely for Step 2, I found that a few statements in
 `01-functional-overview.md` — including one *I* added last session — are not quite right.
-Honesty about the map matters more than the map looking finished, so here they are. I can
-fold these into the Step 1 doc on your say-so.
+Honesty about the map matters more than the map looking finished, so here they are.
+
+**All four are now applied to `01-functional-overview.md`** (§2 profiles paragraph, §7
+"Generated output", §8 Security Model). Kept below as the record of what changed.
 
 1. **The generated PNGs are *not* in version control.** Step 1 §7 says the ~200 (I
    corrected to 150) `visualN.png` files live "inside the source tree **and in version
@@ -609,14 +611,22 @@ that makes Steps 3–5 tractable.
    are **#2** + **#11** (unblock Step 3) or **#3** (quick correctness win).
 4. **Scope of this doc:** shall I fold the four Step-1 corrections (§2) back into
    `01-functional-overview.md` so both documents stay consistent?
-   → **STILL OPEN.** Agreed in principle; the edit to doc 01 has not been made yet. This is
-   the first task of the next session.
+   → **DONE (2026-09-08).** All four applied to doc 01 (§2, §7, §8). Correction 3 was
+   updated in passing to note the credentials are now externalised (→ OP-1), not just
+   "committed in plaintext".
 
 ---
 
 ## 13. Execution log
 
 Newest first. Each entry: what changed, where, and how it was verified.
+
+### 2026-09-08 — doc sync: §2 corrections folded into doc 01 (§12 Q4)
+
+The four accuracy corrections in §2 applied to `01-functional-overview.md`: §2 profiles
+paragraph (runtime profile is always `local`; both env-property files tracked), §7
+"Generated output" (spawn PNGs are git-ignored, not versioned), §8 Security Model (new
+bullet on datasource credentials, noting the OP-1 externalisation). Doc-only; no build.
 
 ### 2026-09-08 — #1 request state off the singleton beans (Step-2 execution session 2)
 
