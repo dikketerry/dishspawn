@@ -43,11 +43,10 @@ assumption makes a dozen separate findings click into place at once.
 
 ---
 
-## 1. Housekeeping first — the uncommitted working tree (your requested "step 0")
+## 1. Housekeeping first — the uncommitted working tree (your requested "step 0") — ✅ DONE (2026-08-29)
 
-Before any analysis is acted on, there's a loose thread to tie off. The working tree on
-`testLint` currently has **uncommitted changes** (this is the in-progress generative-art
-work from the previous sessions):
+This started as a loose thread: the working tree on `testLint` had **uncommitted changes**
+(the in-progress generative-art work from previous sessions):
 
 - `pom.xml` — Java 11 → 19, Lombok annotation-processor path added.
 - `graphics/processing/TheSketch.java` — adds `setComplementaryBackground(...)` and a
@@ -56,17 +55,22 @@ work from the previous sessions):
   adds `applyTextureStyle()` and wires texture → stroke/fill/opacity into rendering.
 - `graphics/processing/util/Transformer.java` — passes the ingredient's texture to the shape.
 
-**Todo (recommended as the very first action of the next working session):**
+**What was done (2026-08-29):**
 
-- [ ] Decide the fate of these changes: **commit them** on `testLint` with a clear message
-      (they are coherent and self-contained — texture-driven rendering + a
-      complementary-background hook), or deliberately stash/discard them.
-- [ ] Do this *before* starting any refactor below, so that the analysis changes and the
-      art changes don't tangle together in one diff.
+- [x] The changes were **committed** on `testLint` (they were coherent and self-contained —
+      texture-driven rendering + a complementary-background hook).
+- [x] `testLint` was then **fast-forward-merged into `main`** (`main`: `2a700bf` → `bebb240`,
+      a clean fast-forward with no divergence and no merge commit).
+- [x] `main` was **pushed to GitHub** (`github.com/dikketerry/dishspawn`, public). Remote
+      `main` is now at `bebb240`.
+- [x] **Security cleanup done in passing:** an old GitHub token was found embedded in plaintext
+      in the `origin` remote URL. It was removed from the local git config (both remotes are
+      now tokenless; auth flows through the macOS keychain with a fresh classic PAT). The old
+      token turned out to be already-dead on GitHub, so there was nothing exploitable to
+      revoke. Nothing compromised remains.
 
-There is nothing wrong with the changes — this is purely about not building new work on top
-of an uncommitted base, which makes everything afterwards harder to review and to undo.
-This is noted as an aside precisely because it's process, not code quality.
+So the base is clean and the analysis work below can proceed without tangling with
+uncommitted art changes. This section is now historical — no action outstanding.
 
 ---
 
@@ -514,9 +518,21 @@ that makes Steps 3–5 tractable.
 ## 12. Open questions for you (to steer the next sessions)
 
 1. **Deployment reality:** is DishSpawn ever meant to run on a real server with multiple
-   users, or is it explicitly a single-user local/portfolio app? Your answer changes how
-   hard we push A1/A3 — if it's genuinely single-user-forever, they drop in priority (though
-   testability still argues for A1).
+   users, or is it explicitly a single-user local/portfolio app?
+   → **ANSWERED (2026-08-29): multi-user web app, ~10–20 users to start, possibly upscaled
+   later.** Implications, now locked in:
+   - The concurrency findings are **genuine must-fixes** — the trigger is **2 concurrent
+     users, not 20** (e.g. one chef saving another chef's image via the shared `pImg`).
+     **A1** and **A2** stay at the top of the order.
+   - **A3 splits in two:** "render headless / off-screen" (drop `java.awt.headless=false`,
+     no on-screen window) is a **deployment prerequisite** — the app can't run on a normal
+     server without it; "make rendering asynchronous" is **deferrable** — a handful of ~8s
+     spawns won't exhaust the thread pool at this scale.
+   - **B2 (authorization + resource-ownership audit)** rises in importance: "can chef A act
+     on chef B's recipe/visual?" is now a real question.
+   - **No scaling infrastructure needed** at 10–20 users — no Redis/session-store, load
+     balancer, or read replicas. Plain HTTP sessions on a single instance suffice, and the
+     A1 fix (state → session) is exactly what keeps a future upscale cheap.
 2. **Boot/Java upgrade appetite:** are you open to the Boot 3 + Jakarta migration (#13) as a
    dedicated session, or should we stay on 2.7 for now and revisit later?
 3. **Where do you want to start executing?** The "prove the loop" batch in §10, or straight
