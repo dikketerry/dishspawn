@@ -198,6 +198,19 @@ a **filename on disk** to a **DB sequence internal**, which is brittle.
 **Direction:** persist the `Visual` first, let JPA assign the id, then name the file from
 `visual.getId()`. One source of truth, no second sequence read, no race.
 
+> **Update (2026-09-09) — ✅ DONE.** `ImageServiceImpl.saveVisual` reordered to
+> **persist-then-name**: build the `Visual` (chef + recipe), `visualService.saveVisual(visual)`
+> so JPA assigns the id, *then* `fileName = "visual" + visual.getId() + ".png"` and write the
+> bytes, then set `fileName`/`fileLocation` on the still-managed entity. Method is now
+> `@Transactional`, so a failed file write rolls the insert back — no orphan row. The
+> `newId` parameter, the `findVisualById(newId)` re-fetch, and the whole
+> `findNextIdValue()` / `getNextValSequence()` chain (native `SELECT next_val FROM
+> dishspawn_db.hibernate_sequence`, hard-coded schema name) are **deleted** —
+> `VisualService`, `VisualServiceImpl`, `VisualRepository` all lose the method.
+> `ImageController` redirects with `visual.getId()` and no longer injects `VisualService`
+> at all (3 service deps → 2). `ImageControllerSessionIsolationTest` updated (mocks the
+> returned `Visual` for its `getId()`); suite 22 green. Commit `ddb6050`.
+
 ### A3. 🔴 The image pipeline opens a real desktop window and blocks the request thread — Effort **L**
 
 `ImageServiceImpl.getTheSketch()` sets `java.awt.headless=false`
@@ -531,7 +544,7 @@ Status last reviewed **2026-09-08**.
 |---|---|---|---|---|---|---|
 | 1 | Request state on singleton beans → session/stateless | A1 | 🔴 | M | ✅ 2026-09-08 (A1.1–A1.5; also fixed `HomeController`) | testability; Step 4/5; scaling |
 | 2 | Search intersection in Java → single SQL query | C1 | 🔴 | M/L | ⬜ | **Step 3** scaling |
-| 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | ⬜ | correct saves |
+| 3 | Visual id/filename race → persist-then-name | A2 | 🔴 | M | ✅ 2026-09-09 (`ddb6050`; also dropped the native sequence read + `VisualService` dep from `ImageController`) | correct saves |
 | 4 | No tests → start the pyramid (pure logic first) | G1 | 🔴 | M | 🔧 slices 1 + 4 underway (converters; 2 session-isolation regression tests) — suite at 22 | safe refactoring of all others |
 | 5 | Committed DB credentials → externalise | B1 | 🔴 | S | ✅ 2026-09-08 (→ OP-1) | security hygiene |
 | 6 | `String ==` unit bug → `.equals`/enum | A4 | 🟠 | S | ✅ 2026-09-08 (`.equals`; enum deferred) | correct mass/volume |
@@ -551,15 +564,17 @@ Status last reviewed **2026-09-08**.
 \* A3 is high-*impact* but large and best sequenced with Steps 4–5, so it sits lower in
 *order* despite its severity.
 
-**Step-2 execution so far (2026-09-08):**
-- Session 1 — the "prove the loop" batch: #5 (credentials), #6 (`String ==`), first slice
-  of #4 (converter tests). Suite 20 green.
-- Session 2 — **#1** (singleton request-state), done in five steps A1.1–A1.5 with two
-  session-isolation regression tests. Suite 22 green. See §13.
+**Step-2 execution so far:**
+- Session 1 (2026-09-08) — the "prove the loop" batch: #5 (credentials), #6 (`String ==`),
+  first slice of #4 (converter tests). Suite 20 green.
+- Session 2 (2026-09-08) — **#1** (singleton request-state), five steps A1.1–A1.5 with two
+  session-isolation regression tests. Suite 22 green.
+- Session 3 (2026-09-09) — **#3** (Visual id/filename race), persist-then-name + drop the
+  native sequence read. Suite 22 green. Also folded the §2 corrections into doc 01 (§12 Q4).
 
-**Next:** fold the §2 corrections into doc 01 (§12 Q4), then **#2** (SQL intersection) and
-**#11** (Flyway) — the two that unblock Step 3 — or **#3** (id/filename race) as a quick
-correctness win.
+**Next:** **#2** (SQL intersection) + **#11** (Flyway) — the two that unblock Step 3 —
+tackled with the same staged treatment #1 got. **#8** (move `findRecipes` into a service,
+collapse the 1/2/3 branch) is the natural first move of that.
 
 ---
 
@@ -620,6 +635,33 @@ that makes Steps 3–5 tractable.
 ## 13. Execution log
 
 Newest first. Each entry: what changed, where, and how it was verified.
+
+### 2026-09-09 — #3 Visual id/filename race (finding A2)
+
+Commit `ddb6050`. Assistant provided hunks, user applied.
+
+- **`ImageServiceImpl.saveVisual(Recipe, byte[])`** (was `(Recipe, Long newId, byte[])`) —
+  reordered to **persist-then-name**: create `Visual` with chef + recipe →
+  `visualService.saveVisual(visual)` (JPA assigns the id) → `fileName = "visual" +
+  visual.getId() + ".png"`, write bytes → set `fileName`/`fileLocation` on the managed
+  entity → return it. Method is now `@Transactional` (rollback on a failed file write; no
+  orphan row). Dropped the `findVisualById(newId)` re-fetch.
+- **Deleted the guessed-id path:** `VisualService.findNextIdValue()`,
+  `VisualServiceImpl.findNextIdValue()`, `VisualRepository.getNextValSequence()` (+ its
+  native `SELECT next_val FROM dishspawn_db.hibernate_sequence` with the hard-coded schema
+  name) and the now-unused `@Query` import.
+- **`ImageController.saveVisual`** — no more `findNextIdValue()`; redirects with
+  `visual.getId()`. `VisualService` was its only user of that dep, so the field, ctor
+  param and import are removed (3 injected services → 2). Dropped two no-op
+  `model.addAttribute` calls before the redirect.
+- **`ImageControllerSessionIsolationTest`** — drop the `VisualService` mock + the
+  `findNextIdValue` stub; `saveVisual` verify is now 2-arg; mock the returned `Visual` for
+  `getId()` so `redirectedUrl("/visual?visualId=7")` is asserted against the persisted
+  entity's id.
+- **Verification:** `./mvnw -Plocal test` → `Tests run: 22`, `BUILD SUCCESS`.
+- **Left for their own findings:** A3 (on-screen window / fixed sleep), and a DB-backed
+  test that `visual.getFileName()` matches `visual{getId()}.png` after a real save — wants
+  Testcontainers / embedded MySQL, deferred to G1 slice 2.
 
 ### 2026-09-08 — doc sync: §2 corrections folded into doc 01 (§12 Q4)
 

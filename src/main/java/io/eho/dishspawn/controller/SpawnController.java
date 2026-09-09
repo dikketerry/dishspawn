@@ -6,6 +6,7 @@ import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.RecipeIngredient;
 import io.eho.dishspawn.service.IngredientService;
 import io.eho.dishspawn.service.RecipeIngredientService;
+import io.eho.dishspawn.service.RecipeSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
@@ -21,17 +22,16 @@ import java.util.stream.Collectors;
 public class SpawnController {
 
     private final IngredientService ingredientService;
-    private final RecipeIngredientService recipeIngredientService;
-
+    private final RecipeSearchService recipeSearchService;
     // per-session workflow state (session-scoped proxy: one instance per HTTP session)
     private final SpawnBasket basket;
 
     @Autowired
     public SpawnController(IngredientService ingredientService,
-                           RecipeIngredientService recipeIngredientService,
+                           RecipeSearchService recipeSearchService,
                            SpawnBasket basket) {
         this.ingredientService = ingredientService;
-        this.recipeIngredientService = recipeIngredientService;
+        this.recipeSearchService = recipeSearchService;
         this.basket = basket;
     }
 
@@ -95,59 +95,20 @@ public class SpawnController {
         // clear old recipe-list, ingredient-search
         basket.resetRecipeList();
         basket.resetIngredientSearch();
-
         basket.setFindRecipeMethodIsUsed(true);
-        int selectedIngredientListSize = basket.getIngredientSpawnList().size();
+        RecipeSearchService.Result result = recipeSearchService.findRecipesContainingAll(basket.getIngredientSpawnList(), searchPageNr);
 
-        // check if amount of ingredients is within range
-        if (selectedIngredientListSize <= 0 || selectedIngredientListSize > 3) {
+        if (!result.ingredientCountValid()) {
             basket.setIncorrectIngredientsAmountMessage("Please select min 1, max 3 ingredient(s) for spawn");
+            return "redirect:/spawn";
         }
 
-        // todo move to service layer
-        else if (selectedIngredientListSize == 1) {
-            Ingredient i1 = basket.getIngredientSpawnList().get(0);
+        basket.setRecipeSpawnList(result.recipes());
+        basket.setTotalFoundRecipeIngredientPages(result.totalPages());
+        basket.setTotalFoundRecipeIngredients(result.totalResults());
 
-            Page<RecipeIngredient> recipeIngredientPage =
-                    recipeIngredientService.findPageRecipeIngredientsByIngredient(i1, searchPageNr);
-            basket.setTotalFoundRecipeIngredientPages(recipeIngredientPage.getTotalPages());
-            basket.setTotalFoundRecipeIngredients(recipeIngredientPage.getTotalElements());
-
-            List<Recipe> recipes = new ArrayList<>();
-            for (RecipeIngredient ri : recipeIngredientPage.getContent()) {
-                recipes.add(ri.getRecipe());
-            }
-            basket.setRecipeSpawnList(recipes);
-            noRecipesFoundMessage(recipes);
-        }
-
-        else if (selectedIngredientListSize == 2) {
-            Ingredient i1 = basket.getIngredientSpawnList().get(0);
-            Ingredient i2 = basket.getIngredientSpawnList().get(1);
-
-            List<Recipe> recipeList1 = createRecipeList(i1); // see help-method
-            List<Recipe> recipeList2 = createRecipeList(i2);
-
-            List<Recipe> intersectionRecipes = createIntersectionRecipes(recipeList1, recipeList2);
-
-            basket.setRecipeSpawnList(createPageRecipesSpawnList(intersectionRecipes, searchPageNr));
-            noRecipesFoundMessage(basket.getRecipeSpawnList());
-        }
-
-        else if (selectedIngredientListSize == 3) {
-            Ingredient i1 = basket.getIngredientSpawnList().get(0);
-            Ingredient i2 = basket.getIngredientSpawnList().get(1);
-            Ingredient i3 = basket.getIngredientSpawnList().get(2);
-
-            List<Recipe> recipeList1 = createRecipeList(i1); // see help-method
-            List<Recipe> recipeList2 = createRecipeList(i2);
-            List<Recipe> recipeList3 = createRecipeList(i3);
-
-            List<Recipe> intermediateIntersectionRecipes = createIntersectionRecipes(recipeList1, recipeList2);
-            List<Recipe> intersectionRecipes = createIntersectionRecipes(intermediateIntersectionRecipes, recipeList3);
-
-            basket.setRecipeSpawnList(createPageRecipesSpawnList(intersectionRecipes, searchPageNr));
-            noRecipesFoundMessage(basket.getRecipeSpawnList());
+        if (result.recipes().isEmpty()) {
+            basket.setNoRecipeMessage("No recipes found for selection of ingredients. Try again.");
         }
 
         return "redirect:/spawn";
@@ -159,43 +120,12 @@ public class SpawnController {
         return "redirect:/spawn";
     }
 
-    // private helpers below
-    private void noRecipesFoundMessage(List<Recipe> recipeList) {
-        if (recipeList.isEmpty()) {
-            basket.setNoRecipeMessage("No recipes found for selection of ingredients. Try again.");
-        }
-    }
+    // ------------ private helpers
 
     private void noIngredientsFoundMessage(List<Ingredient> ingredientList) {
         if (ingredientList.isEmpty()) {
             basket.setNoIngredientMessage("No ingredients found for search term. Try something else.");
         }
-    }
-
-    private List<Recipe> createIntersectionRecipes(List<Recipe> recipeList1, List<Recipe> recipeList2) {
-        return recipeList1.stream()
-                .distinct()
-                .filter(recipeList2::contains)
-                .collect(Collectors.toList());
-    }
-
-    private List<Recipe> createPageRecipesSpawnList(List<Recipe> intersectionRecipes, int searchPageNr) {
-        PagedListHolder<Recipe> page = new PagedListHolder<>(intersectionRecipes);
-        page.setPageSize(3);
-        page.setPage(searchPageNr - 1);
-
-        basket.setTotalFoundRecipeIngredientPages(page.getPageCount());
-        return page.getPageList();
-    }
-
-    private List<Recipe> createRecipeList(Ingredient ingredient) {
-        List<RecipeIngredient> recipeIngredientList =
-                recipeIngredientService.findAllRecipeIngredientByIngredient(ingredient);
-        List<Recipe> recipeList = new ArrayList<>();
-        for (RecipeIngredient ri : recipeIngredientList) {
-            recipeList.add(ri.getRecipe());
-        }
-        return recipeList;
     }
 
     // todo: improve
