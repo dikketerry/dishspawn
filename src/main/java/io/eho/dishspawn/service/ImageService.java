@@ -7,8 +7,7 @@ public interface ImageService {
 
 //    String generateImage(Recipe recipe);
     GeneratedImage generateImage(Recipe recipe);
-    Visual saveVisual(Recipe recipe, Long newId, byte[] pngBytes);
-//    Visual saveVisual(Recipe recipe, Long newId);
+    Visual saveVisual(Recipe recipe, byte[] pngBytes);
 
     /**
      * Output of one spawn render:

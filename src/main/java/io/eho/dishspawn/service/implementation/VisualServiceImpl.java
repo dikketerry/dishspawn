@@ -21,11 +21,6 @@ public class VisualServiceImpl implements VisualService {
     private final VisualRepository visualRepository;
 
     @Override
-    public Long findNextIdValue() {
-        return visualRepository.getNextValSequence();
-    }
-
-    @Override
     public void saveVisual(Visual visual) {
         visualRepository.save(visual);
     }

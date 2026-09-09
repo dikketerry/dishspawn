@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import processing.core.PApplet;
-import processing.core.PImage;
+import org.springframework.transaction.annotation.Transactional;
+import processing.core.PApplet;import processing.core.PImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -41,14 +41,11 @@ public class ImageServiceImpl implements ImageService {
     private final RecipeIngredientService recipeIngredientService;
     private final VisualService visualService;
     private final ChefService chefService;
-//    private TheSketch theSketch;    // custom PApplet class (Processing)
-//    private PImage pImg;            // Processing class
 
     @Autowired
     public ImageServiceImpl(RecipeIngredientService recipeIngredientService,
                             VisualService visualService,
                             ChefService chefService) {
-//        this.theSketch = getTheSketch();
         this.recipeIngredientService = recipeIngredientService;
         this.visualService = visualService;
         this.chefService = chefService;
@@ -56,7 +53,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public GeneratedImage generateImage(Recipe recipe) {
-//        this.pImg = null;
         // get recipe-ingredients
         List<RecipeIngredient> recipeIngredientList = recipeIngredientService.findAllRecipeIngredientByRecipe(recipe);
         // filter recipe-ingredients with visual impact and mass/volume > 0, sort on mass (biggest first)
@@ -132,14 +128,8 @@ public class ImageServiceImpl implements ImageService {
         }
 
         theSketch.dispose();            // stops animation; does NOT close the window with the sketch
-//        this.pImg = theSketch.get();    // assign the image to variable pImg
         PImage pImg = theSketch.get();
         theSketch.exitActual();         // exits processing PApplet without closing the JVM! Important!
-
-//        // convert pImg to BufferedImage to String with help of Base64 encoder and PImage .getNative, which returns a
-//        // Buffered image from a PImage
-//        String imageString = imgToBase64String((BufferedImage) pImg.getNative(), "PNG");
-//        return imageString;
 
         // PImage -> BufferedImage -> PNG bytes; base64 for preview, raw bytes for a later save
         byte[] pngBytes = toPngBytes((BufferedImage) pImg.getNative());
@@ -147,33 +137,12 @@ public class ImageServiceImpl implements ImageService {
         return new GeneratedImage(previewBase64, pngBytes);
     }
 
-    public Visual saveVisual(Recipe recipe, Long newId, byte[] pngBytes) {
-        String fileName = "visual" + newId + ".png";
-
-        // Determine the desired file path
-        String filePath = "src/main/webapp/spawns";
-        // Get the current working directory
-        String currentDir = System.getProperty("user.dir");
-        // Construct the full file path using the current working directory as a starting point
-//        Path imagePath = Paths.get(currentDir, filePath);
-//        // save the PImage (NOT the buffered, encoded one) to the specified folder
-//        this.pImg.save(imagePath + "/" + fileName);
-
-        Path imageDir = Paths.get(currentDir, filePath);
-        // write the PNG bytes handed in by the caller (from that user's session)
-        try {
-            Files.createDirectories(imageDir);
-            Files.write(imageDir.resolve(fileName), pngBytes);
-        } catch (IOException ioe) {
-            throw new UncheckedIOException(ioe);
-        }
-        // create new Visual entity for storing location, chef etc.
-        // TODO: createVisual in VisualService
-        Visual newVisual = new Visual();
+    @Transactional
+    public Visual saveVisual(Recipe recipe, byte[] pngBytes) {
+        // resolve the logged-in chef first (fail fast, before we touch DB or disk)
         String chefUserName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-
         Chef chef;
         try {
             chef = chefService.findChefByUserName(chefUserName);
@@ -182,30 +151,29 @@ public class ImageServiceImpl implements ImageService {
             // thrown as save option not available when not logged in
         }
 
-        newVisual.setChef(chef);
-        newVisual.setRecipe(recipe);
-        newVisual.setFileName(fileName);
-        newVisual.setFileLocation("/spawns/" + fileName);
-        visualService.saveVisual(newVisual);
+        // persist the Visual FIRST so JPA assigns the real id; the filename is derived from it
+        Visual visual = new Visual();
+        visual.setChef(chef);
+        visual.setRecipe(recipe);
+        visualService.saveVisual(visual);
 
-        Visual visual = visualService.findVisualById(newId);
+        // name + write the PNG from the assigned id
+        String fileName = "visual" + visual.getId() + ".png";
+        Path imageDir = Paths.get(System.getProperty("user.dir"), "src/main/webapp/spawns");
+        try {
+            Files.createDirectories(imageDir);
+            Files.write(imageDir.resolve(fileName), pngBytes);
+        } catch (IOException ioe) {
+            throw new UncheckedIOException(ioe);   // @Transactional rolls back the insert: no orphan row
+        }
+        // record the file location on the still-managed entity — flushed on commit
+        visual.setFileName(fileName);
+        visual.setFileLocation("/spawns/" + fileName);
         System.out.println(visual);     // diagnostic check
-
         return visual;
     }
 
-    // help method to encode image to String with Base64 encoder
-//    private String imgToBase64String(final RenderedImage img, final String formatName) {
-//        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-//
-//        try {
-//            ImageIO.write(img, formatName, os);
-//            return Base64.getEncoder().encodeToString(os.toByteArray());
-//        }
-//        catch (final IOException ioe) {
-//            throw new UncheckedIOException(ioe);
-//        }
-//    }
+                // ------------- helpers
 
     // PImage's native image -> PNG byte[]
     private byte[] toPngBytes(final RenderedImage img) {

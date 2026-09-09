@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface VisualService {
 
-    Long findNextIdValue();
     void saveVisual(Visual visual);
     void deleteVisual(Visual visual);
     List<Visual> findAllVisuals();

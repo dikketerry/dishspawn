@@ -5,7 +5,6 @@ import io.eho.dishspawn.model.Recipe;
 import io.eho.dishspawn.model.Visual;
 import io.eho.dishspawn.service.ImageService;
 import io.eho.dishspawn.service.RecipeService;
-import io.eho.dishspawn.service.VisualService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,16 +19,14 @@ public class ImageController {
 
     private final RecipeService recipeService;
     private final ImageService imageService;
-    private final VisualService visualService;
 
     // key under which a freshly generated, not-yet-saved spawn PNG lives in the user's session
     static final String PENDING_IMAGE = "pendingSpawnImage";
 
     @Autowired
-    public ImageController(RecipeService recipeService, ImageService imageService, VisualService visualService) {
+    public ImageController(RecipeService recipeService, ImageService imageService) {
         this.recipeService = recipeService;
         this.imageService = imageService;
-        this.visualService = visualService;
     }
 
     // generate image
@@ -73,14 +70,11 @@ public class ImageController {
         }
 
         Recipe recipe = recipeService.findRecipeById(idLong);
-        Long newId = visualService.findNextIdValue(); // get next_val hibernate sequence
 
         // delegate with this session's image, then clear it
-        Visual visual = imageService.saveVisual(recipe, newId, pngBytes);
+        Visual visual = imageService.saveVisual(recipe, pngBytes);
         session.removeAttribute(PENDING_IMAGE);
 
-        model.addAttribute(recipe);
-        model.addAttribute("visual", visual);
-        return "redirect:/visual?visualId=" + newId;
+        return "redirect:/visual?visualId=" + visual.getId();
     }
 }
